@@ -1,5 +1,6 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { ROUTES } from "./app/routes";
+import Navbar from "./presentation/components/layout/Navbar";
 import HomePage from "./presentation/pages/HomePage";
 import AboutUsPage from "./presentation/pages/AboutUsPage";
 import ServicesPage from "./presentation/pages/ServicesPage";
@@ -10,6 +11,7 @@ import ContactPage from "./presentation/pages/ContactPage";
 function App() {
   return (
     <Router>
+      <Navbar />
       <Routes>
         <Route path={ROUTES.HOME} element={<HomePage />} />
         <Route path={ROUTES.ABOUT} element={<AboutUsPage />} />
