@@ -56,7 +56,6 @@ const Navbar = () => {
           {isMobile && (
             <>
               <IconButton
-                color="inherit"
                 onClick={() => setOpenDrawer(!openDrawer)}
               >
                 <MenuIcon />
@@ -70,8 +69,7 @@ const Navbar = () => {
                   sx: {
                     mt: `${appBarHeight}px`,
                     //borderTop: "1px solid #e0e0e0",
-                    width: "90%",
-                    maxWidth: 600,
+                    width: "80%",
                     mx: "auto",
                   },
                 }}
@@ -85,11 +83,14 @@ const Navbar = () => {
                           to={item.path}
                           onClick={() => setOpenDrawer(false)}
                         >
-                          <ListItemText 
+                          <ListItemText
                             primary={item.label}
                             primaryTypographyProps={{
                               color:
                                 location.pathname === item.path ? "primary.main" : "text.primary",
+                              fontWeight: location.pathname === item.path ? "bold" : 500,
+                              fontSize: "1.1rem",
+                              letterSpacing: "1px",
                             }}
                           />
                         </ListItemButton>
