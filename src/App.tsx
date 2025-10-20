@@ -9,15 +9,20 @@ import ServicesPage from "./presentation/pages/ServicesPage";
 import AccreditationPage from "./presentation/pages/AccreditationPage";
 import NewsPage from "./presentation/pages/NewsPage";
 import ContactPage from "./presentation/pages/ContactPage";
-import { Box } from "@mui/material";
+import { Box, useMediaQuery, useTheme } from "@mui/material";
 
 function App() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const appBarHeight = isMobile ? 56 : 64;
   return (
     <Box
       sx={{
         display: "flex",
         flexDirection: "column",
         minHeight: "100vh", // altura mínima igual a la ventana
+        backgroundColor: "#fff",
+        mt: `${appBarHeight}px`,
       }}
     >
     <Router>
