@@ -3,7 +3,30 @@ import { Science, Restaurant, ColorLens, LocalHospital } from "@mui/icons-materi
 import hero from "../../assets/hero-lab.jpeg";
 import HeroSection from "../components/containers/HeroSection";
 import SectionTitle from "../components/containers/SectionTitle";
-import ServiceCard from "../components/containers/ServiceCard";
+import IconInfoCard from "../components/containers/IconInfoCard";
+
+const servicesData = [
+  {
+    icon: <Science />,
+    title: "Análisis Microbiológicos",
+    description: "Detección de microorganismos indicadores y patógenos en alimentos y agua.",
+  },
+  {
+    icon: <Restaurant />,
+    title: "Análisis Fisicoquímicos",
+    description: "Determinación de nutrientes y parámetros de calidad en alimentos.",
+  },
+  {
+    icon: <ColorLens />,
+    title: "Análisis Sensoriales",
+    description: "Evaluaciones con paneles de catadores entrenados para garantizar calidad.",
+  },
+  {
+    icon: <LocalHospital />,
+    title: "Análisis Especializados",
+    description: "Residuos de plaguicidas, metales pesados, micotoxinas y más.",
+  },
+];
 
 const HomePage = () => {
   return (
@@ -20,50 +43,25 @@ const HomePage = () => {
         ]}
       />
       {/* Servicios */}
-      <Container sx={{ py: 8 }}>
-        <SectionTitle
-          title="Nuestros Servicios"
-          subtitle="Ofrecemos análisis especializados con tecnología de punta y personal altamente calificado."
-        />
-
-        <Grid container spacing={6} justifyContent="center">
-          <Grid item xs={12} md={3}>
-            <ServiceCard
-              icon={<Science />}
-              title="Análisis Microbiológicos"
-              description="Detección de microorganismos indicadores y patógenos en alimentos y agua."
-            />
+      <Box bgcolor={"#F9FAFB"} sx={{ pt: 8, pb: 12 }}>
+        <Container>
+          <SectionTitle
+            title="Nuestros Servicios"
+            subtitle="Ofrecemos análisis especializados con tecnología de punta y personal altamente calificado."
+          />
+          <Grid container spacing={6} justifyContent="center">
+            {servicesData.map((item, index) => (
+              <Grid item key={index}>
+                <IconInfoCard
+                  icon={item.icon}
+                  title={item.title}
+                  description={item.description}
+                />
+              </Grid>
+            ))}
           </Grid>
-          <Grid item xs={12} md={3}>
-            <ServiceCard
-              icon={<Restaurant />}
-              title="Análisis Fisicoquímicos"
-              description="Determinación de nutrientes y parámetros de calidad en alimentos."
-            />
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <ServiceCard
-              icon={<ColorLens />}
-              title="Análisis Sensoriales"
-              description="Evaluaciones con paneles de catadores entrenados para garantizar calidad."
-            />
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <ServiceCard
-              icon={<LocalHospital />}
-              title="Análisis Especializados"
-              description="Residuos de plaguicidas, metales pesados, micotoxinas y más."
-            />
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <ServiceCard
-              icon={<LocalHospital />}
-              title="Análisis Especializados"
-              description="Residuos de plaguicidas, metales pesados, micotoxinas y más."
-            />
-          </Grid>
-        </Grid>
-      </Container>
+        </Container>
+      </Box>
 
       <Container>
         <Box bgcolor="#ed7272ff" p="80px">

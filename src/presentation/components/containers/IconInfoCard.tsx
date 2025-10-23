@@ -1,14 +1,14 @@
 import React from "react";
-import { green } from '@mui/material/colors';
+import { blue } from '@mui/material/colors';
 import { Card, CardContent, Typography, Box, Avatar } from "@mui/material";
 
-interface ServiceCardProps {
+interface IconInfoCardProps {
   icon?: React.ReactNode;
   title: string;
   description: string;
 }
 
-const ServiceCard: React.FC<ServiceCardProps> = ({ icon, title, description }) => (
+const IconInfoCard: React.FC<IconInfoCardProps> = ({ icon, title, description }) => (
   <Card
     elevation={2}
     sx={{
@@ -16,13 +16,14 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ icon, title, description }) =
       textAlign: "center",
       p: 2,
       height: "100%",
+      width: "13rem",
       transition: "transform 0.2s ease",
       "&:hover": { transform: "translateY(-6px)" },
     }}
   >
     <CardContent>
       {icon && <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
-        <Avatar sx={{ color: green[600], bgcolor: green[100], width: 56, height: 56 }}>
+        <Avatar sx={{ color: blue[600], bgcolor: blue[100], width: 56, height: 56 }}>
           {icon}
         </Avatar>
       </Box>}
@@ -36,4 +37,4 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ icon, title, description }) =
   </Card>
 );
 
-export default ServiceCard;
+export default IconInfoCard;

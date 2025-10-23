@@ -1,13 +1,13 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
 
-interface SectionTitleProps {
+interface InfoGridSectionProps {
   title: string;
   subtitle?: string;
   align?: "left" | "center";
 }
 
-const SectionTitle: React.FC<SectionTitleProps> = ({ title, subtitle, align = "center" }) => (
+const InfoGridSection: React.FC<InfoGridSectionProps> = ({ title, subtitle, align = "center" }) => (
   <Box textAlign={align} mb={4}>
     <Typography variant="h4" fontWeight="bold" color="text.primary" gutterBottom>
       {title}
@@ -20,4 +20,4 @@ const SectionTitle: React.FC<SectionTitleProps> = ({ title, subtitle, align = "c
   </Box>
 );
 
-export default SectionTitle;
+export default InfoGridSection;
