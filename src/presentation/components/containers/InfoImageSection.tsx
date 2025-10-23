@@ -1,0 +1,84 @@
+import React from "react";
+import { Box, Grid, Typography, Button, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+
+interface InfoImageSectionProps {
+  title: string;
+  description: string;
+  image: string;
+  items?: string[];
+  buttonText?: string;
+  buttonColor?: "primary" | "secondary" | "success" | "error" | "info";
+  reverse?: boolean; // para cambiar el orden texto/imagen
+  backgroundColor?: string;
+}
+
+const InfoImageSection: React.FC<InfoImageSectionProps> = ({
+  title,
+  description,
+  image,
+  items = [],
+  buttonText,
+  buttonColor = "primary",
+  reverse = false,
+  backgroundColor = "transparent",
+}) => {
+  return (
+    <Box bgcolor={backgroundColor} py={8}>
+      <Grid
+        container
+        spacing={6}
+        alignItems="center" // centrado verticalmente
+        direction={reverse ? "row-reverse" : "row"}
+        justifyContent="space-between"
+        textAlign="start" // horizaontalmente
+      >
+        {/* Texto */}
+        <Grid item xs={12} md={6}>
+          <Typography variant="h4" fontWeight="bold" gutterBottom color="text.primary">
+            {title}
+          </Typography>
+
+          <Typography variant="body1" color="text.secondary" paragraph>
+            {description}
+          </Typography>
+
+          {items.length > 0 && (
+            <List>
+              {items.map((item, index) => (
+                <ListItem key={index} disablePadding sx={{ mb: 1 }}>
+                  <ListItemIcon sx={{ minWidth: 32 }}>
+                    <CheckCircleIcon color={buttonColor} />
+                  </ListItemIcon>
+                  <ListItemText primary={item} sx={{ color:"text.secondary" }} />
+                </ListItem>
+              ))}
+            </List>
+          )}
+
+          {buttonText && (
+            <Button variant="contained" color={buttonColor} sx={{ mt: 2 }}>
+              {buttonText}
+            </Button>
+          )}
+        </Grid>
+
+        {/* Imagen */}
+        <Grid item xs={12} md={6}>
+          <Box
+            component="img"
+            src={image}
+            alt={title}
+            sx={{
+              width: "100%",
+              borderRadius: 2,
+              boxShadow: 5,
+            }}
+          />
+        </Grid>
+      </Grid>
+    </Box>
+  );
+};
+
+export default InfoImageSection;
