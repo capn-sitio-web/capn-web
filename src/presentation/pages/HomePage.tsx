@@ -4,8 +4,9 @@ import hero from "../../assets/hero-lab.jpeg";
 import calidad from "../../assets/calidad-certificada.jpeg";
 import HeroSection from "../components/containers/HeroSection";
 import SectionTitle from "../components/containers/SectionTitle";
-import IconInfoCard from "../components/containers/IconInfoCard";
+import IconInfoCard from "../components/cards/IconInfoCard";
 import InfoImageSection from "../components/containers/InfoImageSection";
+import CallToActionSection from "../components/containers/CallToActionSection";
 
 const servicesData = [
   {
@@ -89,13 +90,14 @@ const HomePage = () => {
           buttonColor="primary"
         />
       </Container>
-
-
-      <Container>
-        <Box bgcolor="#ed7272ff" p="80px">
-
-        </Box>
-      </Container>
+      {/* Análisis de alimentos */}
+      <CallToActionSection
+        title="¿Necesitas análisis de alimentos?"
+        subtitle="Contáctanos hoy mismo y obtén resultados confiables respaldados por nuestra certificación internacional"
+        background="gradient"
+        primaryButton={{ label: "Solicitar Cotización" }}
+        secondaryButton={{ label: "Ver Todos los Servicios" }}
+      />
     </Box>
   );
 }
