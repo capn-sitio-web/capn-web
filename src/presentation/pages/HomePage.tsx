@@ -65,31 +65,20 @@ const HomePage = () => {
           </Grid>
         </Container>
       </Box>
-      {/* Sección: Nuestra Historia */}
-      <Container>
-        <InfoImageSection
-          title="Nuestra Historia"
-          description="El Centro de Análisis de Productos Naturales (CAPN) fue fundado en 2008 como una iniciativa de la Facultad de Ciencias y Tecnología de la UMSS, con el objetivo de brindar servicios especializados en análisis de alimentos y productos naturales."
-          image={hero}
-          reverse // esto invierte el orden (imagen a la izquierda)
-        />
-      </Container>
       {/* Calidad Certificada */}
-      <Container>
-        <InfoImageSection
-          title="Calidad Certificada"
-          description="Somos el primer laboratorio en Bolivia certificado bajo la norma ISO/IEC 17025 para análisis de alimentos, garantizando resultados confiables y reconocidos internacionalmente."
-          image={calidad}
-          items={[
-            "Certificación ISO/IEC 17025",
-            "Personal técnico especializado",
-            "Equipos de última generación",
-            "Resultados internacionalmente válidos",
-          ]}
-          buttonText="Ver Certificación"
-          buttonColor="primary"
-        />
-      </Container>
+      <InfoImageSection
+        title="Calidad Certificada"
+        description="Somos el primer laboratorio en Bolivia certificado bajo la norma ISO/IEC 17025 para análisis de alimentos, garantizando resultados confiables y reconocidos internacionalmente."
+        image={calidad}
+        items={[
+          "Certificación ISO/IEC 17025",
+          "Personal técnico especializado",
+          "Equipos de última generación",
+          "Resultados internacionalmente válidos",
+        ]}
+        buttonText="Ver Certificación"
+        buttonColor="primary"
+      />
       {/* Análisis de alimentos */}
       <CallToActionSection
         title="¿Necesitas análisis de alimentos?"

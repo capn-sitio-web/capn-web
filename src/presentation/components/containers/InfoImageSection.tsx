@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Grid, Typography, Button, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import { Box, Grid, Typography, Button, List, ListItem, ListItemIcon, ListItemText, Container } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 interface InfoImageSectionProps {
@@ -25,58 +25,61 @@ const InfoImageSection: React.FC<InfoImageSectionProps> = ({
 }) => {
   return (
     <Box bgcolor={backgroundColor} py={8}>
-      <Grid
-        container
-        spacing={6}
-        alignItems="center" // centrado verticalmente
-        direction={reverse ? "row-reverse" : "row"}
-        justifyContent="space-between"
-        textAlign="start" // horizaontalmente
-      >
-        {/* Texto */}
-        <Grid item xs={12} md={6}>
-          <Typography variant="h4" fontWeight="bold" gutterBottom color="text.primary">
-            {title}
-          </Typography>
+      <Container>
+        <Grid
+          container
+          spacing={6}
+          alignItems="center" // centrado verticalmente
+          direction={reverse ? "row-reverse" : "row"}
+          justifyContent="space-between"
+          textAlign="start" // horizaontalmente
+        >
+          {/* Texto */}
+          <Grid item xs={12} md={6}>
+            <Typography variant="h4" fontWeight="bold" gutterBottom color="text.primary">
+              {title}
+            </Typography>
 
-          <Typography variant="body1" color="text.secondary" paragraph>
-            {description}
-          </Typography>
+            <Typography variant="body1" color="text.secondary" paragraph sx={{ whiteSpace: 'pre-line' }}>
+              {description}
+            </Typography>
 
-          {items.length > 0 && (
-            <List>
-              {items.map((item, index) => (
-                <ListItem key={index} disablePadding sx={{ mb: 1 }}>
-                  <ListItemIcon sx={{ minWidth: 32 }}>
-                    <CheckCircleIcon color={buttonColor} />
-                  </ListItemIcon>
-                  <ListItemText primary={item} sx={{ color:"text.secondary" }} />
-                </ListItem>
-              ))}
-            </List>
-          )}
+            {items.length > 0 && (
+              <List>
+                {items.map((item, index) => (
+                  <ListItem key={index} disablePadding sx={{ mb: 1 }}>
+                    <ListItemIcon sx={{ minWidth: 32 }}>
+                      <CheckCircleIcon color={buttonColor} />
+                    </ListItemIcon>
+                    <ListItemText primary={item} sx={{ color:"text.secondary" }} />
+                  </ListItem>
+                ))}
+              </List>
+            )}
 
-          {buttonText && (
-            <Button variant="contained" color={buttonColor} sx={{ mt: 2 }}>
-              {buttonText}
-            </Button>
-          )}
+            {buttonText && (
+              <Button variant="contained" color={buttonColor} sx={{ mt: 2 }}>
+                {buttonText}
+              </Button>
+            )}
+          </Grid>
+
+          {/* Imagen */}
+          <Grid item xs={12} md={6}>
+            <Box
+              component="img"
+              src={image}
+              alt={title}
+              sx={{
+                width: "100%",
+                borderRadius: 2,
+                boxShadow: 5,
+                filter: "brightness(0.7)", // oscurece la imagen
+              }}
+            />
+          </Grid>
         </Grid>
-
-        {/* Imagen */}
-        <Grid item xs={12} md={6}>
-          <Box
-            component="img"
-            src={image}
-            alt={title}
-            sx={{
-              width: "100%",
-              borderRadius: 2,
-              boxShadow: 5,
-            }}
-          />
-        </Grid>
-      </Grid>
+      </Container>
     </Box>
   );
 };
