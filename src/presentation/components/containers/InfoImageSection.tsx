@@ -24,7 +24,7 @@ const InfoImageSection: React.FC<InfoImageSectionProps> = ({
   backgroundColor = "transparent",
 }) => {
   return (
-    <Box bgcolor={backgroundColor} py={8}>
+    <Box bgcolor={backgroundColor} py={6}>
       <Container>
         <Grid
           container
