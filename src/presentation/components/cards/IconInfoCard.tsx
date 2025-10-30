@@ -16,7 +16,7 @@ const IconInfoCard: React.FC<IconInfoCardProps> = ({ icon, title, description })
       textAlign: "center",
       p: 2,
       height: "100%",
-      width: "13rem",
+      //width: "13rem",
       transition: "transform 0.2s ease",
       "&:hover": { transform: "translateY(-6px)" },
     }}

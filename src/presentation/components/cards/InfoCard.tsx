@@ -1,4 +1,5 @@
-import { Box, Typography } from "@mui/material";
+import { Avatar, Box, Typography } from "@mui/material";
+import { blue } from "@mui/material/colors";
 
 interface InfoCardProps {
   icon: React.ReactNode;
@@ -8,23 +9,18 @@ interface InfoCardProps {
 
 const InfoCard: React.FC<InfoCardProps> = ({ icon, title, description }) => {
   return (
-    <Box textAlign="center" px={2}>
-      <Box
-        sx={{
-          width: 64,
-          height: 64,
-          mx: "auto",
-          borderRadius: "50%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          bgcolor: "rgba(59,130,246,0.1)",
-          mb: 2,
-        }}
-      >
-        {icon}
+    <Box 
+			borderRadius={3}
+			textAlign="center"
+			p={2}
+			height="100%"
+		>
+      <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
+        <Avatar sx={{ color: blue[600], bgcolor: "rgba(59,130,246,0.1)", width: 64, height: 64 }}>
+          {icon}
+        </Avatar>
       </Box>
-      <Typography variant="h6" fontWeight="bold" gutterBottom>
+      <Typography variant="h6" color="text.primary" fontWeight="bold" gutterBottom>
         {title}
       </Typography>
       <Typography variant="body2" color="text.secondary">

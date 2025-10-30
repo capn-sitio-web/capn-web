@@ -6,7 +6,7 @@ interface GridSectionProps<T extends object> {
   subtitle?: string;
   items: T[]; // el tipo genérico reemplaza al any[]
   CardComponent: React.ComponentType<T>;
-  //columns?: 2 | 3 | 4;
+  columns?: 2 | 3 | 4;
   backgroundColor?: string;
 }
 
@@ -15,11 +15,11 @@ const GridSection = <T extends object>({
   subtitle,
   items,
   CardComponent,
-  //columns = 4,
+  columns = 4,
   backgroundColor = "transparent",
 }: GridSectionProps<T>) => {
   return (
-    <Box bgcolor={backgroundColor} py={6}>
+    <Box bgcolor={backgroundColor} pt={6} pb={11}>
       <Container>
         <Box textAlign="center" mb={4}>
           <Typography
@@ -33,7 +33,8 @@ const GridSection = <T extends object>({
           {subtitle && (
             <Typography
               variant="body1"
-              color="text.secondary"
+              color="text.primary"
+              sx={{ opacity: 0.8 }}
             >
               {subtitle}
             </Typography>
@@ -49,9 +50,10 @@ const GridSection = <T extends object>({
             <Grid
               item
               key={index}
-              /*xs={12}
+              xs={12}
               sm={6}
-              md={12 / columns}*/
+              md={columns===4 ? 4 : 6}
+              lg={12 / columns}
             >
               <CardComponent {...item} />
             </Grid>

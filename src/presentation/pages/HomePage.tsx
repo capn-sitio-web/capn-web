@@ -1,9 +1,9 @@
-import { Box, Container, Grid } from "@mui/material";
+import { Box } from "@mui/material";
 import { Science, Restaurant, ColorLens, LocalHospital } from "@mui/icons-material";
 import hero from "../../assets/hero-lab.jpeg";
 import calidad from "../../assets/calidad-certificada.jpeg";
 import HeroSection from "../components/containers/HeroSection";
-import SectionTitle from "../components/containers/SectionTitle";
+import GridSection from "../components/containers/GridSection";
 import IconInfoCard from "../components/cards/IconInfoCard";
 import InfoImageSection from "../components/containers/InfoImageSection";
 import CallToActionSection from "../components/containers/CallToActionSection";
@@ -46,25 +46,13 @@ const HomePage = () => {
         ]}
       />
       {/* Servicios */}
-      <Box bgcolor={"#F9FAFB"} sx={{ pt: 8, pb: 12 }}>
-        <Container>
-          <SectionTitle
-            title="Nuestros Servicios"
-            subtitle="Ofrecemos análisis especializados con tecnología de punta y personal altamente calificado."
-          />
-          <Grid container spacing={6} justifyContent="center">
-            {servicesData.map((item, index) => (
-              <Grid item key={index}>
-                <IconInfoCard
-                  icon={item.icon}
-                  title={item.title}
-                  description={item.description}
-                />
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
-      </Box>
+      <GridSection
+        title="Nuestros Servicios"
+        subtitle="Ofrecemos análisis especializados con tecnología de punta y personal altamente calificado."
+        items={servicesData}
+        CardComponent={IconInfoCard}
+        backgroundColor="#F9FAFB"
+      />
       {/* Calidad Certificada */}
       <InfoImageSection
         title="Calidad Certificada"
