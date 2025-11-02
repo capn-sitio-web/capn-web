@@ -6,15 +6,16 @@ interface IconInfoCardProps {
   icon?: React.ReactNode;
   title: string;
   description: string;
+  txtAlign?: string;
 }
 
-const IconInfoCard: React.FC<IconInfoCardProps> = ({ icon, title, description }) => (
+const IconInfoCard: React.FC<IconInfoCardProps> = ({ icon, title, description, txtAlign = "center" }) => (
   <Card
     elevation={2}
     sx={{
       borderRadius: 3,
       textAlign: "center",
-      p: 2,
+      pt: 2,
       height: "100%",
       //width: "13rem",
       transition: "transform 0.2s ease",
@@ -30,7 +31,10 @@ const IconInfoCard: React.FC<IconInfoCardProps> = ({ icon, title, description })
       <Typography variant="h6" fontWeight="bold">
         {title}
       </Typography>
-      <Typography variant="body2" sx={{ mt: 1, opacity: 0.8 }}>
+      <Typography 
+        variant="body2"
+        textAlign={txtAlign === "center" ? "center" : "left"}
+        sx={{ mt: 1, opacity: 0.8 }}>
         {description}
       </Typography>
     </CardContent>

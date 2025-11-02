@@ -21,25 +21,24 @@ const GridSection = <T extends object>({
   return (
     <Box bgcolor={backgroundColor} pt={6} pb={11}>
       <Container>
-        <Box textAlign="center" mb={4}>
+        <Typography
+          variant="h4"
+          fontWeight="bold"
+          color="text.primary"
+          gutterBottom
+        >
+          {title}
+        </Typography>
+        {subtitle && (
           <Typography
-            variant="h4"
-            fontWeight="bold"
+            variant="body1"
             color="text.primary"
             gutterBottom
+            sx={{ opacity: 0.8 }}
           >
-            {title}
+            {subtitle}
           </Typography>
-          {subtitle && (
-            <Typography
-              variant="body1"
-              color="text.primary"
-              sx={{ opacity: 0.8 }}
-            >
-              {subtitle}
-            </Typography>
-          )}
-        </Box>
+        )}
 
         <Grid
           container
