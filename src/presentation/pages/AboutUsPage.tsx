@@ -1,9 +1,11 @@
 import { Box } from "@mui/material";
 import historia from "../../assets/historia.jpeg";
+import carlos from "../../assets/carlos.jpg";
 import InfoImageSection from "../components/containers/InfoImageSection";
 import GridSection from "../components/containers/GridSection";
-import IconInfoCard from "../components/cards/IconInfoCard";
-import InfoCard from "../components/cards/InfoCard";
+import OutlinedIconCard from "../components/cards/OutlinedIconCard";
+import FlatIconCard from "../components/cards/FlatIconCard";
+import OutlinedImageCard from "../components/cards/OutlinedImageCard";
 import { Security, EmojiEvents, Favorite, Visibility } from "@mui/icons-material";
 
 const misionVisionData = [
@@ -44,6 +46,33 @@ const valoresData = [
   },
 ];
 
+const teamData = [
+  {
+    image: carlos,
+    title: "Ing. Carlos Mendoza",
+    subtitle: "Director General",
+    description: "Ingeniero Químico con especialización en cromatografía. 15 años de experiencia en determinación de nutrientes y contaminantes en alimentos.",
+  },
+  {
+    image: carlos,
+    title: "Ing. Carlos Mendoza",
+    subtitle: "Director General",
+    description: "Ingeniero Químico con especialización en cromatografía. 15 años de experiencia en determinación de nutrientes y contaminantes en alimentos.",
+  },
+  {
+    image: carlos,
+    title: "Ing. Carlos Mendoza",
+    subtitle: "Director General",
+    description: "Ingeniero Químico con especialización en cromatografía. 15 años de experiencia en determinación de nutrientes y contaminantes en alimentos.",
+  },
+  {
+    image: carlos,
+    title: "Ing. Carlos Mendoza",
+    subtitle: "Director General",
+    description: "Ingeniero Químico con especialización en cromatografía. 15 años de experiencia en determinación de nutrientes y contaminantes en alimentos.",
+  },
+];
+
 const AboutUsPage = () => {
   return (
     <Box>
@@ -59,7 +88,7 @@ const AboutUsPage = () => {
       <GridSection
         title="Misión y Visión"
         items={misionVisionData}
-        CardComponent={IconInfoCard}
+        CardComponent={OutlinedIconCard}
         columns={2}
         backgroundColor="#F9FAFB"
       />
@@ -68,8 +97,17 @@ const AboutUsPage = () => {
         title="Nuestros Valores"
         subtitle="Los principios que guían nuestro trabajo diario"
         items={valoresData}
-        CardComponent={InfoCard}
+        CardComponent={FlatIconCard}
         columns={4}
+      />
+      {/* Sección: Nuestro Equipo */}
+      <GridSection
+        title="Nuestro Equipo"
+        subtitle="Profesionales especializados comprometidos con la excelencia"
+        items={teamData}
+        CardComponent={OutlinedImageCard}
+        columns={3}
+        backgroundColor="#F9FAFB"
       />
     </Box>
   );

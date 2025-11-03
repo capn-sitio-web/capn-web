@@ -19,7 +19,7 @@ const GridSection = <T extends object>({
   backgroundColor = "transparent",
 }: GridSectionProps<T>) => {
   return (
-    <Box bgcolor={backgroundColor} pt={6} pb={11}>
+    <Box bgcolor={backgroundColor} pt={6} pb={9}>
       <Container>
         <Typography
           variant="h4"
@@ -33,7 +33,7 @@ const GridSection = <T extends object>({
           <Typography
             variant="body1"
             color="text.primary"
-            gutterBottom
+            mb={2}
             sx={{ opacity: 0.8 }}
           >
             {subtitle}

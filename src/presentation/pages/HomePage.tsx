@@ -4,7 +4,7 @@ import hero from "../../assets/hero-lab.jpeg";
 import calidad from "../../assets/calidad-certificada.jpeg";
 import HeroSection from "../components/containers/HeroSection";
 import GridSection from "../components/containers/GridSection";
-import IconInfoCard from "../components/cards/IconInfoCard";
+import OutlinedIconCard from "../components/cards/OutlinedIconCard";
 import InfoImageSection from "../components/containers/InfoImageSection";
 import CallToActionSection from "../components/containers/CallToActionSection";
 
@@ -50,7 +50,7 @@ const HomePage = () => {
         title="Nuestros Servicios"
         subtitle="Ofrecemos análisis especializados con tecnología de punta y personal altamente calificado."
         items={servicesData}
-        CardComponent={IconInfoCard}
+        CardComponent={OutlinedIconCard}
         backgroundColor="#F9FAFB"
       />
       {/* Calidad Certificada */}

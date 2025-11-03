@@ -1,13 +1,13 @@
 import { Avatar, Box, Typography } from "@mui/material";
 import { blue } from "@mui/material/colors";
 
-interface InfoCardProps {
+interface FlatIconCardProps {
   icon: React.ReactNode;
   title: string;
   description: string;
 }
 
-const InfoCard: React.FC<InfoCardProps> = ({ icon, title, description }) => {
+const FlatIconCard: React.FC<FlatIconCardProps> = ({ icon, title, description }) => {
   return (
     <Box 
 			borderRadius={3}
@@ -30,4 +30,4 @@ const InfoCard: React.FC<InfoCardProps> = ({ icon, title, description }) => {
   );
 };
 
-export default InfoCard;
+export default FlatIconCard;
