@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+import { Security, EmojiEvents, Favorite, Visibility } from "@mui/icons-material";
 import historia from "../../assets/historia.jpeg";
 import carlos from "../../assets/carlos.jpg";
 import InfoImageSection from "../components/containers/InfoImageSection";
@@ -6,7 +7,6 @@ import GridSection from "../components/containers/GridSection";
 import OutlinedIconCard from "../components/cards/OutlinedIconCard";
 import FlatIconCard from "../components/cards/FlatIconCard";
 import OutlinedImageCard from "../components/cards/OutlinedImageCard";
-import { Security, EmojiEvents, Favorite, Visibility } from "@mui/icons-material";
 
 const misionVisionData = [
   {

@@ -34,7 +34,7 @@ const servicesData = [
 const HomePage = () => {
   return (
     <Box>
-      {/* Hero */}
+      {/* Sección: Hero */}
       <HeroSection
         title="Centro de Alimentos y Productos Naturales"
         subtitle="Laboratorio especializado en análisis microbiológicos, fisicoquímicos y sensoriales. Certificado ISO/IEC 17025 para garantizar la calidad y seguridad alimentaria."
@@ -45,7 +45,7 @@ const HomePage = () => {
           { label: "Ver Acreditación", color: "secondary" },
         ]}
       />
-      {/* Servicios */}
+      {/* Sección: Nuestros Servicios */}
       <GridSection
         title="Nuestros Servicios"
         subtitle="Ofrecemos análisis especializados con tecnología de punta y personal altamente calificado."
@@ -53,7 +53,7 @@ const HomePage = () => {
         CardComponent={OutlinedIconCard}
         backgroundColor="#F9FAFB"
       />
-      {/* Calidad Certificada */}
+      {/* Sección: Calidad Certificada */}
       <InfoImageSection
         title="Calidad Certificada"
         description="Somos el primer laboratorio en Bolivia certificado bajo la norma ISO/IEC 17025 para análisis de alimentos, garantizando resultados confiables y reconocidos internacionalmente."
@@ -67,11 +67,10 @@ const HomePage = () => {
         buttonText="Ver Certificación"
         buttonColor="primary"
       />
-      {/* Análisis de alimentos */}
+      {/* Sección: Análisis de alimentos */}
       <CallToActionSection
         title="¿Necesitas análisis de alimentos?"
         subtitle="Contáctanos hoy mismo y obtén resultados confiables respaldados por nuestra certificación internacional"
-        background="gradient"
         primaryButton={{ label: "Solicitar Cotización" }}
         secondaryButton={{ label: "Ver Todos los Servicios" }}
       />

@@ -72,9 +72,19 @@ const InfoImageSection: React.FC<InfoImageSectionProps> = ({
               alt={title}
               sx={{
                 width: "100%",
+                maxWidth: 500,
+                height: "auto",
+                maxHeight: 350,
                 borderRadius: 2,
                 boxShadow: 5,
-                filter: "brightness(0.7)", // oscurece la imagen
+                objectFit: "cover", // mantiene la proporción sin deformar
+                display: "block",
+                margin: "0 auto", // centra la imagen
+                filter: "brightness(0.9)", // oscurece la imagen
+                transition: "transform 0.3s ease",
+                "&:hover": {
+                  transform: "scale(1.02)",
+                },
               }}
             />
           </Grid>
