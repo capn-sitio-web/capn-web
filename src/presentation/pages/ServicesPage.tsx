@@ -1,6 +1,7 @@
 import { Box } from "@mui/material"
 import { LooksOne, LooksTwo, Looks3, Looks4, ScienceOutlined, BiotechOutlined, ScaleOutlined, OpacityOutlined, AcUnitOutlined, ScienceRounded } from "@mui/icons-material";
 import analisis from "../../assets/analisis.jpeg";
+import PageHeader from "../components/containers/PageHeader";
 import InfoImageSection from "../components/containers/InfoImageSection";
 import GridSection from "../components/containers/GridSection";
 import CallToActionSection from "../components/containers/CallToActionSection";
@@ -66,6 +67,12 @@ const equiposTecnologiaData = [
 const ServicesPage = () => {
   return (
     <Box>
+      {/* Sección: Cabecera */}
+      <PageHeader
+        title="Nuestros Servicios"
+        subtitle="Ofrecemos análisis especializados con tecnología de punta y metodologías certificadas internacionalmente"
+        backgroundImage={analisis}
+      />
       {/* Sección: Análisis Microbiológicos */}
       <InfoImageSection
         title="Análisis Microbiológicos"

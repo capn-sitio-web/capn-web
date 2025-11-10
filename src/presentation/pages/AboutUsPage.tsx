@@ -2,6 +2,7 @@ import { Box } from "@mui/material";
 import { Security, EmojiEvents, Favorite, Visibility } from "@mui/icons-material";
 import historia from "../../assets/historia.jpeg";
 import carlos from "../../assets/carlos.jpg";
+import PageHeader from "../components/containers/PageHeader";
 import InfoImageSection from "../components/containers/InfoImageSection";
 import GridSection from "../components/containers/GridSection";
 import OutlinedIconCard from "../components/cards/OutlinedIconCard";
@@ -76,6 +77,13 @@ const teamData = [
 const AboutUsPage = () => {
   return (
     <Box>
+      {/* Sección: Cabecera */}
+      <PageHeader
+        title="Nosotros"
+        subtitle="Conoce la historia, misión y el equipo que hace del CAPN el laboratorio de referencia en análisis de alimentos en Bolivia"
+        backgroundImage={historia}
+        
+      />
       {/* Sección: Nuestra Historia */}
       <InfoImageSection
         title="Nuestra Historia"
