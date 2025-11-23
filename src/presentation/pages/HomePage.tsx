@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { Science, Restaurant, ColorLens, LocalHospital } from "@mui/icons-material";
 import hero from "../../assets/hero-lab.jpeg";
-import calidad from "../../assets/calidad-certificada.jpeg";
+import calidad from "../../assets/calidad-certificada.jpg";
 import HeroSection from "../components/containers/HeroSection";
 import GridSection from "../components/containers/GridSection";
 import OutlinedIconCard from "../components/cards/OutlinedIconCard";

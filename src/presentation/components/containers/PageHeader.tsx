@@ -24,8 +24,8 @@ const PageHeader: React.FC<PageHeaderProps> = ({
           content: '""',
           position: "absolute",
           inset: 0,
-          background: "linear-gradient(90deg, rgba(0,64,128,0.85) 0%, rgba(0,100,200,0.85) 100%)",
-          //background: "linear-gradient(90deg, rgba(55, 118, 182, 0.85) 0%, rgba(200, 217, 233, 0.85) 100%)",
+          //background: "linear-gradient(90deg, rgba(0,64,128,0.85) 0%, rgba(0,100,200,0.85) 100%)",
+          background: "linear-gradient(90deg, rgba(55, 118, 182, 0.85) 0%, rgba(200, 217, 233, 0.85) 100%)",
           opacity: 0.6,
         },
       }}

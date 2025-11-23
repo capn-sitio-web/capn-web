@@ -1,6 +1,10 @@
 import { Box } from "@mui/material"
 import { LooksOne, LooksTwo, Looks3, Looks4, ScienceOutlined, BiotechOutlined, ScaleOutlined, OpacityOutlined, AcUnitOutlined, ScienceRounded } from "@mui/icons-material";
 import analisis from "../../assets/analisis.jpeg";
+import analisismicrobiologico from "../../assets/analisismicrobiologico.jpg";
+import analisisfisicoquimico from "../../assets/analisisfisicoquimico.jpg";
+import analisissensorial from "../../assets/analisissensorial.jpg";
+import analisisespecializado from "../../assets/analisisespecializado.jpg";
 import PageHeader from "../components/containers/PageHeader";
 import InfoImageSection from "../components/containers/InfoImageSection";
 import GridSection from "../components/containers/GridSection";
@@ -77,7 +81,7 @@ const ServicesPage = () => {
       <InfoImageSection
         title="Análisis Microbiológicos"
         description="Detección y cuantificación de microorganismos indicadores y patógenos en alimentos, agua y superficies de contacto con alimentos."
-        image={analisis}
+        image={analisismicrobiologico}
         items={[
           "Microorganismos Indicadores",
           "Patógenos",
@@ -91,7 +95,7 @@ const ServicesPage = () => {
       <InfoImageSection
         title="Análisis Fisicoquímico"
         description="Determinación de componentes nutricionales y parámetros de calidad en alimentos procesados y materias primas."
-        image={analisis}
+        image={analisisfisicoquimico}
         items={[
           "Composición Proximal",
           "Parámetros de Calidad",
@@ -107,7 +111,7 @@ const ServicesPage = () => {
       <InfoImageSection
         title="Análisis Sensorial"
         description="Evaluación de la calidad sensorial de alimentos mediante paneles de catadores entrenados y metodologías estandarizadas."
-        image={analisis}
+        image={analisissensorial}
         items={[
           "Análisis Descriptivo",
           "Pruebas de Preferencia",
@@ -115,13 +119,13 @@ const ServicesPage = () => {
           "Vida Útil Sensorial",
         ]}
         buttonText="Solicitar Información"
-        buttonColor="secondary"
+        buttonColor="primary"
       />
       {/* Sección: Análisis Especializado */}
       <InfoImageSection
         title="Análisis Especializado"
         description="Determinación de contaminantes y compuestos específicos mediante técnicas analíticas avanzadas de cromatografía y espectrometría."
-        image={analisis}
+        image={analisisespecializado}
         items={[
           "Residuos de Plaguicidas",
           "Metales Pesados",
@@ -129,7 +133,7 @@ const ServicesPage = () => {
           "Compuestos Bioactivos",
         ]}
         buttonText="Solicitar Información"
-        buttonColor="error"
+        buttonColor="success"
         reverse
         backgroundColor="#F9FAFB"
       />
