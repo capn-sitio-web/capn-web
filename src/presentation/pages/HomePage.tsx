@@ -2,10 +2,18 @@ import { Box } from "@mui/material";
 import { Science, Restaurant, ColorLens, LocalHospital } from "@mui/icons-material";
 import hero from "../../assets/hero-lab.jpeg";
 import calidad from "../../assets/calidad-certificada.jpg";
+import cofadenaLogo from "../../assets/clients-logo/cofadena.png";
+import inlasaLogo from "../../assets/clients-logo/inlasa.png";
+import pilLogo from "../../assets/clients-logo/pil.svg";
+import senasagLogo from "../../assets/clients-logo/senasag.png";
+import umssLogo from "../../assets/clients-logo/umss.svg";
+import oberonLogo from "../../assets/clients-logo/oberon.png";
+import fcapfLogo from "../../assets/clients-logo/fcapf.png";
 import HeroSection from "../components/containers/HeroSection";
 import GridSection from "../components/containers/GridSection";
 import OutlinedIconCard from "../components/cards/OutlinedIconCard";
 import InfoImageSection from "../components/containers/InfoImageSection";
+import ClientsSection from "../components/sections/ClientsSection";
 import CallToActionSection from "../components/containers/CallToActionSection";
 
 const servicesData = [
@@ -29,6 +37,16 @@ const servicesData = [
     title: "Análisis Especializados",
     description: "Residuos de plaguicidas, metales pesados, micotoxinas y más.",
   },
+];
+
+const clientsData = [
+  { name: "COFADENA", logo: cofadenaLogo },
+  { name: "INLASA", logo: inlasaLogo },
+  { name: "PIL", logo: pilLogo },
+  { name: "SENASAG", logo: senasagLogo },
+  { name: "UMSS", logo: umssLogo },
+  { name: "OBERON", logo: oberonLogo },
+  { name: "FCAPF", logo: fcapfLogo },
 ];
 
 const HomePage = () => {
@@ -66,6 +84,12 @@ const HomePage = () => {
         ]}
         buttonText="Ver Certificación"
         buttonColor="primary"
+      />
+      {/* Sección: Nuestros Clientes */}
+      <ClientsSection
+        title="Nuestros Clientes"
+        subtitle="Empresas e instituciones que confían en nosotros"
+        clients={clientsData}
       />
       {/* Sección: Análisis de alimentos */}
       <CallToActionSection
