@@ -14,6 +14,7 @@ import GridSection from "../components/containers/GridSection";
 import OutlinedIconCard from "../components/cards/OutlinedIconCard";
 import InfoImageSection from "../components/containers/InfoImageSection";
 import ClientsSection from "../components/sections/ClientsSection";
+import StatsSection from "../components/sections/StatsSection";
 import CallToActionSection from "../components/containers/CallToActionSection";
 
 const servicesData = [
@@ -37,6 +38,13 @@ const servicesData = [
     title: "Análisis Especializados",
     description: "Residuos de plaguicidas, metales pesados, micotoxinas y más.",
   },
+];
+
+const statsData = [
+  { value: 15, suffix: "+", label: "Años de Experiencia" },
+  { value: 500, suffix: "+", label: "Análisis Realizados" },
+  { value: 200, suffix: "+", label: "Empresas Atendidas" },
+  { value: 98, suffix: "%", label: "Satisfacción del Cliente" },
 ];
 
 const clientsData = [
@@ -84,6 +92,12 @@ const HomePage = () => {
         ]}
         buttonText="Ver Certificación"
         buttonColor="primary"
+      />
+      {/* Sección: Nuestros asdfg */}
+      <StatsSection
+        stats={statsData}
+        backgroundImage={hero}
+        duration={2000}
       />
       {/* Sección: Nuestros Clientes */}
       <ClientsSection
