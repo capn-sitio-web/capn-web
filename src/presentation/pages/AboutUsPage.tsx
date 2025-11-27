@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import { Security, EmojiEvents, Favorite, Visibility } from "@mui/icons-material";
+import aboutusHero from "../../assets/page-headers/aboutus.jpg";
 import historia from "../../assets/historia.jpeg";
 import carlos from "../../assets/carlos.jpg";
 import PageHeader from "../components/containers/PageHeader";
@@ -81,7 +82,7 @@ const AboutUsPage = () => {
       <PageHeader
         title="Nosotros"
         subtitle="Conoce la historia, misión y el equipo que hace del CAPN el laboratorio de referencia en análisis de alimentos en Bolivia"
-        backgroundImage={historia}
+        backgroundImage={aboutusHero}
         
       />
       {/* Sección: Nuestra Historia */}

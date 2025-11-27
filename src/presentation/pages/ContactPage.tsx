@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 //import { DirectionsCar, DirectionsWalk, DirectionsBus } from "@mui/icons-material";
+import contactHero from "../../assets/page-headers/contact.jpg";
 import LocationSection from "../components/containers/LocationSection";
-import analisis from "../../assets/analisis.jpeg";
 import PageHeader from "../components/containers/PageHeader";
 
 const ContactPage = () => {
@@ -32,7 +32,7 @@ const ContactPage = () => {
       <PageHeader
         title="Nuestros Servicios"
         subtitle="Ofrecemos análisis especializados con tecnología de punta y metodologías certificadas internacionalmente"
-        backgroundImage={analisis}
+        backgroundImage={contactHero}
       />
       {/* Sección: Ubicación */}
       <LocationSection
