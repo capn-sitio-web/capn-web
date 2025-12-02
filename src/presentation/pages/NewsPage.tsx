@@ -4,6 +4,7 @@ import newsAccreditation from "../../assets/news-cover/noticiaacreditacion.jpg";
 import newsFCYT from "../../assets/news-cover/noticiaFCYT.jpg";
 import PageHeader from "../components/containers/PageHeader";
 import NewsCarousel from "../components/sections/NewsCarousel";
+import CallToActionSection from "../components/containers/CallToActionSection";
 
 const newsData = [
   {
@@ -46,6 +47,13 @@ const NewsPage = () => {
       />
       {/* Sección de Noticias Destacadas */}
       <NewsCarousel news={newsData} />
+      {/* Sección: Tienes una noticia para compartir */}
+      <CallToActionSection
+        title="¿Tienes una noticia para compartir?"
+        subtitle="Si eres parte de nuestra comunidad científica y tienes información relevante, contáctanos"
+        primaryButton={{ label: "Contactar Redación" }}
+        secondaryButton={{ label: "Conocer Nuestro Equipo" }}
+      />
     </Box>
   );
 };

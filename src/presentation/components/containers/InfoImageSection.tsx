@@ -58,7 +58,7 @@ const InfoImageSection: React.FC<InfoImageSectionProps> = ({
             )}
 
             {buttonText && (
-              <Button variant="contained" color={buttonColor} sx={{ mt: 2 }}>
+              <Button variant="contained" color={buttonColor} sx={{ mt: 2, textTransform: "none" }}>
                 {buttonText}
               </Button>
             )}
