@@ -32,7 +32,7 @@ const InfoImageSection: React.FC<InfoImageSectionProps> = ({
           alignItems="center" // centrado verticalmente
           direction={reverse ? "row-reverse" : "row"}
           justifyContent="space-between"
-          textAlign="start" // horizaontalmente
+          textAlign="start" // horizontalmente
         >
           {/* Texto */}
           <Grid item xs={12} md={6}>
@@ -58,7 +58,7 @@ const InfoImageSection: React.FC<InfoImageSectionProps> = ({
             )}
 
             {buttonText && (
-              <Button variant="contained" color={buttonColor} sx={{ mt: 2 }}>
+              <Button variant="contained" color={buttonColor} sx={{ mt: 2, textTransform: "none" }}>
                 {buttonText}
               </Button>
             )}

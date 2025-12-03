@@ -1,6 +1,6 @@
 import { Box } from "@mui/material"
 import { LooksOne, LooksTwo, Looks3, Looks4, ScienceOutlined, BiotechOutlined, ScaleOutlined, OpacityOutlined, AcUnitOutlined, ScienceRounded } from "@mui/icons-material";
-import analisis from "../../assets/analisis.jpeg";
+import servicesHero from "../../assets/page-headers/services2.jpeg";
 import analisismicrobiologico from "../../assets/analisismicrobiologico.jpg";
 import analisisfisicoquimico from "../../assets/analisisfisicoquimico.jpg";
 import analisissensorial from "../../assets/analisissensorial.jpg";
@@ -75,7 +75,7 @@ const ServicesPage = () => {
       <PageHeader
         title="Nuestros Servicios"
         subtitle="Ofrecemos análisis especializados con tecnología de punta y metodologías certificadas internacionalmente"
-        backgroundImage={analisis}
+        backgroundImage={servicesHero}
       />
       {/* Sección: Análisis Microbiológicos */}
       <InfoImageSection
