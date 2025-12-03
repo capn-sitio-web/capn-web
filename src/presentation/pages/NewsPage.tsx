@@ -2,8 +2,13 @@ import { Box } from "@mui/material";
 import newsHero from "../../assets/page-headers/news.jpg";
 import newsAccreditation from "../../assets/news-cover/noticiaacreditacion.jpg";
 import newsFCYT from "../../assets/news-cover/noticiaFCYT.jpg";
+import newsConvenio from "../../assets/news-cover/noticiaConvenio.jpg";
+import newsCongreso from "../../assets/news-cover/noticiaCongreso.jpg";
+import newsCromatografia from "../../assets/news-cover/noticiaCromatografia.jpg";
+import newsAnalisisSensorial from "../../assets/news-cover/noticiaAnalisisSensorial.jpg";
 import PageHeader from "../components/containers/PageHeader";
 import NewsCarousel from "../components/sections/NewsCarousel";
+import NewsGridSection from "../components/sections/NewsGridSection";
 import CallToActionSection from "../components/containers/CallToActionSection";
 
 const newsData = [
@@ -36,6 +41,79 @@ const newsData = [
   },
 ];
 
+const newsListaData = [
+  {
+    id: 1,
+    category: "Convenios",
+    date: "2024-02-28",
+    title: "Nuevo convenio con empresas agroalimentarias de Cochabamba",
+    description:
+      "CAPN firma convenios estratégicos con principales productores de alimentos de la región para garantizar la calidad alimentaria.",
+    image: newsConvenio,
+    link: "#",
+  },
+  {
+    id: 2,
+    category: "Investigación",
+    date: "2024-02-10",
+    title: "Participación en el Congreso Latinoamericano de Ciencia y Tecnología de Alimentos",
+    description:
+      "Investigadores del CAPN presentaron avances en metodologías de análisis microbiológico en el evento regional más importante.",
+    image: newsCongreso,
+    link: "#",
+  },
+  {
+    id: 3,
+    category: "Equipamiento",
+    date: "2024-01-20",
+    title: "Adquisición de nuevo equipo de cromatografía líquida HPLC",
+    description:
+      "La inversión en tecnología de punta permite ampliar la capacidad de análisis de contaminantes y aditivos alimentarios.",
+    image: newsCromatografia,
+    link: "#",
+  },
+  {
+    id: 4,
+    category: "Capacitación",
+    date: "2024-03-15",
+    title: "Taller práctico de análisis sensorial de alimentos",
+    description:
+      "El laboratorio brindó capacitación sobre técnicas de evaluación sensorial dirigidas a la industria alimentaria local.",
+    image: newsAnalisisSensorial,
+    link: "#",
+  },
+  {
+    id: 5,
+    category: "Investigación",
+    date: "2024-02-10",
+    title: "Participación en el Congreso Latinoamericano de Ciencia y Tecnología de Alimentos",
+    description:
+      "Investigadores del CAPN presentaron avances en metodologías de análisis microbiológico en el evento regional más importante.",
+    image: newsCongreso,
+    link: "#",
+  },
+  {
+    id: 6,
+    category: "Equipamiento",
+    date: "2024-01-20",
+    title: "Adquisición de nuevo equipo de cromatografía líquida HPLC",
+    description:
+      "La inversión en tecnología de punta permite ampliar la capacidad de análisis de contaminantes y aditivos alimentarios.",
+    image: newsCromatografia,
+    link: "#",
+  },
+  {
+    id: 7,
+    category: "Capacitación",
+    date: "2024-03-15",
+    title: "Taller práctico de análisis sensorial de alimentos",
+    description:
+      "El laboratorio brindó capacitación sobre técnicas de evaluación sensorial dirigidas a la industria alimentaria local.",
+    image: newsAnalisisSensorial,
+    link: "#",
+  },
+];
+
 const NewsPage = () => {
   return (
     <Box>
@@ -45,8 +123,10 @@ const NewsPage = () => {
         subtitle="Mantente informado sobre nuestros logros, nuevas acreditaciones, investigaciones y actividades del CAPN"
         backgroundImage={newsHero}
       />
-      {/* Sección de Noticias Destacadas */}
+      {/* Sección: Noticias Destacadas */}
       <NewsCarousel news={newsData} />
+      {/* Sección: Lista de Noticias */}
+      <NewsGridSection news={newsListaData} />
       {/* Sección: Tienes una noticia para compartir */}
       <CallToActionSection
         title="¿Tienes una noticia para compartir?"
