@@ -38,7 +38,7 @@ const AccreditationPage = () => {
         subtitle="Somos el primer laboratorio en Bolivia certificado bajo la norma ISO/IEC 17025, garantizando resultados confiables y reconocidos internacionalmente"
         backgroundImage={accreditationHero}
       />
-      {/* Sección: Nuestros Valores */}
+      {/* Sección: Nuestro Sistema de Calidad */}
       <GridSection
         title="Nuestro Sistema de Calidad"
         subtitle="Garantizamos la confiabilidad en cada etapa del proceso"
