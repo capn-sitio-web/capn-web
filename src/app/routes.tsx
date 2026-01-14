@@ -1,9 +1,11 @@
 export const ROUTES = {
-  // Páginas principales
+  // Sitio web
   HOME: "/",
   ABOUT: "/nosotros",
   SERVICES: "/servicios",
   ACCREDITATION: "/acreditacion",
   NEWS: "/noticias",
   CONTACT: "/contacto",
+  // CMS
+  ADMIN: "/admin",
 };
