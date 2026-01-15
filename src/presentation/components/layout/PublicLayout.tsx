@@ -18,7 +18,7 @@ export default function PublicLayout() {
       }}
     >
       <Navbar />
-      <Box component="main">
+      <Box component="main" sx={{ textAlign: "center" }}>
         <Outlet />
       </Box>
       <Footer />

@@ -11,7 +11,7 @@ import NewsPage from "./presentation/pages/NewsPage";
 import ContactPage from "./presentation/pages/ContactPage";
 {/* CMS */}
 import AdminLayout from "./admin/components/layout/AdminLayout";
-import DashboardPage from "./admin/pages/DashboardPage";
+import DashboardPage from "./admin/features/dashboard/pages/DashboardPage";
 
 function App() {
   return (

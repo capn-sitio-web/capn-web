@@ -30,8 +30,8 @@ const ContactPage = () => {
     <Box>
       {/* Sección: Cabecera */}
       <PageHeader
-        title="Nuestros Servicios"
-        subtitle="Ofrecemos análisis especializados con tecnología de punta y metodologías certificadas internacionalmente"
+        title="Contacto"
+        subtitle="Estamos aquí para ayudarte con todos tus requerimientos de análisis de alimentos"
         backgroundImage={contactHero}
       />
       {/* Sección: Ubicación */}

@@ -17,7 +17,7 @@ export default function AdminLayout() {
         sx={{
           flex: 1,
           ml: { md: `${DRAWER_WIDTH}px` },
-          p: 3,
+          p: { xs: 2, sm: 3 },
         }}
       >
         <Toolbar />
