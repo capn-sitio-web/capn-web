@@ -5,3 +5,10 @@ export type DashboardKpi = {
   deltaText: string; // "+12.5% vs período anterior"
   trend: "up" | "down" | "neutral";
 };
+
+export type MostVisitedPageItem = {
+  id: string;
+  name: string;
+  visits: number;
+  percent: number; // 0-100
+};

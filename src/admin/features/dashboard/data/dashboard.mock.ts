@@ -1,4 +1,4 @@
-import type { DashboardKpi } from "../types/dashboard.types";
+import type { DashboardKpi, MostVisitedPageItem } from "../types/dashboard.types";
 
 export const KPI_MOCK: DashboardKpi[] = [
   {
@@ -29,4 +29,12 @@ export const KPI_MOCK: DashboardKpi[] = [
     deltaText: "-2.1% vs período anterior",
     trend: "down",
   },
+];
+
+export const MOST_VISITED_MOCK: MostVisitedPageItem[] = [
+  { id: "inicio", name: "Inicio", visits: 8547, percent: 38 },
+  { id: "servicios", name: "Servicios", visits: 5234, percent: 23 },
+  { id: "acreditacion", name: "Acreditación", visits: 3421, percent: 15 },
+  { id: "noticias", name: "Noticias", visits: 2876, percent: 13 },
+  { id: "contacto", name: "Contacto", visits: 2453, percent: 11 },
 ];
