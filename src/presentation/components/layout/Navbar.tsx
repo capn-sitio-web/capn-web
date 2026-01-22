@@ -34,7 +34,7 @@ const Navbar = () => {
         <Toolbar sx={{ justifyContent: "space-between" }}>
           {/* Logo */}
           <Box component={Link} to="/" sx={{ display: "flex" }}>
-            <img src={capnLogo} alt="CAPN Logo" style={{ height: 50 }} />
+            <img src={capnLogo} alt="CAPN Logo" style={{ height: 60 }} />
           </Box>
 
           {/* Desktop menu */}

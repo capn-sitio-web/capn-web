@@ -59,6 +59,7 @@ const CallToActionSection: React.FC<CallToActionSectionProps> = ({
         <Button
           variant="contained"
           sx={{
+            textTransform: "none",
             color: 
               background === "gradient"
                 ? "#1976D2"
@@ -77,6 +78,7 @@ const CallToActionSection: React.FC<CallToActionSectionProps> = ({
           <Button
             variant={secondaryButton.variant || "outlined"}
             sx={{
+              textTransform: "none",
               color:
                 background === "gradient"
                   ? "white"
