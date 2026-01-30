@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef } from "react";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Button, FormHelperText, Stack, Typography } from "@mui/material";
 import UploadRoundedIcon from "@mui/icons-material/UploadRounded";
 import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
 
@@ -8,6 +8,8 @@ type Props = {
   value: { file: File | null; previewUrl: string };
   onChange: (next: { file: File | null; previewUrl: string }) => void;
   accept?: string;
+  error?: boolean;
+  helperText?: string;
 };
 
 export default function ImageUploadField({
@@ -15,6 +17,8 @@ export default function ImageUploadField({
   value,
   onChange,
   accept = "image/*",
+  error = false,
+  helperText,
 }: Props) {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -82,29 +86,36 @@ export default function ImageUploadField({
         />
       </Stack>
 
-      <Box
-        sx={{
-          border: "1px solid",
-          borderColor: "divider",
-          borderRadius: 2,
-          overflow: "hidden",
-          minHeight: 160,
-          display: "grid",
-          placeItems: "center",
-        }}
-      >
-        {previewToShow ? (
-          <Box
-            component="img"
-            src={previewToShow}
-            alt="preview"
-            sx={{ height: 260, objectFit: "cover" }}
-          />
-        ) : (
-          <Typography variant="body2" color="text.secondary">
-            Aún no se subió ninguna imagen.
-          </Typography>
-        )}
+      <Box>
+        <Box
+          sx={{
+            border: "1px solid",
+            borderColor: error ? "error.main" : "divider",
+            borderRadius: 2,
+            overflow: "hidden",
+            minHeight: 160,
+            display: "grid",
+            placeItems: "center",
+          }}
+        >
+          {previewToShow ? (
+            <Box
+              component="img"
+              src={previewToShow}
+              alt="preview"
+              sx={{ height: 260, objectFit: "cover" }}
+            />
+          ) : (
+            <Typography variant="body2" color="text.secondary">
+              Aún no se subió ninguna imagen.
+            </Typography>
+          )}
+        </Box>
+        <Box pl={1.8}>
+          {helperText ? (
+            <FormHelperText error={error}>{helperText}</FormHelperText>
+          ) : null}
+        </Box>
       </Box>
     </Stack>
   );

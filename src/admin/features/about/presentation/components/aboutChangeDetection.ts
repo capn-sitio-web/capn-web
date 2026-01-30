@@ -12,19 +12,19 @@ function isDifferent<N extends object>(a: N, b: N): boolean {
 /** ---- Historia ---- */
 type NormalizedHistory = {
   sectionTitle: string;
-  paragraphs: Array<{ id: string; text: string }>;
+  paragraphs: Array<{ id: number; text: string }>;
   image: { previewUrl: string; fileFp: string };
 };
 
 export function normalizeHistory(d: History): NormalizedHistory {
   return {
-    sectionTitle: d.sectionTitle ?? "",
+    sectionTitle: (d.sectionTitle ?? "").trim(),
     paragraphs: (d.paragraphs ?? []).map((p) => ({
       id: p.id,
-      text: p.text ?? "",
+      text: (p.text ?? "").trim(),
     })),
     image: {
-      previewUrl: d.image?.previewUrl ?? "",
+      previewUrl: (d.image?.previewUrl ?? "").trim(),
       fileFp: fileFingerprint(d.image?.file ?? null),
     },
   };

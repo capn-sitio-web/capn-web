@@ -22,11 +22,12 @@ type Props = {
 type FieldErrors = {
   sectionTitle?: string;
   paragraphsById: Record<string, string | undefined>;
-  // image?: string; // por si luego se valida imagen
+  image?: string;
 };
 
-function createId(prefix = "p") {
-  return `${prefix}_${Math.random().toString(16).slice(2)}_${Date.now()}`;
+let tmpId = -1;
+function createTempId() {
+  return tmpId--;
 }
 
 function emptyErrors(): FieldErrors {
@@ -38,23 +39,23 @@ function mapZodIssuesToErrors(issues: ZodIssue[], data: History): FieldErrors {
 
   for (const issue of issues) {
     const path = issue.path;
-
     // sectionTitle
     if (path[0] === "sectionTitle") {
       next.sectionTitle = issue.message;
       continue;
     }
-
     // paragraphs[index].text
     if (path[0] === "paragraphs" && typeof path[1] === "number" && path[2] === "text") {
       const idx = path[1];
       const paragraphId = data.paragraphs[idx]?.id;
-      if (paragraphId) next.paragraphsById[paragraphId] = issue.message;
+      if (typeof paragraphId === "number") next.paragraphsById[paragraphId] = issue.message;
       continue;
     }
-
-    // image (si luego se agrega validación)
-    // if (path[0] === "image") next.image = issue.message;
+    // image
+    if (path[0] === "image") {
+      next.image = issue.message;
+      continue;
+    }
   }
 
   return next;
@@ -83,7 +84,7 @@ const HistoryTab = forwardRef<HistoryTabHandle, Props>(function HistoryTab(
     setErrors((prev) => ({ ...prev, sectionTitle: undefined }));
   };
 
-  const handleParagraphChange = (id: string, text: string) => {
+  const handleParagraphChange = (id: number, text: string) => {
     setData((prev) => ({
       ...prev,
       paragraphs: prev.paragraphs.map((p) => (p.id === id ? { ...p, text } : p)),
@@ -95,11 +96,11 @@ const HistoryTab = forwardRef<HistoryTabHandle, Props>(function HistoryTab(
   };
 
   const addParagraph = () => {
-    const next: HistoryParagraph = { id: createId(), text: "" };
+    const next: HistoryParagraph = { id: createTempId(), text: "" };
     setData((prev) => ({ ...prev, paragraphs: [...prev.paragraphs, next] }));
   };
 
-  const removeParagraph = (id: string) => {
+  const removeParagraph = (id: number) => {
     setData((prev) => {
       if (prev.paragraphs.length <= 1) return prev;
       return { ...prev, paragraphs: prev.paragraphs.filter((p) => p.id !== id) };
@@ -114,17 +115,15 @@ const HistoryTab = forwardRef<HistoryTabHandle, Props>(function HistoryTab(
 
   const handleImageChange = (next: { file: File | null; previewUrl: string }) => {
     setData((prev) => ({ ...prev, image: next }));
-    // si luego se valida imagen, aquí limpiar errors.image
+    setErrors((prev) => ({ ...prev, image: undefined }));
   };
 
   const validateAndCommit = (): boolean => {
     const result = aboutHistoryValidation.safeParse(data);
-
     if (!result.success) {
       setErrors(mapZodIssuesToErrors(result.error.issues, data));
       return false;
     }
-
     setErrors(emptyErrors());
     onCommitSave(data);
     return true;
@@ -193,6 +192,8 @@ const HistoryTab = forwardRef<HistoryTabHandle, Props>(function HistoryTab(
         label="Imágen de la sección"
         value={data.image}
         onChange={handleImageChange}
+        error={Boolean(errors.image)}
+        helperText={errors.image}
       />
     </Stack>
   );

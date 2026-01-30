@@ -9,17 +9,18 @@ export const aboutHistoryValidation = z.object({
   paragraphs: z
     .array(
       z.object({
-        id: z.string().min(1),
+        id: z.number().int(),
         text: z.string().trim().min(1, "El párrafo no puede estar vacío."),
       }),
     )
     .min(1, "Debe existir al menos un párrafo."),
   // imagen: en mocks será File|null, y previewUrl string.
   image: z.object({
-    file: z.any().nullable(),
-    previewUrl: z.string().optional().default(""),
+    file: z.instanceof(File).nullable(),
+      previewUrl: z.string().optional().default(""),
+    })
+    .refine((img) => Boolean(img.file) || Boolean(img.previewUrl?.trim()), {
+      message: "La imagen es obligatoria.",
+      path: ["file"],
   }),
 });
-
-export type AboutHistoryInput = z.input<typeof aboutHistoryValidation>;
-export type AboutHistoryOutput = z.output<typeof aboutHistoryValidation>;
