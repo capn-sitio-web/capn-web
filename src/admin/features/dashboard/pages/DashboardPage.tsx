@@ -22,7 +22,6 @@ export default function DashboardPage() {
   return (
     <Box>
       <DashboardHeader range={range} onChangeRange={setRange} />
-
       {/* KPIs */}
       <Grid container spacing={2} sx={{ mb: 2 }}>
         {kpis.map((kpi) => (
@@ -31,7 +30,6 @@ export default function DashboardPage() {
           </Grid>
         ))}
       </Grid>
-
       {/* Tráfico + Más visitadas */}
       <Grid container spacing={2} sx={{ mb: 2 }}>
         <Grid item xs={12} lg={7}>

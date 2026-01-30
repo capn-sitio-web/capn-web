@@ -8,4 +8,5 @@ export const ROUTES = {
   CONTACT: "/contacto",
   // CMS
   ADMIN: "/admin",
+  ADMIN_ABOUT: "/admin/nosotros",
 };

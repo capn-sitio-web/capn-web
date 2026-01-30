@@ -1,0 +1,37 @@
+import type { History } from "../../domain/about.types";
+
+export function fileFingerprint(file: File | null): string {
+  if (!file) return "";
+  return `${file.name}|${file.size}|${file.type}|${file.lastModified}`;
+}
+
+function isDifferent<N extends object>(a: N, b: N): boolean {
+  return JSON.stringify(a) !== JSON.stringify(b);
+}
+
+/** ---- Historia ---- */
+type NormalizedHistory = {
+  sectionTitle: string;
+  paragraphs: Array<{ id: string; text: string }>;
+  image: { previewUrl: string; fileFp: string };
+};
+
+export function normalizeHistory(d: History): NormalizedHistory {
+  return {
+    sectionTitle: d.sectionTitle ?? "",
+    paragraphs: (d.paragraphs ?? []).map((p) => ({
+      id: p.id,
+      text: p.text ?? "",
+    })),
+    image: {
+      previewUrl: d.image?.previewUrl ?? "",
+      fileFp: fileFingerprint(d.image?.file ?? null),
+    },
+  };
+}
+
+export function hasHistoryChanges(current: History, saved: History): boolean {
+  return isDifferent(normalizeHistory(current), normalizeHistory(saved));
+}
+
+/** ---- Mision y Vision ---- */

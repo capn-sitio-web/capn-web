@@ -12,6 +12,7 @@ import ContactPage from "./presentation/pages/ContactPage";
 {/* CMS */}
 import AdminLayout from "./admin/components/layout/AdminLayout";
 import DashboardPage from "./admin/features/dashboard/pages/DashboardPage";
+import AboutManagePage from "./admin/features/about/presentation/pages/AboutManagePage";
 
 function App() {
   return (
@@ -29,11 +30,7 @@ function App() {
         {/* CMS */}
         <Route path={ROUTES.ADMIN} element={<AdminLayout />}>
           <Route index element={<DashboardPage />} />
-          {/*
-            <Route path="paginas" element={<SitePagesListPage />} />
-            <Route path="noticias" element={<NewsListPage />} />
-            <Route path="servicios" element={<ServicesListPage />} />
-          */}
+          <Route path={ROUTES.ADMIN_ABOUT} element={<AboutManagePage />} />
         </Route>
         {/* Fallback */}
         <Route path="*" element={<Navigate to={ROUTES.HOME} replace />} />

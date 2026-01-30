@@ -1,3 +1,4 @@
+import { ROUTES } from "../../../app/routes";
 import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
 /*import ArticleRoundedIcon from "@mui/icons-material/ArticleRounded";
 import DesignServicesRoundedIcon from "@mui/icons-material/DesignServicesRounded";
@@ -13,9 +14,8 @@ export type NavItem = {
 };
 
 export const NavItems: NavItem[] = [
-  { label: "Dashboard", to: "/admin", icon: <DashboardRoundedIcon /> },
-  { label: "Servicios", to: "/", icon: <DashboardRoundedIcon /> },
-  { label: "Noticias", to: "/", icon: <DashboardRoundedIcon /> },
+  { label: "Dashboard", to: ROUTES.ADMIN, icon: <DashboardRoundedIcon /> },
+  { label: "Nosotros", to: ROUTES.ADMIN_ABOUT, icon: <DashboardRoundedIcon /> },
   /*{ label: "Páginas", to: "/admin/site-pages", icon: <ArticleRoundedIcon /> },
   { label: "Servicios", to: "/admin/services", icon: <DesignServicesRoundedIcon /> },
   { label: "Noticias", to: "/admin/news", icon: <NewspaperRoundedIcon /> },
