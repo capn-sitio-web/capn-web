@@ -10,7 +10,7 @@ import AccreditationPage from "./presentation/pages/AccreditationPage";
 import NewsPage from "./presentation/pages/NewsPage";
 import ContactPage from "./presentation/pages/ContactPage";
 {/* CMS */}
-import AdminLayout from "./admin/components/layout/AdminLayout";
+import AdminGate from "./admin/features/auth/presentation/AdminGate";
 import DashboardPage from "./admin/features/dashboard/pages/DashboardPage";
 import AboutManagePage from "./admin/features/about/presentation/pages/AboutManagePage";
 
@@ -28,7 +28,7 @@ function App() {
           <Route path={ROUTES.CONTACT} element={<ContactPage />} />
         </Route>
         {/* CMS */}
-        <Route path={ROUTES.ADMIN} element={<AdminLayout />}>
+        <Route path={ROUTES.ADMIN} element={<AdminGate />}>
           <Route index element={<DashboardPage />} />
           <Route path={ROUTES.ADMIN_ABOUT} element={<AboutManagePage />} />
         </Route>

@@ -7,14 +7,29 @@ import {
   Button,
   Tooltip,
 } from "@mui/material";
-import { MenuRounded, NotificationsNoneRounded } from "@mui/icons-material";
+import { MenuRounded, Logout } from "@mui/icons-material";
 import { DRAWER_WIDTH } from "./Sidebar";
+import { useNavigate } from "react-router-dom";
+import { authService } from "../../features/auth/data/auth.service";
+import { ROUTES } from "../../../app/routes";
 
 type Props = {
   onOpenMobileMenu: () => void;
 };
 
 export default function Topbar({ onOpenMobileMenu }: Props) {
+  const navigate = useNavigate();
+  
+  const handleLogout = async () => {
+    try {
+      await authService.cerrarSesion();
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+    } finally {
+      navigate(ROUTES.ADMIN);
+    }
+  };
+
   return (
     <AppBar
       elevation={0}
@@ -43,9 +58,9 @@ export default function Topbar({ onOpenMobileMenu }: Props) {
 
         <Box sx={{ flex: 1 }} />
 
-        <Tooltip title="Notificaciones">
-          <IconButton>
-            <NotificationsNoneRounded />
+        <Tooltip title="Cerrar sesión">
+          <IconButton onClick={handleLogout}>
+            <Logout />
           </IconButton>
         </Tooltip>
 
