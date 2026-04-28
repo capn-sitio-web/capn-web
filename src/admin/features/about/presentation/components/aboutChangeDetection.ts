@@ -1,4 +1,5 @@
 import type { History } from "../../domain/about.types";
+import type { MissionVision } from "../../domain/about.types";
 
 export function fileFingerprint(file: File | null): string {
   if (!file) return "";
@@ -35,3 +36,17 @@ export function hasHistoryChanges(current: History, saved: History): boolean {
 }
 
 /** ---- Mision y Vision ---- */
+type NormalizedMissionVision = { mission: string; vision: string };
+
+export function normalizeMissionVision(d: MissionVision): NormalizedMissionVision {
+  return {
+    mission: (d.mission ?? "").trim(),
+    vision: (d.vision ?? "").trim(),
+  };
+}
+
+export function hasMissionVisionChanges(current: MissionVision, saved: MissionVision): boolean {
+  return isDifferent(normalizeMissionVision(current), normalizeMissionVision(saved));
+}
+
+/** ---- Valores ---- */

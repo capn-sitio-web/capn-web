@@ -1,10 +1,14 @@
-import { useCallback, useRef, useState } from "react";
-import { Box, Card, CardContent } from "@mui/material";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Box, Card, CardContent, CircularProgress } from "@mui/material";
 import AboutHeader from "../components/AboutHeader";
 import AboutTabs, { type AboutTabKey } from "../components/AboutTabs";
-import HistoryTab, { type HistoryTabHandle } from "../components/HistoryTab";
+// History
+import HistoryTab, { type HistoryTabHandle } from "../tabs/HistoryTab";
 import { aboutHistoryMock } from "../../data/aboutHistory.mock";
-import type { History } from "../../domain/about.types";
+import type { History, MissionVision } from "../../domain/about.types";
+// MissionVision
+import MissionVisionTab, { type MissionVisionTabHandle } from "../tabs/MissionVisionTab";
+import { aboutMissionVisionService } from "../../data/aboutMissionVision.service";
 
 export default function AboutManagementPage() {
   const [tab, setTab] = useState<AboutTabKey>("historia");
@@ -12,18 +16,39 @@ export default function AboutManagementPage() {
 
   // “Lo guardado” (simulado)
   const [savedHistory, setSavedHistory] = useState<History>(aboutHistoryMock);
+  const [savedMissionVision, setSavedMissionVision] = useState<MissionVision>({
+    seccionId: null,
+    missionElementId: null,
+    visionElementId: null,
+    mission: "",
+    vision: "",
+  });
+  const [loadingMissionVision, setLoadingMissionVision] = useState(true);
   
   // ref para ejecutar submit() desde el botón del header
   const historyRef = useRef<HistoryTabHandle | null>(null);
+  const missionVisionRef = useRef<MissionVisionTabHandle | null>(null);
 
-  const handleSave = useCallback(() => {
-    if (tab === "historia") {
-      const ok = historyRef.current?.submit() ?? false;
-      // si ok, el tab ya llamó onCommitSave y tú puedes limpiar hasChanges ahí
-      // si no ok, se muestran errores inline y NO se limpia
-      return;
+  const cargarMisionVision = useCallback(async () => {
+    try {
+      setLoadingMissionVision(true);
+      const response = await aboutMissionVisionService.obtenerMisionVision();
+      setSavedMissionVision(response);
+    } catch (error) {
+      console.error("Error al obtener misión y visión:", error);
+    } finally {
+      setLoadingMissionVision(false);
     }
-    // luego aquí: misionVisionRef.current?.submit(), etc.
+  }, []);
+
+  useEffect(() => {
+    cargarMisionVision();
+  }, [cargarMisionVision]);
+
+  const handleSave = useCallback(async () => {
+    if (tab === "historia") return historyRef.current?.submit() ?? false;
+    if (tab === "misionVision") return (await missionVisionRef.current?.submit()) ?? false;
+    return false;
   }, [tab]);
 
   return (
@@ -50,9 +75,26 @@ export default function AboutManagementPage() {
               }}
             />
           ) : null}
+          {tab === "misionVision" ? (
+            loadingMissionVision ? (
+              <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              <MissionVisionTab
+                ref={missionVisionRef}
+                initialValue={savedMissionVision}
+                onChanges={setHasChanges}
+                onCommitSave={async (nextSaved) => {
+                  const updated = await aboutMissionVisionService.actualizarMisionVision(nextSaved);
+                  setSavedMissionVision(updated);
+                  setHasChanges(false);
+                }}
+              />
+            )
+          ) : null}
 
           {/* luego aquí conectas los otros tabs */}
-          {tab === "misionVision" ? <div>TODO: Misión y Visión</div> : null}
           {tab === "valores" ? <div>TODO: Valores</div> : null}
           {tab === "equipo" ? <div>TODO: Equipo</div> : null}
         </CardContent>
