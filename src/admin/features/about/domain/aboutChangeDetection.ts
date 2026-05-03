@@ -1,9 +1,10 @@
-import type { History } from "../../domain/about.types";
-import type { MissionVision } from "../../domain/about.types";
+import type { History, MissionVision } from "./about.types";
 
-export function fileFingerprint(file: File | null): string {
-  if (!file) return "";
-  return `${file.name}|${file.size}|${file.type}|${file.lastModified}`;
+function normalizeText(value: string | null | undefined): string {
+  return (value ?? "")
+    .replace(/\r\n/g, "\n")
+    .replace(/\r/g, "\n")
+    .trim();
 }
 
 function isDifferent<N extends object>(a: N, b: N): boolean {
@@ -13,20 +14,17 @@ function isDifferent<N extends object>(a: N, b: N): boolean {
 /** ---- Historia ---- */
 type NormalizedHistory = {
   sectionTitle: string;
-  paragraphs: Array<{ id: number; text: string }>;
-  image: { previewUrl: string; fileFp: string };
+  description: string;
+  image: { previewUrl: string; hasNewFile: boolean; };
 };
 
 export function normalizeHistory(d: History): NormalizedHistory {
   return {
-    sectionTitle: (d.sectionTitle ?? "").trim(),
-    paragraphs: (d.paragraphs ?? []).map((p) => ({
-      id: p.id,
-      text: (p.text ?? "").trim(),
-    })),
+    sectionTitle: normalizeText(d.sectionTitle),
+    description: normalizeText(d.description),
     image: {
-      previewUrl: (d.image?.previewUrl ?? "").trim(),
-      fileFp: fileFingerprint(d.image?.file ?? null),
+      previewUrl: normalizeText(d.image?.previewUrl),
+      hasNewFile: Boolean(d.image?.file),
     },
   };
 }
@@ -40,8 +38,8 @@ type NormalizedMissionVision = { mission: string; vision: string };
 
 export function normalizeMissionVision(d: MissionVision): NormalizedMissionVision {
   return {
-    mission: (d.mission ?? "").trim(),
-    vision: (d.vision ?? "").trim(),
+    mission: normalizeText(d.mission),
+    vision: normalizeText(d.vision),
   };
 }
 

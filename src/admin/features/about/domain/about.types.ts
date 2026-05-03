@@ -1,4 +1,11 @@
 // -------- Tipos base API --------
+export type SectionImage = {
+  idimagen_seccion: number;
+  seccion_idseccion: number;
+  imagen_url: string;
+  imagen_alt: string | null;
+};
+
 export type SectionElement = {
   idelemento: number;
   seccion_idseccion: number;
@@ -15,22 +22,21 @@ export type SectionResponse = {
   titulo: string;
   descripcion: string | null;
   elementos: SectionElement[];
+  imagenes?: SectionImage[];
 };
 
 // -------- Historia --------
-export type HistoryParagraph = {
-  id: number;
-  text: string;
-};
-
 export type HistoryImage = {
   file: File | null;
   previewUrl: string;
+  imageId: number | null;
+  alt: string;
 };
 
 export type History = {
+  seccionId: number | null;
   sectionTitle: string;
-  paragraphs: HistoryParagraph[];
+  description: string;
   image: HistoryImage;
 };
 

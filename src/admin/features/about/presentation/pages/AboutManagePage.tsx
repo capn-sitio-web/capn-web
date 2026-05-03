@@ -2,20 +2,32 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Box, Card, CardContent, CircularProgress } from "@mui/material";
 import AboutHeader from "../components/AboutHeader";
 import AboutTabs, { type AboutTabKey } from "../components/AboutTabs";
-// History
+// Tabs
 import HistoryTab, { type HistoryTabHandle } from "../tabs/HistoryTab";
-import { aboutHistoryMock } from "../../data/aboutHistory.mock";
-import type { History, MissionVision } from "../../domain/about.types";
-// MissionVision
 import MissionVisionTab, { type MissionVisionTabHandle } from "../tabs/MissionVisionTab";
+// Types
+import type { History, MissionVision } from "../../domain/about.types";
+// Services
+import { aboutHistoryService } from "../../data/aboutHistory.service";
 import { aboutMissionVisionService } from "../../data/aboutMissionVision.service";
 
 export default function AboutManagementPage() {
   const [tab, setTab] = useState<AboutTabKey>("historia");
   const [hasChanges, setHasChanges] = useState(false);
 
-  // “Lo guardado” (simulado)
-  const [savedHistory, setSavedHistory] = useState<History>(aboutHistoryMock);
+  // Estado persistido por sección
+  const [savedHistory, setSavedHistory] = useState<History>({
+    seccionId: null,
+    sectionTitle: "",
+    description: "",
+    image: {
+      file: null,
+      previewUrl: "",
+      imageId: null,
+      alt: "",
+    },
+  });
+
   const [savedMissionVision, setSavedMissionVision] = useState<MissionVision>({
     seccionId: null,
     missionElementId: null,
@@ -23,11 +35,26 @@ export default function AboutManagementPage() {
     mission: "",
     vision: "",
   });
+
+  // Estados de carga por sección
+  const [loadingHistory, setLoadingHistory] = useState(true);
   const [loadingMissionVision, setLoadingMissionVision] = useState(true);
   
   // ref para ejecutar submit() desde el botón del header
   const historyRef = useRef<HistoryTabHandle | null>(null);
   const missionVisionRef = useRef<MissionVisionTabHandle | null>(null);
+
+  const cargarHistoria = useCallback(async () => {
+    try {
+      setLoadingHistory(true);
+      const response = await aboutHistoryService.obtenerHistoria();
+      setSavedHistory(response);
+    } catch (error) {
+      console.error("Error al obtener historia:", error);
+    } finally {
+      setLoadingHistory(false);
+    }
+  }, []);
 
   const cargarMisionVision = useCallback(async () => {
     try {
@@ -42,11 +69,12 @@ export default function AboutManagementPage() {
   }, []);
 
   useEffect(() => {
+    cargarHistoria();
     cargarMisionVision();
-  }, [cargarMisionVision]);
+  }, [cargarHistoria, cargarMisionVision]);
 
   const handleSave = useCallback(async () => {
-    if (tab === "historia") return historyRef.current?.submit() ?? false;
+    if (tab === "historia") return (await historyRef.current?.submit()) ?? false;
     if (tab === "misionVision") return (await missionVisionRef.current?.submit()) ?? false;
     return false;
   }, [tab]);
@@ -63,18 +91,26 @@ export default function AboutManagementPage() {
       <Card variant="outlined" sx={{ borderRadius: 3 }}>
         <AboutTabs value={tab} onChange={setTab} />
         <CardContent sx={{ mt: 1 }}>
+          {/* Historia */}
           {tab === "historia" ? (
-            <HistoryTab
-              ref={historyRef}
-              initialValue={savedHistory}
-              onHistoryChange={setHasChanges}
-              onCommitSave={(nextSaved) => {
-                // simula persistencia (luego será API)
-                setSavedHistory(nextSaved);
-                setHasChanges(false);
-              }}
-            />
+            loadingHistory ? (
+              <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              <HistoryTab
+                ref={historyRef}
+                initialValue={savedHistory}
+                onHistoryChange={setHasChanges}
+                onCommitSave={async (nextSaved) => {
+                  const updated = await aboutHistoryService.actualizarHistoria(nextSaved);
+                  setSavedHistory(updated);
+                  setHasChanges(false);
+                }}
+              />
+            )
           ) : null}
+          {/* Mision y vision */}
           {tab === "misionVision" ? (
             loadingMissionVision ? (
               <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>

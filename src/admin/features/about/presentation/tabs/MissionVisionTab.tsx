@@ -5,7 +5,7 @@ import type { ZodIssue } from "zod";
 
 import type { MissionVision } from "../../domain/about.types";
 import { aboutMissionVisionValidation } from "../../domain/aboutMissionVision.validation";
-import { hasMissionVisionChanges } from "../components/aboutChangeDetection";
+import { hasMissionVisionChanges } from "../../domain/aboutChangeDetection";
 
 export type MissionVisionTabHandle = {
   submit: () => Promise<boolean>;
