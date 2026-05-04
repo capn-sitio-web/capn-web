@@ -1,3 +1,5 @@
+import type { SectionCardsData } from "../../../components/sectionCardsIcon/sectionCards.types";
+
 // -------- Tipos base API --------
 export type SectionImage = {
   idimagen_seccion: number;
@@ -48,3 +50,8 @@ export type MissionVision = {
   mission: string;
   vision: string;
 };
+
+// -------- Valores --------
+export interface Values extends SectionCardsData {
+  seccionId: number | null;
+}

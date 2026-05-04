@@ -1,4 +1,4 @@
-import type { History, MissionVision } from "./about.types";
+import type { History, MissionVision, Values } from "./about.types";
 
 function normalizeText(value: string | null | undefined): string {
   return (value ?? "")
@@ -48,3 +48,30 @@ export function hasMissionVisionChanges(current: MissionVision, saved: MissionVi
 }
 
 /** ---- Valores ---- */
+type NormalizedValues = {
+  sectionTitle: string;
+  sectionDescription: string;
+  cards: {
+    icon: string;
+    title: string;
+    description: string;
+  }[];
+};
+
+export function normalizeValues(d: Values): NormalizedValues {
+  return {
+    sectionTitle: normalizeText(d.sectionTitle),
+    sectionDescription: normalizeText(d.sectionDescription),
+    cards: d.cards.map((card) => ({
+      icon: normalizeText(card.icon),
+      title: normalizeText(card.title),
+      description: normalizeText(card.description),
+    })),
+  };
+}
+
+export function hasValuesChanges(current: Values, saved: Values): boolean {
+  return isDifferent(normalizeValues(current), normalizeValues(saved));
+}
+
+/** ---- Equipo ---- */
