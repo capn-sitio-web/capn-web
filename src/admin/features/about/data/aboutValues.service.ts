@@ -1,47 +1,63 @@
+import { axiosClient } from "../../../config/axiosClient";
 import type { Values } from "../domain/about.types";
 
-const mockValues: Values = {
-  seccionId: null,
-  sectionTitle: "Nuestros Valores",
-  sectionDescription: "Los principios que guían nuestro trabajo diario",
-  cards: [
-    {
-      id: crypto.randomUUID(),
-      icon: "shield",
-      title: "Responsabilidad",
-      description:
-        "Compromiso con la exactitud y confiabilidad en cada análisis realizado.",
-    },
-    {
-      id: crypto.randomUUID(),
-      icon: "trophy",
-      title: "Excelencia",
-      description:
-        "Búsqueda constante de la mejora continua en todos nuestros procesos.",
-    },
-    {
-      id: crypto.randomUUID(),
-      icon: "heart",
-      title: "Compromiso",
-      description:
-        "Dedicación total a la seguridad alimentaria y el bienestar social.",
-    },
-    {
-      id: crypto.randomUUID(),
-      icon: "eye",
-      title: "Transparencia",
-      description:
-        "Información clara y honesta en todos nuestros procedimientos.",
-    },
-  ],
+type ValuesApiPayload = {
+  seccionId: number | null;
+  sectionTitle: string;
+  sectionDescription: string;
+  cards: {
+    id: string;
+    elementId?: number | null;
+    icon: string;
+    title: string;
+    description: string;
+  }[];
 };
+
+type ValuesApiResponse = {
+  message: string;
+  data: ValuesApiPayload;
+};
+
+function mapValuesFromApi(data: ValuesApiPayload): Values {
+  return {
+    seccionId: data.seccionId,
+    sectionTitle: data.sectionTitle,
+    sectionDescription: data.sectionDescription ?? "",
+    cards: data.cards.map((card) => ({
+      id: card.id,
+      elementId: card.elementId ?? null,
+      icon: card.icon as Values["cards"][number]["icon"],
+      title: card.title,
+      description: card.description,
+    })),
+  };
+}
 
 export const aboutValuesService = {
   async obtenerValores(): Promise<Values> {
-    return mockValues;
+    const response = await axiosClient.get<ValuesApiResponse>("/admin/about/values");
+    return mapValuesFromApi(response.data.data);
   },
 
   async actualizarValores(data: Values): Promise<Values> {
-    return data;
+    const payload = {
+      sectionTitle: data.sectionTitle,
+      sectionDescription: data.sectionDescription ?? "",
+      cards: data.cards.map((card) => ({
+        id: card.id,
+        elementId: card.elementId ?? null,
+        icon: card.icon,
+        title: card.title,
+        description: card.description,
+      })),
+    };
+
+    const response = await axiosClient.post<ValuesApiResponse>(
+      "/admin/about/values",
+      payload
+    );
+
+    return mapValuesFromApi(response.data.data);
   },
 };
