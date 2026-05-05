@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Box, Card, CardContent, CircularProgress } from "@mui/material";
 import AboutHeader from "../components/AboutHeader";
 import AboutTabs, { type AboutTabKey } from "../components/AboutTabs";
+import FeedbackSnackbar, { type FeedbackState } from "../../../../components/FeedbackSnackbar";
 // Tabs
 import HistoryTab, { type HistoryTabHandle } from "../tabs/HistoryTab";
 import MissionVisionTab, { type MissionVisionTabHandle } from "../tabs/MissionVisionTab";
@@ -16,6 +17,14 @@ import { aboutValuesService } from "../../data/aboutValues.service";
 export default function AboutManagementPage() {
   const [tab, setTab] = useState<AboutTabKey>("historia");
   const [hasChanges, setHasChanges] = useState(false);
+  
+  // Mensajes globales
+  const [feedback, setFeedback] = useState<FeedbackState | null>(null);
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const showFeedback = useCallback((nextFeedback: FeedbackState) => {
+    setFeedback(nextFeedback);
+    setFeedbackOpen(true);
+  }, []);
 
   // Estado persistido por sección
   const [savedHistory, setSavedHistory] = useState<History>({
@@ -111,17 +120,44 @@ export default function AboutManagementPage() {
     return false;
   }, [tab]);
 
+  // Cambiar de tab: si hay cambios pendientes, bloquea el cambio
+  const handleTabChange = useCallback(
+    (nextTab: AboutTabKey) => {
+      if (nextTab === tab) return;
+      if (hasChanges) {
+        showFeedback({
+          message: "Tienes cambios pendientes. Guarda antes de cambiar de pestaña.",
+          severity: "warning",
+        });
+        return;
+      }
+      setTab(nextTab);
+    },
+    [tab, hasChanges, showFeedback]
+  );
+
+  // Wrapper general para mostrar mensaje de exito
+  const handleSaveWithFeedback = useCallback(async () => {
+    const savedOk = await handleSave();
+    if (savedOk) {
+      showFeedback({
+        message: "Los cambios se guardaron correctamente.",
+        severity: "success",
+      });
+    }
+  }, [handleSave, showFeedback]);
+
   return (
     <Box>
       <AboutHeader
         title="Gestión de Nosotros"
         subtitle="Administra el contenido de la página Nosotros"
         disableSave={!hasChanges}
-        onSave={handleSave}
+        onSave={handleSaveWithFeedback}
       />
       
       <Card variant="outlined" sx={{ borderRadius: 3 }}>
-        <AboutTabs value={tab} onChange={setTab} />
+        <AboutTabs value={tab} onChange={handleTabChange} />
         <CardContent sx={{ mt: 1 }}>
           {/* Historia */}
           {tab === "historia" ? (
@@ -184,6 +220,13 @@ export default function AboutManagementPage() {
           {tab === "equipo" ? <div>TODO: Equipo</div> : null}
         </CardContent>
       </Card>
+      {/* Mensaje de exito y advertencia */}
+      <FeedbackSnackbar
+        feedback={feedback}
+        open={feedbackOpen}
+        onClose={() => setFeedbackOpen(false)}
+        onExited={() => setFeedback(null)}
+      />
     </Box>
   );
 }
