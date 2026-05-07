@@ -159,12 +159,6 @@ const HistoryTab = forwardRef<HistoryTabHandle, Props>(function HistoryTab(
         onChange={handleImageChange}
         error={Boolean(errors.image)}
         helperText={errors.image}
-        /*helperText={
-          errors.image ||
-          (data.image.file
-            ? "La imagen fue seleccionada localmente. La subida al backend se implementará después."
-            : undefined)
-        }*/
       />
     </Stack>
   );

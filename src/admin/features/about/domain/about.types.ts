@@ -27,19 +27,19 @@ export type SectionResponse = {
   imagenes?: SectionImage[];
 };
 
-// -------- Historia --------
-export type HistoryImage = {
+export type Image = {
   file: File | null;
   previewUrl: string;
   imageId: number | null;
   alt: string;
 };
 
+// -------- Historia --------
 export type History = {
   seccionId: number | null;
   sectionTitle: string;
   description: string;
-  image: HistoryImage;
+  image: Image;
 };
 
 // -------- Misión y Visión --------
@@ -55,3 +55,19 @@ export type MissionVision = {
 export interface Values extends SectionCardsData {
   seccionId: number | null;
 }
+
+// -------- Team --------
+export type TeamMember = {
+  id: string;
+  image: Image;
+  name: string;
+  position: string;
+  description: string;
+};
+
+export type Team = {
+  seccionId: number | null;
+  sectionTitle: string;
+  sectionDescription: string;
+  members: TeamMember[];
+};

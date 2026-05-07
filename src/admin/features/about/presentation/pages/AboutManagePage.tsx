@@ -7,12 +7,14 @@ import FeedbackSnackbar, { type FeedbackState } from "../../../../components/Fee
 import HistoryTab, { type HistoryTabHandle } from "../tabs/HistoryTab";
 import MissionVisionTab, { type MissionVisionTabHandle } from "../tabs/MissionVisionTab";
 import ValuesTab, { type ValuesTabHandle } from "../tabs/ValuesTab";
+import TeamTab, { type TeamTabHandle } from "../tabs/TeamTab";
 // Types
-import type { History, MissionVision, Values } from "../../domain/about.types";
+import type { History, MissionVision, Values, Team } from "../../domain/about.types";
 // Services
 import { aboutHistoryService } from "../../data/aboutHistory.service";
 import { aboutMissionVisionService } from "../../data/aboutMissionVision.service";
 import { aboutValuesService } from "../../data/aboutValues.service";
+import { aboutTeamService } from "../../data/aboutTeam.service";
 
 export default function AboutManagementPage() {
   const [tab, setTab] = useState<AboutTabKey>("historia");
@@ -61,15 +63,37 @@ export default function AboutManagementPage() {
     ],
   });
 
+  const [savedTeam, setSavedTeam] = useState<Team>({
+    seccionId: null,
+    sectionTitle: "",
+    sectionDescription: "",
+    members: [
+      {
+        id: "1",
+        image: {
+          file: null,
+          previewUrl: "",
+          imageId: null,
+          alt: "",
+        },
+        name: "",
+        position: "",
+        description: "",
+      },
+    ],
+  });
+
   // Estados de carga por sección
   const [loadingHistory, setLoadingHistory] = useState(true);
   const [loadingMissionVision, setLoadingMissionVision] = useState(true);
   const [loadingValues, setLoadingValues] = useState(true);
+  const [loadingTeam, setLoadingTeam] = useState(true);
   
   // ref para ejecutar submit() desde el botón del header
   const historyRef = useRef<HistoryTabHandle | null>(null);
   const missionVisionRef = useRef<MissionVisionTabHandle | null>(null);
   const valuesRef = useRef<ValuesTabHandle | null>(null);
+  const teamRef = useRef<TeamTabHandle | null>(null);
 
   const cargarHistoria = useCallback(async () => {
     try {
@@ -107,16 +131,30 @@ export default function AboutManagementPage() {
     }
   }, []);
 
+  const cargarEquipo = useCallback(async () => {
+    try {
+      setLoadingTeam(true);
+      const response = await aboutTeamService.obtenerEquipo();
+      setSavedTeam(response);
+    } catch (error) {
+      console.error("Error al obtener equipo:", error);
+    } finally {
+      setLoadingTeam(false);
+    }
+  }, []);
+
   useEffect(() => {
     cargarHistoria();
     cargarMisionVision();
     cargarValores();
-  }, [cargarHistoria, cargarMisionVision, cargarValores]);
+    cargarEquipo();
+  }, [cargarHistoria, cargarMisionVision, cargarValores, cargarEquipo]);
 
   const handleSave = useCallback(async () => {
     if (tab === "historia") return (await historyRef.current?.submit()) ?? false;
     if (tab === "misionVision") return (await missionVisionRef.current?.submit()) ?? false;
     if (tab === "valores") return (await valuesRef.current?.submit()) ?? false;
+    if (tab === "equipo") return (await teamRef.current?.submit()) ?? false;
     return false;
   }, [tab]);
 
@@ -217,7 +255,24 @@ export default function AboutManagementPage() {
             )
           ) : null}
           {/* Equipo */}
-          {tab === "equipo" ? <div>TODO: Equipo</div> : null}
+          {tab === "equipo" ? (
+            loadingTeam ? (
+              <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              <TeamTab
+                ref={teamRef}
+                initialValue={savedTeam}
+                onChanges={setHasChanges}
+                onCommitSave={async (nextSaved) => {
+                  const updated = await aboutTeamService.actualizarEquipo(nextSaved);
+                  setSavedTeam(updated);
+                  setHasChanges(false);
+                }}
+              />
+            )
+          ) : null}
         </CardContent>
       </Card>
       {/* Mensaje de exito y advertencia */}

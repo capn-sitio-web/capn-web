@@ -1,4 +1,4 @@
-import type { History, MissionVision, Values } from "./about.types";
+import type { History, MissionVision, Values, Team } from "./about.types";
 
 function normalizeText(value: string | null | undefined): string {
   return (value ?? "")
@@ -75,3 +75,33 @@ export function hasValuesChanges(current: Values, saved: Values): boolean {
 }
 
 /** ---- Equipo ---- */
+type NormalizedTeam = {
+  sectionTitle: string;
+  sectionDescription: string;
+  members: {
+    image: { previewUrl: string; hasNewFile: boolean; };
+    name: string;
+    position: string;
+    description: string;
+  }[];
+};
+
+export function normalizeTeam(d: Team): NormalizedTeam {
+  return {
+    sectionTitle: normalizeText(d.sectionTitle),
+    sectionDescription: normalizeText(d.sectionDescription),
+    members: d.members.map((member) => ({
+      image: {
+        previewUrl: normalizeText(member.image?.previewUrl),
+        hasNewFile: Boolean(member.image?.file),
+      },
+      name: normalizeText(member.name),
+      position: normalizeText(member.position),
+      description: normalizeText(member.description),
+    })),
+  };
+}
+
+export function hasTeamChanges(current: Team, saved: Team): boolean {
+  return isDifferent(normalizeTeam(current), normalizeTeam(saved));
+}
