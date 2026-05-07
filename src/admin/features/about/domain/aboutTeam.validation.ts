@@ -11,6 +11,7 @@ export const aboutTeamValidation = z.object({
     .array(
       z.object({
         id: z.string(),
+        personalId: z.number().nullable().optional(),
         image: z
           .object({
             file: z.instanceof(File).nullable().default(null),

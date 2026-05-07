@@ -70,6 +70,7 @@ export default function AboutManagementPage() {
     members: [
       {
         id: "1",
+        personalId: null,
         image: {
           file: null,
           previewUrl: "",

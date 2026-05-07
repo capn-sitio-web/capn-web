@@ -59,6 +59,7 @@ export interface Values extends SectionCardsData {
 // -------- Team --------
 export type TeamMember = {
   id: string;
+  personalId?: number | null;
   image: Image;
   name: string;
   position: string;

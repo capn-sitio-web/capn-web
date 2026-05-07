@@ -45,6 +45,7 @@ type TeamFormErrors = {
 function createEmptyMember(): TeamMember {
   return {
     id: crypto.randomUUID(),
+    personalId: null,
     image: {
       file: null,
       previewUrl: "",

@@ -1,47 +1,84 @@
+import { axiosClient } from "../../../config/axiosClient";
 import type { Team } from "../domain/about.types";
 
-const mockTeam: Team = {
-  seccionId: null,
-  sectionTitle: "Nuestro Equipo",
-  sectionDescription: "Profesionales especializados comprometidos con la excelencia",
-  members: [
-    {
-      id: "1",
-      image: {
-        file: null,
-        previewUrl:
-          "https://img.freepik.com/vector-gratis/cientifico-dibujos-animados-laboratorio_23-2148672514.jpg",
-        imageId: null,
-        alt: "Integrante del equipo CAPN",
-      },
-      name: "Ing. Carlos Mendoza",
-      position: "Director General",
-      description:
-        "Ingeniero Químico con especialización en cromatografía. 15 años de experiencia en determinación de nutrientes y contaminantes en alimentos.",
-    },
-    {
-      id: "2",
-      image: {
-        file: null,
-        previewUrl:
-          "https://img.freepik.com/vector-gratis/cientifico-dibujos-animados-laboratorio_23-2148672514.jpg",
-        imageId: null,
-        alt: "Integrante del equipo CAPN",
-      },
-      name: "Lic. Ana Rodríguez",
-      position: "Responsable de Laboratorio",
-      description:
-        "Especialista en análisis microbiológicos y control de calidad alimentaria.",
-    },
-  ],
+type TeamApiPayload = {
+  seccionId: number | null;
+  sectionTitle: string;
+  sectionDescription: string;
+  members: {
+    id: string;
+    personalId?: number | null;
+    image: {
+      previewUrl: string;
+      alt: string;
+    };
+    name: string;
+    position: string;
+    description: string;
+  }[];
 };
+
+type TeamApiResponse = {
+  message: string;
+  data: TeamApiPayload;
+};
+
+function mapTeamFromApi(data: TeamApiPayload): Team {
+  return {
+    seccionId: data.seccionId,
+    sectionTitle: data.sectionTitle,
+    sectionDescription: data.sectionDescription ?? "",
+    members: data.members.map((member) => ({
+      id: member.id,
+      personalId: member.personalId ?? null,
+      image: {
+        file: null,
+        previewUrl: member.image?.previewUrl ?? "",
+        imageId: null,
+        alt: member.image?.alt ?? "",
+      },
+      name: member.name,
+      position: member.position,
+      description: member.description,
+    })),
+  };
+}
 
 export const aboutTeamService = {
   async obtenerEquipo(): Promise<Team> {
-    return mockTeam;
+    const response = await axiosClient.get<TeamApiResponse>("/admin/about/team");
+    return mapTeamFromApi(response.data.data);
   },
 
   async actualizarEquipo(data: Team): Promise<Team> {
-    return data;
+    const formData = new FormData();
+
+    formData.append("sectionTitle", data.sectionTitle);
+    formData.append("sectionDescription", data.sectionDescription ?? "");
+
+    data.members.forEach((member, index) => {
+      formData.append(`members[${index}][id]`, member.id);
+      formData.append(`members[${index}][personalId]`, String(member.personalId ?? ""));
+      formData.append(`members[${index}][name]`, member.name);
+      formData.append(`members[${index}][position]`, member.position);
+      formData.append(`members[${index}][description]`, member.description);
+      formData.append(`members[${index}][image_alt]`, member.image.alt ?? "");
+
+      if (member.image.file) {
+        formData.append(`members[${index}][image]`, member.image.file);
+      }
+    });
+
+    const response = await axiosClient.post<TeamApiResponse>(
+      "/admin/about/team",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    return mapTeamFromApi(response.data.data);
   },
 };
