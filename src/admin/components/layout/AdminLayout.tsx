@@ -18,6 +18,7 @@ export default function AdminLayout() {
           flex: 1,
           ml: { md: `${DRAWER_WIDTH}px` },
           p: { xs: 2, sm: 3 },
+          overflowX: "hidden",
         }}
       >
         <Toolbar />

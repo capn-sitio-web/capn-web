@@ -12,7 +12,12 @@ import ContactPage from "./presentation/pages/ContactPage";
 {/* CMS */}
 import AdminGate from "./admin/features/auth/presentation/AdminGate";
 import DashboardPage from "./admin/features/dashboard/pages/DashboardPage";
-import AboutManagePage from "./admin/features/about/presentation/pages/AboutManagePage";
+import HomeManagementPage from "./admin/features/home/presentation/pages/HomeManagementPage";
+import AboutManagementPage from "./admin/features/about/presentation/pages/AboutManagementPage";
+import ServicesManagementPage from "./admin/features/services/presentation/pages/ServicesManagementPage";
+import AccreditationManagementPage from "./admin/features/accreditation/presentation/pages/AccreditationManagementPage";
+import NewsManagementPage from "./admin/features/news/presentation/pages/NewsManagementPage";
+import ContactManagementPage from "./admin/features/contact/presentation/pages/ContactManagementPage";
 
 function App() {
   return (
@@ -30,7 +35,12 @@ function App() {
         {/* CMS */}
         <Route path={ROUTES.ADMIN} element={<AdminGate />}>
           <Route index element={<DashboardPage />} />
-          <Route path={ROUTES.ADMIN_ABOUT} element={<AboutManagePage />} />
+          <Route path={ROUTES.ADMIN_HOME} element={<HomeManagementPage />} />
+          <Route path={ROUTES.ADMIN_ABOUT} element={<AboutManagementPage />} />
+          <Route path={ROUTES.ADMIN_SERVICES} element={<ServicesManagementPage />} />
+          <Route path={ROUTES.ADMIN_ACCREDITATION} element={<AccreditationManagementPage />} />
+          <Route path={ROUTES.ADMIN_NEWS} element={<NewsManagementPage />} />
+          <Route path={ROUTES.ADMIN_CONTACT} element={<ContactManagementPage />} />
         </Route>
         {/* Fallback */}
         <Route path="*" element={<Navigate to={ROUTES.HOME} replace />} />
