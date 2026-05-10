@@ -5,7 +5,8 @@ export const aboutTeamValidation = z.object({
   sectionTitle: z
     .string()
     .trim()
-    .min(1, "El título de la sección es obligatorio."),
+    .min(1, "El título de la sección es obligatorio.")
+    .max(150, "El título es muy largo"),
   sectionDescription: z.string().trim().optional(),
   members: z
     .array(

@@ -10,12 +10,7 @@ import {
 } from "@mui/material";
 import { Add, DeleteOutline } from "@mui/icons-material";
 import ImageUploadField from "../ImageUploadField";
-
-import type {
-  SectionListImageData,
-  SectionListItem,
-} from "./sectionListImage.types";
-
+import type { SectionListImageData, SectionListItem } from "./sectionListImage.types";
 import type { SectionListImageFormErrors } from "./sectionListImage.validation";
 
 type Props = {

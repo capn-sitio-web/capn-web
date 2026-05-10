@@ -5,7 +5,8 @@ export const aboutHistoryValidation = z.object({
     .string()
     .trim()
     .min(3, "El título debe tener al menos 3 caracteres.")
-    .min(1, "El título de la sección es obligatorio."),
+    .min(1, "El título de la sección es obligatorio.")
+    .max(150, "El título es muy largo"),
   description: z
     .string()
     .trim()

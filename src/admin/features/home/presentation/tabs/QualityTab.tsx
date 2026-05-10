@@ -5,19 +5,11 @@ import {
   useMemo,
   useState,
 } from "react";
-
 import { Alert, Box } from "@mui/material";
 import axios from "axios";
-
 import SectionListImageEditor from "../../../../components/sectionListImage/SectionListImageEditor";
-
 import type { HomeQuality } from "../../domain/home.types";
-
-import {
-  validateSectionListImage,
-  type SectionListImageFormErrors,
-} from "../../../../components/sectionListImage/sectionListImage.validation";
-
+import { validateSectionListImage, type SectionListImageFormErrors } from "../../../../components/sectionListImage/sectionListImage.validation";
 import { hasHomeQualityChanges } from "../../domain/homeChangeDetection";
 
 export type QualityTabHandle = {
