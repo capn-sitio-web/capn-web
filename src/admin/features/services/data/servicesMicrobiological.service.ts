@@ -1,44 +1,82 @@
+import { axiosClient } from "../../../config/axiosClient";
 import type { ServiceMicrobiological } from "../domain/services.types";
 
-const mockMicrobiological: ServiceMicrobiological = {
-  seccionId: null,
-  sectionTitle: "Análisis Microbiológicos",
-  sectionDescription:
-    "Detección y cuantificación de microorganismos indicadores y patógenos en alimentos, agua y superficies de contacto con alimentos.",
-  items: [
-    {
-      id: "1",
-      text: "Microorganismos Indicadores",
-    },
-    {
-      id: "2",
-      text: "Patógenos",
-    },
-    {
-      id: "3",
-      text: "Mohos y Levaduras",
-    },
-    {
-      id: "4",
-      text: "Análisis de Agua",
-    },
-  ],
+type ServiceMicrobiologicalApiPayload = {
+  seccionId: number | null;
+  sectionTitle: string;
+  sectionDescription: string;
+  items: {
+    id: string;
+    text: string;
+  }[];
   image: {
-    file: null,
-    previewUrl: "",
-    imageId: null,
-    alt: "Análisis microbiológicos en laboratorio",
-  },
+    previewUrl: string;
+    imageId: number | null;
+    alt: string;
+  };
 };
+
+type ServiceMicrobiologicalApiResponse = {
+  message: string;
+  data: ServiceMicrobiologicalApiPayload;
+};
+
+function mapServiceMicrobiologicalFromApi(
+  data: ServiceMicrobiologicalApiPayload
+): ServiceMicrobiological {
+  return {
+    seccionId: data.seccionId,
+    sectionTitle: data.sectionTitle,
+    sectionDescription: data.sectionDescription ?? "",
+    items: data.items.map((item) => ({
+      id: item.id,
+      text: item.text,
+    })),
+    image: {
+      file: null,
+      previewUrl: data.image?.previewUrl ?? "",
+      imageId: data.image?.imageId ?? null,
+      alt: data.image?.alt ?? "",
+    },
+  };
+}
 
 export const servicesMicrobiologicalService = {
   async obtenerMicrobiologico(): Promise<ServiceMicrobiological> {
-    return mockMicrobiological;
+    const response = await axiosClient.get<ServiceMicrobiologicalApiResponse>(
+      "/admin/services/microbiological"
+    );
+    return mapServiceMicrobiologicalFromApi(response.data.data);
   },
 
   async actualizarMicrobiologico(
     data: ServiceMicrobiological
   ): Promise<ServiceMicrobiological> {
-    return data;
+    const formData = new FormData();
+
+    formData.append("sectionTitle", data.sectionTitle);
+    formData.append("sectionDescription", data.sectionDescription ?? "");
+    formData.append("image_alt", data.image.alt ?? "");
+
+    data.items.forEach((item, index) => {
+      formData.append(`items[${index}][id]`, item.id);
+      formData.append(`items[${index}][text]`, item.text);
+    });
+
+    if (data.image.file) {
+      formData.append("image", data.image.file);
+    }
+
+    const response = await axiosClient.post<ServiceMicrobiologicalApiResponse>(
+      "/admin/services/microbiological",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    return mapServiceMicrobiologicalFromApi(response.data.data);
   },
 };
