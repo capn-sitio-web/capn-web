@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Box, Card, CardContent, CircularProgress } from "@mui/material";
-import AboutHeader from "../components/AboutHeader";
-import AboutTabs, { type AboutTabKey } from "../components/AboutTabs";
+import PageHeader from "../../../../components/PageHeader";
+import PageTabs, { type PageTabItem } from "../../../../components/PageTabs";
 import FeedbackSnackbar, { type FeedbackState } from "../../../../components/FeedbackSnackbar";
 // Tabs
 import HistoryTab, { type HistoryTabHandle } from "../tabs/HistoryTab";
@@ -15,6 +15,14 @@ import { aboutHistoryService } from "../../data/aboutHistory.service";
 import { aboutMissionVisionService } from "../../data/aboutMissionVision.service";
 import { aboutValuesService } from "../../data/aboutValues.service";
 import { aboutTeamService } from "../../data/aboutTeam.service";
+
+type AboutTabKey = "historia" | "misionVision" | "valores" | "equipo";
+const ABOUT_TABS: PageTabItem<AboutTabKey>[] = [
+  { value: "historia", label: "Historia" },
+  { value: "misionVision", label: "Misión y Visión" },
+  { value: "valores", label: "Valores" },
+  { value: "equipo", label: "Equipo" },
+];
 
 export default function AboutManagementPage() {
   const [tab, setTab] = useState<AboutTabKey>("historia");
@@ -188,7 +196,7 @@ export default function AboutManagementPage() {
 
   return (
     <Box>
-      <AboutHeader
+      <PageHeader
         title="Gestión de Nosotros"
         subtitle="Administra el contenido de la página Nosotros"
         disableSave={!hasChanges}
@@ -196,7 +204,7 @@ export default function AboutManagementPage() {
       />
       
       <Card variant="outlined" sx={{ borderRadius: 3 }}>
-        <AboutTabs value={tab} onChange={handleTabChange} />
+        <PageTabs value={tab} tabs={ABOUT_TABS} onChange={handleTabChange} />
         <CardContent sx={{ mt: 1 }}>
           {/* Historia */}
           {tab === "historia" ? (

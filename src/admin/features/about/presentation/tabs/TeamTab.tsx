@@ -16,7 +16,7 @@ import { Add, DeleteOutline } from "@mui/icons-material";
 import axios from "axios";
 import type { ZodIssue } from "zod";
 
-import ImageUploadField from "../components/ImageUploadField";
+import ImageUploadField from "../../../../components/ImageUploadField";
 import type { Team, TeamMember } from "../../domain/about.types";
 import { aboutTeamValidation } from "../../domain/aboutTeam.validation";
 import { hasTeamChanges } from "../../domain/aboutChangeDetection";
