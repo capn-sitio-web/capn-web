@@ -1,10 +1,20 @@
-import type { HomeServices } from "./home.types";
+import type { HomeServices, HomeQuality } from "./home.types";
 
 function normalizeText(value: string | null | undefined): string {
   return (value ?? "")
     .replace(/\r\n/g, "\n")
     .replace(/\r/g, "\n")
     .trim();
+}
+
+function normalizeFile(file: File | null | undefined): string {
+  if (!file) return "";
+  return [
+    file.name,
+    file.size,
+    file.type,
+    file.lastModified,
+  ].join("-");
 }
 
 function isDifferent<N extends object>(a: N, b: N): boolean {
@@ -36,4 +46,30 @@ export function normalizeHomeServices(data: HomeServices): NormalizedHomeService
 
 export function hasHomeServicesChanges(current: HomeServices, saved: HomeServices): boolean {
   return isDifferent(normalizeHomeServices(current), normalizeHomeServices(saved));
+}
+
+/** ---- Calidad Certificada de Inicio ---- */
+type NormalizedHomeQuality = {
+  sectionTitle: string;
+  sectionDescription: string;
+  items: { text: string; }[];
+  image: { previewUrl: string; file: string; };
+};
+
+export function normalizeHomeQuality(data: HomeQuality): NormalizedHomeQuality {
+  return {
+    sectionTitle: normalizeText(data.sectionTitle),
+    sectionDescription: normalizeText(data.sectionDescription),
+    items: data.items.map((item) => ({
+      text: normalizeText(item.text),
+    })),
+    image: {
+      previewUrl: normalizeText(data.image?.previewUrl),
+      file: normalizeFile(data.image?.file),
+    },
+  };
+}
+
+export function hasHomeQualityChanges(current: HomeQuality, saved: HomeQuality): boolean {
+  return isDifferent(normalizeHomeQuality(current), normalizeHomeQuality(saved));
 }

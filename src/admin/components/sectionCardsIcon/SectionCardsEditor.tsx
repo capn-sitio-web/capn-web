@@ -10,6 +10,7 @@ import {
   MenuItem,
   Select,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
@@ -102,6 +103,7 @@ export default function SectionCardsEditor({
         <Typography fontWeight={700} sx={{ mb: 1 }}>Título de la Sección</Typography>
         <TextField
           fullWidth
+          multiline
           value={value.sectionTitle}
           onChange={(event) => handleSectionChange("sectionTitle", event.target.value)}
           error={Boolean(errors?.sectionTitle)}
@@ -222,17 +224,20 @@ export default function SectionCardsEditor({
                     )}
                   </FormControl>
 
-                  <IconButton
-                    color="error"
-                    onClick={() => handleDeleteCard(card.id)}
-                    disabled={value.cards.length === 1}
-                  >
-                    <DeleteOutlineIcon />
-                  </IconButton>
+                  <Tooltip title="Eliminar tarjeta">
+                    <IconButton
+                      color="error"
+                      onClick={() => handleDeleteCard(card.id)}
+                      disabled={value.cards.length === 1}
+                    >
+                      <DeleteOutlineIcon />
+                    </IconButton>
+                  </Tooltip>
                 </Box>
 
                 <TextField
                   fullWidth
+                  multiline
                   label="Título"
                   value={card.title}
                   onChange={(event) =>

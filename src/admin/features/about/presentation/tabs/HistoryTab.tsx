@@ -135,6 +135,7 @@ const HistoryTab = forwardRef<HistoryTabHandle, Props>(function HistoryTab(
           value={data.sectionTitle}
           onChange={(e) => handleTitleChange(e.target.value)}
           fullWidth
+          multiline
           error={Boolean(errors.sectionTitle)}
           helperText={errors.sectionTitle}
         />

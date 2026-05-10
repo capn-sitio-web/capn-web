@@ -227,6 +227,7 @@ const TeamTab = forwardRef<TeamTabHandle, Props>(function TeamTab(
         <Typography fontWeight={700} mb={1}>Título de la Sección</Typography>
         <TextField
           fullWidth
+          multiline
           value={data.sectionTitle}
           onChange={(event) => updateSectionField("sectionTitle", event.target.value)}
           error={Boolean(errors.sectionTitle)}
@@ -278,9 +279,17 @@ const TeamTab = forwardRef<TeamTabHandle, Props>(function TeamTab(
               <Box
                 sx={{
                   display: "flex",
-                  justifyContent: "flex-end",
                 }}
               >
+                <TextField
+                  fullWidth
+                  multiline
+                  label="Nombre"
+                  value={member.name}
+                  onChange={(event) => updateMemberField(member.id, "name", event.target.value)}
+                  error={Boolean(errors.members?.[index]?.name)}
+                  helperText={errors.members?.[index]?.name}
+                />
                 <Tooltip title="Eliminar integrante">
                   <IconButton
                     color="error"
@@ -289,21 +298,12 @@ const TeamTab = forwardRef<TeamTabHandle, Props>(function TeamTab(
                   >
                     <DeleteOutline />
                   </IconButton>
-                </Tooltip>
+                </Tooltip> 
               </Box>
 
               <TextField
                 fullWidth
-                label="Nombre"
-                value={member.name}
-                onChange={(event) => updateMemberField(member.id, "name", event.target.value)}
-                error={Boolean(errors.members?.[index]?.name)}
-                helperText={errors.members?.[index]?.name}
-                sx={{ mt: 2 }}
-              />
-
-              <TextField
-                fullWidth
+                multiline
                 label="Cargo"
                 value={member.position}
                 onChange={(event) => updateMemberField(member.id, "position", event.target.value)}

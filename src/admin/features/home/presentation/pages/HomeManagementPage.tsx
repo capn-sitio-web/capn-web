@@ -5,10 +5,12 @@ import PageTabs, { type PageTabItem } from "../../../../components/PageTabs";
 import FeedbackSnackbar, { type FeedbackState } from "../../../../components/FeedbackSnackbar";
 // Tabs
 import ServicesTab, { type ServicesTabHandle } from "../tabs/ServicesTab";
+import QualityTab, { type QualityTabHandle } from "../tabs/QualityTab";
 // Types
-import type { HomeServices } from "../../domain/home.types";
+import type { HomeServices, HomeQuality } from "../../domain/home.types";
 // Services
 import { homeServicesService } from "../../data/homeServices.service";
+import { homeQualityService } from "../../data/homeQuality.service";
 
 type HomeTabKey =
   | "hero"
@@ -51,11 +53,31 @@ export default function HomeManagementPage() {
     ],
   });
 
+  const [savedQuality, setSavedQuality] = useState<HomeQuality>({
+    seccionId: null,
+    sectionTitle: "",
+    sectionDescription: "",
+    items: [
+      {
+        id: "1",
+        text: "",
+      },
+    ],
+    image: {
+      file: null,
+      previewUrl: "",
+      imageId: null,
+      alt: "",
+    },
+  });
+
   // Estados de carga por sección
   const [loadingServices, setLoadingServices] = useState(true);
+  const [loadingQuality, setLoadingQuality] = useState(true);
 
   // ref para ejecutar submit() desde el botón del header
   const servicesRef = useRef<ServicesTabHandle | null>(null);
+  const qualityRef = useRef<QualityTabHandle | null>(null);
 
   const cargarServicios = useCallback(async () => {
     try {
@@ -69,12 +91,26 @@ export default function HomeManagementPage() {
     }
   }, []);
 
+  const cargarCalidad = useCallback(async () => {
+    try {
+      setLoadingQuality(true);
+      const response = await homeQualityService.obtenerCalidad();
+      setSavedQuality(response);
+    } catch (error) {
+      console.error("Error al obtener calidad certificada de inicio:", error);
+    } finally {
+      setLoadingQuality(false);
+    }
+  }, []);
+
   useEffect(() => {
     cargarServicios();
-  }, [cargarServicios]);
+    cargarCalidad();
+  }, [cargarServicios, cargarCalidad]);
 
   const handleSave = useCallback(async () => {
     if (tab === "servicios") return (await servicesRef.current?.submit()) ?? false;
+    if (tab === "calidad") return (await qualityRef.current?.submit()) ?? false;
     return false;
   }, [tab]);
 
@@ -148,16 +184,24 @@ export default function HomeManagementPage() {
               />
             )
           ) : null}
-
+          {/* Calidad certificada */}
           {tab === "calidad" ? (
-            <Box>
-              <Typography variant="h6" fontWeight={700}>
-                Calidad Certificada
-              </Typography>
-              <Typography color="text.secondary">
-                Aquí irá el formulario para editar el bloque de certificación, beneficios e imagen.
-              </Typography>
-            </Box>
+            loadingQuality ? (
+              <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              <QualityTab
+                ref={qualityRef}
+                initialValue={savedQuality}
+                onChanges={setHasChanges}
+                onCommitSave={async (nextSaved) => {
+                  const updated = await homeQualityService.actualizarCalidad(nextSaved);
+                  setSavedQuality(updated);
+                  setHasChanges(false);
+                }}
+              />
+            )
           ) : null}
 
           {tab === "estadisticas" ? (
