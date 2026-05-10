@@ -1,4 +1,4 @@
-import type { ServiceMicrobiological } from "./services.types";
+import type { ServiceAnalysisSection, ServiceMicrobiological, ServicePhysicochemical, ServiceSensory, ServiceSpecialized } from "./services.types";
 
 function normalizeText(value: string | null | undefined): string {
   return (value ?? "")
@@ -21,15 +21,17 @@ function isDifferent<N extends object>(a: N, b: N): boolean {
   return JSON.stringify(a) !== JSON.stringify(b);
 }
 
-/** ---- Análisis Microbiológicos ---- */
-type NormalizedServiceMicrobiological = {
+/** ---- Análisis reutilizable ---- */
+type NormalizedSectionListImage = {
   sectionTitle: string;
   sectionDescription: string;
   items: { text: string; }[];
   image: { previewUrl: string; file: string; };
 };
 
-export function normalizeServiceMicrobiological(data: ServiceMicrobiological): NormalizedServiceMicrobiological {
+function normalizeSectionListImage(
+  data: ServiceAnalysisSection
+): NormalizedSectionListImage {
   return {
     sectionTitle: normalizeText(data.sectionTitle),
     sectionDescription: normalizeText(data.sectionDescription),
@@ -43,6 +45,22 @@ export function normalizeServiceMicrobiological(data: ServiceMicrobiological): N
   };
 }
 
+/** ---- Análisis Microbiológicos ---- */
 export function hasServiceMicrobiologicalChanges(current: ServiceMicrobiological, saved: ServiceMicrobiological): boolean {
-  return isDifferent(normalizeServiceMicrobiological(current), normalizeServiceMicrobiological(saved));
+  return isDifferent(normalizeSectionListImage(current), normalizeSectionListImage(saved));
+}
+
+/** ---- Análisis Fisicoquímicos ---- */
+export function hasServicePhysicochemicalChanges(current: ServicePhysicochemical, saved: ServicePhysicochemical): boolean {
+  return isDifferent(normalizeSectionListImage(current), normalizeSectionListImage(saved));
+}
+
+/** ---- Análisis Sensoriales ---- */
+export function hasServiceSensoryChanges(current: ServiceSensory, saved: ServiceSensory): boolean {
+  return isDifferent(normalizeSectionListImage(current), normalizeSectionListImage(saved));
+}
+
+/** ---- Análisis Especializados ---- */
+export function hasServiceSpecializedChanges(current: ServiceSpecialized, saved: ServiceSpecialized): boolean {
+  return isDifferent(normalizeSectionListImage(current), normalizeSectionListImage(saved));
 }

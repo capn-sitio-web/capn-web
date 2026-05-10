@@ -5,10 +5,16 @@ import PageTabs, { type PageTabItem } from "../../../../components/PageTabs";
 import FeedbackSnackbar, { type FeedbackState } from "../../../../components/FeedbackSnackbar";
 // Tabs
 import MicrobiologicalTab, { type MicrobiologicalTabHandle } from "../tabs/MicrobiologicalTab";
+import PhysicochemicalTab, { type PhysicochemicalTabHandle } from "../tabs/PhysicochemicalTab";
+import SensoryTab, { type SensoryTabHandle } from "../tabs/SensoryTab";
+import SpecializedTab, { type SpecializedTabHandle } from "../tabs/SpecializedTab";
 // Types
-import type { ServiceMicrobiological } from "../../domain/services.types";
+import type { ServiceMicrobiological, ServicePhysicochemical, ServiceSensory, ServiceSpecialized } from "../../domain/services.types";
 // Services
 import { servicesMicrobiologicalService } from "../../data/servicesMicrobiological.service";
+import { servicesPhysicochemicalService } from "../../data/servicesPhysicochemical.service";
+import { servicesSensoryService } from "../../data/servicesSensory.service";
+import { servicesSpecializedService } from "../../data/servicesSpecialized.service";
 
 type ServicesTabKey =
   | "hero"
@@ -59,11 +65,71 @@ export default function ServicesManagementPage() {
     },
   });
 
+  const [savedPhysicochemical, setSavedPhysicochemical] = useState<ServicePhysicochemical>({
+    seccionId: null,
+    sectionTitle: "",
+    sectionDescription: "",
+    items: [
+      {
+        id: "1",
+        text: "",
+      },
+    ],
+    image: {
+      file: null,
+      previewUrl: "",
+      imageId: null,
+      alt: "",
+    },
+  });
+
+  const [savedSensory, setSavedSensory] = useState<ServiceSensory>({
+    seccionId: null,
+    sectionTitle: "",
+    sectionDescription: "",
+    items: [
+      {
+        id: "1",
+        text: "",
+      },
+    ],
+    image: {
+      file: null,
+      previewUrl: "",
+      imageId: null,
+      alt: "",
+    },
+  });
+
+  const [savedSpecialized, setSavedSpecialized] = useState<ServiceSpecialized>({
+    seccionId: null,
+    sectionTitle: "",
+    sectionDescription: "",
+    items: [
+      {
+        id: "1",
+        text: "",
+      },
+    ],
+    image: {
+      file: null,
+      previewUrl: "",
+      imageId: null,
+      alt: "",
+    },
+  });
+
   // Estados de carga por sección
   const [loadingMicrobiological, setLoadingMicrobiological] = useState(true);
+  const [loadingPhysicochemical, setLoadingPhysicochemical] = useState(true);
+  const [loadingSensory, setLoadingSensory] = useState(true);
+  const [loadingSpecialized, setLoadingSpecialized] = useState(true);
 
   // ref para ejecutar submit() desde el botón del header
   const microbiologicalRef = useRef<MicrobiologicalTabHandle | null>(null);
+  const physicochemicalRef = useRef<PhysicochemicalTabHandle | null>(null);
+  const sensoryRef = useRef<SensoryTabHandle | null>(null);
+  const specializedRef = useRef<SpecializedTabHandle | null>(null);
 
   const cargarMicrobiologico = useCallback(async () => {
     try {
@@ -77,12 +143,54 @@ export default function ServicesManagementPage() {
     }
   }, []);
 
+  const cargarFisicoquimico = useCallback(async () => {
+    try {
+      setLoadingPhysicochemical(true);
+      const response = await servicesPhysicochemicalService.obtenerFisicoquimico();
+      setSavedPhysicochemical(response);
+    } catch (error) {
+      console.error("Error al obtener análisis fisicoquímico:", error);
+    } finally {
+      setLoadingPhysicochemical(false);
+    }
+  }, []);
+
+  const cargarSensorial = useCallback(async () => {
+    try {
+      setLoadingSensory(true);
+      const response = await servicesSensoryService.obtenerSensorial();
+      setSavedSensory(response);
+    } catch (error) {
+      console.error("Error al obtener análisis sensorial:", error);
+    } finally {
+      setLoadingSensory(false);
+    }
+  }, []);
+
+  const cargarEspecializado = useCallback(async () => {
+    try {
+      setLoadingSpecialized(true);
+      const response = await servicesSpecializedService.obtenerEspecializado();
+      setSavedSpecialized(response);
+    } catch (error) {
+      console.error("Error al obtener análisis especializado:", error);
+    } finally {
+      setLoadingSpecialized(false);
+    }
+  }, []);
+
   useEffect(() => {
     cargarMicrobiologico();
-  }, [cargarMicrobiologico]);
+    cargarFisicoquimico();
+    cargarSensorial();
+    cargarEspecializado();
+  }, [cargarMicrobiologico, cargarFisicoquimico, cargarSensorial, cargarEspecializado]);
 
   const handleSave = useCallback(async () => {
     if (tab === "microbiologico") return (await microbiologicalRef.current?.submit()) ?? false;
+    if (tab === "fisicoquimico") return (await physicochemicalRef.current?.submit()) ?? false;
+    if (tab === "sensorial") return (await sensoryRef.current?.submit()) ?? false;
+    if (tab === "especializado") return (await specializedRef.current?.submit()) ?? false;
     return false;
   }, [tab]);
 
@@ -156,38 +264,62 @@ export default function ServicesManagementPage() {
               />
             )
           ) : null}
-
+          {/* Analisis Fisicoquimico */}
           {tab === "fisicoquimico" ? (
-            <Box>
-              <Typography variant="h6" fontWeight={700}>
-                Tipos de Análisis
-              </Typography>
-              <Typography color="text.secondary">
-                Aquí irá el formulario para administrar análisis microbiológicos, fisicoquímicos, sensoriales y especializados.
-              </Typography>
-            </Box>
+            loadingPhysicochemical ? (
+              <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              <PhysicochemicalTab
+                ref={physicochemicalRef}
+                initialValue={savedPhysicochemical}
+                onChanges={setHasChanges}
+                onCommitSave={async (nextSaved) => {
+                  const updated = await servicesPhysicochemicalService.actualizarFisicoquimico(nextSaved);
+                  setSavedPhysicochemical(updated);
+                  setHasChanges(false);
+                }}
+              />
+            )
           ) : null}
-
+          {/* Analisis Sensorial */}
           {tab === "sensorial" ? (
-            <Box>
-              <Typography variant="h6" fontWeight={700}>
-                Tipos de Análisis
-              </Typography>
-              <Typography color="text.secondary">
-                Aquí irá el formulario para administrar análisis microbiológicos, fisicoquímicos, sensoriales y especializados.
-              </Typography>
-            </Box>
+            loadingSensory ? (
+              <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              <SensoryTab
+                ref={sensoryRef}
+                initialValue={savedSensory}
+                onChanges={setHasChanges}
+                onCommitSave={async (nextSaved) => {
+                  const updated = await servicesSensoryService.actualizarSensorial(nextSaved);
+                  setSavedSensory(updated);
+                  setHasChanges(false);
+                }}
+              />
+            )
           ) : null}
-
+          {/* Analisis Especializado */}
           {tab === "especializado" ? (
-            <Box>
-              <Typography variant="h6" fontWeight={700}>
-                Tipos de Análisis
-              </Typography>
-              <Typography color="text.secondary">
-                Aquí irá el formulario para administrar análisis microbiológicos, fisicoquímicos, sensoriales y especializados.
-              </Typography>
-            </Box>
+            loadingSpecialized ? (
+              <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              <SpecializedTab
+                ref={specializedRef}
+                initialValue={savedSpecialized}
+                onChanges={setHasChanges}
+                onCommitSave={async (nextSaved) => {
+                  const updated = await servicesSpecializedService.actualizarEspecializado(nextSaved);
+                  setSavedSpecialized(updated);
+                  setHasChanges(false);
+                }}
+              />
+            )
           ) : null}
 
           {tab === "procesoTrabajo" ? (
