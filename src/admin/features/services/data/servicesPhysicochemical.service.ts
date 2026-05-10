@@ -1,44 +1,83 @@
+import { axiosClient } from "../../../config/axiosClient";
 import type { ServicePhysicochemical } from "../domain/services.types";
 
-const mockPhysicochemical: ServicePhysicochemical = {
-  seccionId: null,
-  sectionTitle: "Análisis Fisicoquímico",
-  sectionDescription:
-    "Determinación de componentes nutricionales y parámetros de calidad en alimentos procesados y materias primas.",
-  items: [
-    {
-      id: "1",
-      text: "Composición Proximal",
-    },
-    {
-      id: "2",
-      text: "Parámetros de Calidad",
-    },
-    {
-      id: "3",
-      text: "Vitaminas y Minerales",
-    },
-    {
-      id: "4",
-      text: "Perfil Lipídico",
-    },
-  ],
+type ServicePhysicochemicalApiPayload = {
+  seccionId: number | null;
+  sectionTitle: string;
+  sectionDescription: string;
+  items: {
+    id: string;
+    text: string;
+  }[];
   image: {
-    file: null,
-    previewUrl: "",
-    imageId: null,
-    alt: "Análisis fisicoquímico en laboratorio",
-  },
+    previewUrl: string;
+    imageId: number | null;
+    alt: string;
+  };
 };
+
+type ServicePhysicochemicalApiResponse = {
+  message: string;
+  data: ServicePhysicochemicalApiPayload;
+};
+
+function mapServicePhysicochemicalFromApi(
+  data: ServicePhysicochemicalApiPayload
+): ServicePhysicochemical {
+  return {
+    seccionId: data.seccionId,
+    sectionTitle: data.sectionTitle,
+    sectionDescription: data.sectionDescription ?? "",
+    items: data.items.map((item) => ({
+      id: item.id,
+      text: item.text,
+    })),
+    image: {
+      file: null,
+      previewUrl: data.image?.previewUrl ?? "",
+      imageId: data.image?.imageId ?? null,
+      alt: data.image?.alt ?? "",
+    },
+  };
+}
 
 export const servicesPhysicochemicalService = {
   async obtenerFisicoquimico(): Promise<ServicePhysicochemical> {
-    return mockPhysicochemical;
+    const response = await axiosClient.get<ServicePhysicochemicalApiResponse>(
+      "/admin/services/physicochemical"
+    );
+
+    return mapServicePhysicochemicalFromApi(response.data.data);
   },
 
   async actualizarFisicoquimico(
     data: ServicePhysicochemical
   ): Promise<ServicePhysicochemical> {
-    return data;
+    const formData = new FormData();
+
+    formData.append("sectionTitle", data.sectionTitle);
+    formData.append("sectionDescription", data.sectionDescription ?? "");
+    formData.append("image_alt", data.image.alt ?? "");
+
+    data.items.forEach((item, index) => {
+      formData.append(`items[${index}][id]`, item.id);
+      formData.append(`items[${index}][text]`, item.text);
+    });
+
+    if (data.image.file) {
+      formData.append("image", data.image.file);
+    }
+
+    const response = await axiosClient.post<ServicePhysicochemicalApiResponse>(
+      "/admin/services/physicochemical",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    return mapServicePhysicochemicalFromApi(response.data.data);
   },
 };

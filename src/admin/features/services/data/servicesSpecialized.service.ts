@@ -1,44 +1,83 @@
+import { axiosClient } from "../../../config/axiosClient";
 import type { ServiceSpecialized } from "../domain/services.types";
 
-const mockSpecialized: ServiceSpecialized = {
-  seccionId: null,
-  sectionTitle: "Análisis Especializado",
-  sectionDescription:
-    "Determinación de contaminantes y compuestos específicos mediante técnicas analíticas avanzadas de cromatografía y espectrometría.",
-  items: [
-    {
-      id: "1",
-      text: "Residuos de Plaguicidas",
-    },
-    {
-      id: "2",
-      text: "Metales Pesados",
-    },
-    {
-      id: "3",
-      text: "Micotoxinas",
-    },
-    {
-      id: "4",
-      text: "Compuestos Bioactivos",
-    },
-  ],
+type ServiceSpecializedApiPayload = {
+  seccionId: number | null;
+  sectionTitle: string;
+  sectionDescription: string;
+  items: {
+    id: string;
+    text: string;
+  }[];
   image: {
-    file: null,
-    previewUrl: "",
-    imageId: null,
-    alt: "Análisis especializado en laboratorio",
-  },
+    previewUrl: string;
+    imageId: number | null;
+    alt: string;
+  };
 };
+
+type ServiceSpecializedApiResponse = {
+  message: string;
+  data: ServiceSpecializedApiPayload;
+};
+
+function mapServiceSpecializedFromApi(
+  data: ServiceSpecializedApiPayload
+): ServiceSpecialized {
+  return {
+    seccionId: data.seccionId,
+    sectionTitle: data.sectionTitle,
+    sectionDescription: data.sectionDescription ?? "",
+    items: data.items.map((item) => ({
+      id: item.id,
+      text: item.text,
+    })),
+    image: {
+      file: null,
+      previewUrl: data.image?.previewUrl ?? "",
+      imageId: data.image?.imageId ?? null,
+      alt: data.image?.alt ?? "",
+    },
+  };
+}
 
 export const servicesSpecializedService = {
   async obtenerEspecializado(): Promise<ServiceSpecialized> {
-    return mockSpecialized;
+    const response = await axiosClient.get<ServiceSpecializedApiResponse>(
+      "/admin/services/specialized"
+    );
+
+    return mapServiceSpecializedFromApi(response.data.data);
   },
 
   async actualizarEspecializado(
     data: ServiceSpecialized
   ): Promise<ServiceSpecialized> {
-    return data;
+    const formData = new FormData();
+
+    formData.append("sectionTitle", data.sectionTitle);
+    formData.append("sectionDescription", data.sectionDescription ?? "");
+    formData.append("image_alt", data.image.alt ?? "");
+
+    data.items.forEach((item, index) => {
+      formData.append(`items[${index}][id]`, item.id);
+      formData.append(`items[${index}][text]`, item.text);
+    });
+
+    if (data.image.file) {
+      formData.append("image", data.image.file);
+    }
+
+    const response = await axiosClient.post<ServiceSpecializedApiResponse>(
+      "/admin/services/specialized",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    return mapServiceSpecializedFromApi(response.data.data);
   },
 };
