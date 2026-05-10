@@ -16,13 +16,11 @@ type HomeTabKey =
   | "hero"
   | "servicios"
   | "calidad"
-  | "estadisticas"
   | "clientes";
 const HOME_TABS: PageTabItem<HomeTabKey>[] = [
   { value: "hero", label: "Portada" },
   { value: "servicios", label: "Servicios" },
   { value: "calidad", label: "Calidad Certificada" },
-  { value: "estadisticas", label: "Estadísticas" },
   { value: "clientes", label: "Clientes" },
 ];
 
@@ -202,17 +200,6 @@ export default function HomeManagementPage() {
                 }}
               />
             )
-          ) : null}
-
-          {tab === "estadisticas" ? (
-            <Box>
-              <Typography variant="h6" fontWeight={700}>
-                Estadísticas
-              </Typography>
-              <Typography color="text.secondary">
-                Aquí irá el formulario para editar años de experiencia, análisis realizados, empresas atendidas y satisfacción.
-              </Typography>
-            </Box>
           ) : null}
 
           {tab === "clientes" ? (
