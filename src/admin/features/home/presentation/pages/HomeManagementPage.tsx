@@ -1,8 +1,14 @@
-import { useCallback, useState } from "react";
-import { Box, Card, CardContent, Typography } from "@mui/material";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Box, Card, CardContent, CircularProgress, Typography } from "@mui/material";
 import PageHeader from "../../../../components/PageHeader";
 import PageTabs, { type PageTabItem } from "../../../../components/PageTabs";
 import FeedbackSnackbar, { type FeedbackState } from "../../../../components/FeedbackSnackbar";
+// Tabs
+import ServicesTab, { type ServicesTabHandle } from "../tabs/ServicesTab";
+// Types
+import type { HomeServices } from "../../domain/home.types";
+// Services
+import { homeServicesService } from "../../data/homeServices.service";
 
 type HomeTabKey =
   | "hero"
@@ -22,41 +28,60 @@ export default function HomeManagementPage() {
   const [tab, setTab] = useState<HomeTabKey>("hero");
   const [hasChanges, setHasChanges] = useState(false);
 
+  // Mensajes globales
   const [feedback, setFeedback] = useState<FeedbackState | null>(null);
   const [feedbackOpen, setFeedbackOpen] = useState(false);
-
   const showFeedback = useCallback((nextFeedback: FeedbackState) => {
     setFeedback(nextFeedback);
     setFeedbackOpen(true);
   }, []);
 
-  const handleSave = useCallback(async () => {
-    // Aquí luego llamarás al submit del tab activo con refs.
-    // Ejemplo: if (tab === "hero") return await heroRef.current?.submit()
-    return false;
+  // Estado persistido por sección
+  const [savedServices, setSavedServices] = useState<HomeServices>({
+    seccionId: null,
+    sectionTitle: "",
+    sectionDescription: "",
+    cards: [
+      {
+        id: "1",
+        icon: "flask",
+        title: "",
+        description: "",
+      },
+    ],
+  });
+
+  // Estados de carga por sección
+  const [loadingServices, setLoadingServices] = useState(true);
+
+  // ref para ejecutar submit() desde el botón del header
+  const servicesRef = useRef<ServicesTabHandle | null>(null);
+
+  const cargarServicios = useCallback(async () => {
+    try {
+      setLoadingServices(true);
+      const response = await homeServicesService.obtenerServicios();
+      setSavedServices(response);
+    } catch (error) {
+      console.error("Error al obtener servicios de inicio:", error);
+    } finally {
+      setLoadingServices(false);
+    }
   }, []);
 
-  const handleSaveWithFeedback = useCallback(async () => {
-    const savedOk = await handleSave();
+  useEffect(() => {
+    cargarServicios();
+  }, [cargarServicios]);
 
-    if (savedOk) {
-      showFeedback({
-        message: "Los cambios se guardaron correctamente.",
-        severity: "success",
-      });
-      return;
-    }
+  const handleSave = useCallback(async () => {
+    if (tab === "servicios") return (await servicesRef.current?.submit()) ?? false;
+    return false;
+  }, [tab]);
 
-    showFeedback({
-      message: "Aún no hay un formulario conectado para guardar esta sección.",
-      severity: "info",
-    });
-  }, [handleSave, showFeedback]);
-
+  // Cambiar de tab: si hay cambios pendientes, bloquea el cambio
   const handleTabChange = useCallback(
     (nextTab: HomeTabKey) => {
       if (nextTab === tab) return;
-
       if (hasChanges) {
         showFeedback({
           message: "Tienes cambios pendientes. Guarda antes de cambiar de pestaña.",
@@ -64,11 +89,22 @@ export default function HomeManagementPage() {
         });
         return;
       }
-
       setTab(nextTab);
     },
     [tab, hasChanges, showFeedback]
   );
+
+  // Wrapper general para mostrar mensaje de exito
+  const handleSaveWithFeedback = useCallback(async () => {
+    const savedOk = await handleSave();
+    if (savedOk) {
+      showFeedback({
+        message: "Los cambios se guardaron correctamente.",
+        severity: "success",
+      });
+      return;
+    }
+  }, [handleSave, showFeedback]);
 
   return (
     <Box>
@@ -93,16 +129,24 @@ export default function HomeManagementPage() {
               </Typography>
             </Box>
           ) : null}
-
+          {/* Servicios */}
           {tab === "servicios" ? (
-            <Box>
-              <Typography variant="h6" fontWeight={700}>
-                Nuestros Servicios
-              </Typography>
-              <Typography color="text.secondary">
-                Aquí irá el formulario para administrar las tarjetas de servicios mostradas en Inicio.
-              </Typography>
-            </Box>
+            loadingServices ? (
+              <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              <ServicesTab
+                ref={servicesRef}
+                initialValue={savedServices}
+                onChanges={setHasChanges}
+                onCommitSave={async (nextSaved) => {
+                  const updated = await homeServicesService.actualizarServicios(nextSaved);
+                  setSavedServices(updated);
+                  setHasChanges(false);
+                }}
+              />
+            )
           ) : null}
 
           {tab === "calidad" ? (
