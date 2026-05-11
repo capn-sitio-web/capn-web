@@ -7,6 +7,16 @@ function normalizeText(value: string | null | undefined): string {
     .trim();
 }
 
+function normalizeFile(file: File | null | undefined): string {
+  if (!file) return "";
+  return [
+    file.name,
+    file.size,
+    file.type,
+    file.lastModified,
+  ].join("-");
+}
+
 function isDifferent<N extends object>(a: N, b: N): boolean {
   return JSON.stringify(a) !== JSON.stringify(b);
 }
@@ -15,7 +25,7 @@ function isDifferent<N extends object>(a: N, b: N): boolean {
 type NormalizedHistory = {
   sectionTitle: string;
   description: string;
-  image: { previewUrl: string; hasNewFile: boolean; };
+  image: { previewUrl: string; file: string; };
 };
 
 export function normalizeHistory(d: History): NormalizedHistory {
@@ -24,7 +34,7 @@ export function normalizeHistory(d: History): NormalizedHistory {
     description: normalizeText(d.description),
     image: {
       previewUrl: normalizeText(d.image?.previewUrl),
-      hasNewFile: Boolean(d.image?.file),
+      file: normalizeFile(d.image?.file),
     },
   };
 }
@@ -79,7 +89,7 @@ type NormalizedTeam = {
   sectionTitle: string;
   sectionDescription: string;
   members: {
-    image: { previewUrl: string; hasNewFile: boolean; };
+    image: { previewUrl: string; file: string; };
     name: string;
     position: string;
     description: string;
@@ -93,7 +103,7 @@ export function normalizeTeam(d: Team): NormalizedTeam {
     members: d.members.map((member) => ({
       image: {
         previewUrl: normalizeText(member.image?.previewUrl),
-        hasNewFile: Boolean(member.image?.file),
+        file: normalizeFile(member.image?.file),
       },
       name: normalizeText(member.name),
       position: normalizeText(member.position),

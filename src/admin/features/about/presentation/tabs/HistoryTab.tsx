@@ -3,7 +3,7 @@ import { Alert, Stack, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import type { ZodIssue } from "zod";
 
-import ImageUploadField from "../components/ImageUploadField";
+import ImageUploadField from "../../../../components/ImageUploadField";
 import type { History } from "../../domain/about.types";
 import { aboutHistoryValidation } from "../../domain/aboutHistory.validation";
 import { hasHistoryChanges } from "../../domain/aboutChangeDetection";
@@ -135,6 +135,7 @@ const HistoryTab = forwardRef<HistoryTabHandle, Props>(function HistoryTab(
           value={data.sectionTitle}
           onChange={(e) => handleTitleChange(e.target.value)}
           fullWidth
+          multiline
           error={Boolean(errors.sectionTitle)}
           helperText={errors.sectionTitle}
         />

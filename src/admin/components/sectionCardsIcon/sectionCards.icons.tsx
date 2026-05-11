@@ -11,6 +11,10 @@ import {
   Settings,
   Search,
   Verified,
+  Biotech,
+  AcUnit,
+  WaterDrop,
+  Scale,
 } from "@mui/icons-material";
 
 import type { SectionCardIcon } from "./sectionCards.types";
@@ -79,6 +83,26 @@ export const CARD_ICON_OPTIONS: {
     value: "check",
     label: "Verificado",
     icon: <Verified fontSize="small" />,
+  },
+  {
+    value: "microscope",
+    label: "Microscopio",
+    icon: <Biotech fontSize="small" />,
+  },
+  {
+    value: "snowflake",
+    label: "Liofilizador",
+    icon: <AcUnit fontSize="small" />,
+  },
+  {
+    value: "water",
+    label: "Gota",
+    icon: <WaterDrop fontSize="small" />,
+  },
+  {
+    value: "scale",
+    label: "Balanza",
+    icon: <Scale fontSize="small" />,
   },
 ];
 

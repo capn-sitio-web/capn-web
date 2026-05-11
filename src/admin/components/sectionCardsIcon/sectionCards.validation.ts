@@ -5,12 +5,12 @@ export const sectionCardIconValidation = z.object({
   id: z.string(),
   elementId: z.number().nullable().optional(),
   icon: z.string().min(1, "El ícono es obligatorio"),
-  title: z.string().trim().min(1, "El título de la card es obligatorio"),
+  title: z.string().trim().min(1, "El título de la card es obligatorio").max(150, "El título no debe exceder los 150 caracteres"),
   description: z.string().trim().min(1, "La descripción de la card es obligatoria"),
 });
 
 export const sectionCardsIcon = z.object({
-  sectionTitle: z.string().trim().min(1, "El título de la sección es obligatorio"),
+  sectionTitle: z.string().trim().min(1, "El título de la sección es obligatorio").max(150, "El título no debe exceder los 150 caracteres"),
   sectionDescription: z.string().optional(),
   cards: z.array(sectionCardIconValidation).min(1, "Debe existir al menos una card"),
 });
