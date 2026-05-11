@@ -31,3 +31,8 @@ export interface ServiceSpecialized extends SectionListImageData {
 export interface ServiceWorkProcess extends SectionCardsData {
   seccionId: number | null;
 }
+
+// -------- Equipos y Tecnología --------
+export interface ServiceEquipmentTechnology extends SectionCardsData {
+  seccionId: number | null;
+}

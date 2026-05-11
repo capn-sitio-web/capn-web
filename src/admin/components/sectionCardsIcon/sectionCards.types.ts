@@ -10,7 +10,11 @@ export type SectionCardIcon =
   | "document"
   | "settings"
   | "search"
-  | "check";
+  | "check"
+  | "microscope"
+  | "snowflake"
+  | "water"
+  | "scale";
 
 export interface SectionCardItem {
   id: string;

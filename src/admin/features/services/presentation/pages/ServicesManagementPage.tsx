@@ -9,6 +9,7 @@ import PhysicochemicalTab, { type PhysicochemicalTabHandle } from "../tabs/Physi
 import SensoryTab, { type SensoryTabHandle } from "../tabs/SensoryTab";
 import SpecializedTab, { type SpecializedTabHandle } from "../tabs/SpecializedTab";
 import WorkProcessTab, { type WorkProcessTabHandle } from "../tabs/WorkProcessTab";
+import EquipmentTechnologyTab, { type EquipmentTechnologyTabHandle } from "../tabs/EquipmentTechnologyTab";
 // Types
 import type {
   ServiceMicrobiological,
@@ -16,6 +17,7 @@ import type {
   ServiceSensory,
   ServiceSpecialized,
   ServiceWorkProcess,
+  ServiceEquipmentTechnology,
 } from "../../domain/services.types";
 // Services
 import { servicesMicrobiologicalService } from "../../data/servicesMicrobiological.service";
@@ -23,6 +25,7 @@ import { servicesPhysicochemicalService } from "../../data/servicesPhysicochemic
 import { servicesSensoryService } from "../../data/servicesSensory.service";
 import { servicesSpecializedService } from "../../data/servicesSpecialized.service";
 import { servicesWorkProcessService } from "../../data/servicesWorkProcess.service";
+import { servicesEquipmentTechnologyService } from "../../data/servicesEquipmentTechnology.service";
 
 type ServicesTabKey =
   | "hero"
@@ -141,12 +144,27 @@ export default function ServicesManagementPage() {
     ],
   });
 
+  const [savedEquipmentTechnology, setSavedEquipmentTechnology] = useState<ServiceEquipmentTechnology>({
+    seccionId: null,
+    sectionTitle: "",
+    sectionDescription: "",
+    cards: [
+      {
+        id: "1",
+        icon: "flask",
+        title: "",
+        description: "",
+      },
+    ],
+  });
+
   // Estados de carga por sección
   const [loadingMicrobiological, setLoadingMicrobiological] = useState(true);
   const [loadingPhysicochemical, setLoadingPhysicochemical] = useState(true);
   const [loadingSensory, setLoadingSensory] = useState(true);
   const [loadingSpecialized, setLoadingSpecialized] = useState(true);
   const [loadingWorkProcess, setLoadingWorkProcess] = useState(true);
+  const [loadingEquipmentTechnology, setLoadingEquipmentTechnology] = useState(true);
 
   // ref para ejecutar submit() desde el botón del header
   const microbiologicalRef = useRef<MicrobiologicalTabHandle | null>(null);
@@ -154,6 +172,7 @@ export default function ServicesManagementPage() {
   const sensoryRef = useRef<SensoryTabHandle | null>(null);
   const specializedRef = useRef<SpecializedTabHandle | null>(null);
   const workProcessRef = useRef<WorkProcessTabHandle | null>(null);
+  const equipmentTechnologyRef = useRef<EquipmentTechnologyTabHandle | null>(null);
 
   const cargarMicrobiologico = useCallback(async () => {
     try {
@@ -215,13 +234,26 @@ export default function ServicesManagementPage() {
     }
   }, []);
 
+  const cargarEquiposTecnologia = useCallback(async () => {
+    try {
+      setLoadingEquipmentTechnology(true);
+      const response = await servicesEquipmentTechnologyService.obtenerEquiposTecnologia();
+      setSavedEquipmentTechnology(response);
+    } catch (error) {
+      console.error("Error al obtener equipos y tecnología:", error);
+    } finally {
+      setLoadingEquipmentTechnology(false);
+    }
+  }, []);
+
   useEffect(() => {
     cargarMicrobiologico();
     cargarFisicoquimico();
     cargarSensorial();
     cargarEspecializado();
     cargarProcesoTrabajo();
-  }, [cargarMicrobiologico, cargarFisicoquimico, cargarSensorial, cargarEspecializado, cargarProcesoTrabajo]);
+    cargarEquiposTecnologia();
+  }, [cargarMicrobiologico, cargarFisicoquimico, cargarSensorial, cargarEspecializado, cargarProcesoTrabajo, cargarEquiposTecnologia]);
 
   const handleSave = useCallback(async () => {
     if (tab === "microbiologico") return (await microbiologicalRef.current?.submit()) ?? false;
@@ -229,6 +261,7 @@ export default function ServicesManagementPage() {
     if (tab === "sensorial") return (await sensoryRef.current?.submit()) ?? false;
     if (tab === "especializado") return (await specializedRef.current?.submit()) ?? false;
     if (tab === "procesoTrabajo") return (await workProcessRef.current?.submit()) ?? false;
+    if (tab === "equiposTecnologia") return (await equipmentTechnologyRef.current?.submit()) ?? false;
     return false;
   }, [tab]);
 
@@ -378,16 +411,24 @@ export default function ServicesManagementPage() {
               />
             )
           ) : null}
-
+          {/* Equipos y tecnologias */}
           {tab === "equiposTecnologia" ? (
-            <Box>
-              <Typography variant="h6" fontWeight={700}>
-                Equipos y Tecnología
-              </Typography>
-              <Typography color="text.secondary">
-                Aquí irá el formulario para administrar las tarjetas de equipos e instrumentos.
-              </Typography>
-            </Box>
+            loadingEquipmentTechnology ? (
+              <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              <EquipmentTechnologyTab
+                ref={equipmentTechnologyRef}
+                initialValue={savedEquipmentTechnology}
+                onChanges={setHasChanges}
+                onCommitSave={async (nextSaved) => {
+                  const updated = await servicesEquipmentTechnologyService.actualizarEquiposTecnologia(nextSaved);
+                  setSavedEquipmentTechnology(updated);
+                  setHasChanges(false);
+                }}
+              />
+            )
           ) : null}
         </CardContent>
       </Card>

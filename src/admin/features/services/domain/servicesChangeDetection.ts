@@ -5,6 +5,7 @@ import type {
   ServiceSensory,
   ServiceSpecialized,
   ServiceWorkProcess,
+  ServiceEquipmentTechnology,
 } from "./services.types";
 
 function normalizeText(value: string | null | undefined): string {
@@ -99,4 +100,33 @@ export function normalizeServiceWorkProcess(
 
 export function hasServiceWorkProcessChanges(current: ServiceWorkProcess, saved: ServiceWorkProcess): boolean {
   return isDifferent(normalizeServiceWorkProcess(current), normalizeServiceWorkProcess(saved));
+}
+
+/** ---- Equipos y Tecnología ---- */
+type NormalizedServiceEquipmentTechnology = {
+  sectionTitle: string;
+  sectionDescription: string;
+  cards: {
+    icon: string;
+    title: string;
+    description: string;
+  }[];
+};
+
+export function normalizeServiceEquipmentTechnology(
+  data: ServiceEquipmentTechnology
+): NormalizedServiceEquipmentTechnology {
+  return {
+    sectionTitle: normalizeText(data.sectionTitle),
+    sectionDescription: normalizeText(data.sectionDescription),
+    cards: data.cards.map((card) => ({
+      icon: normalizeText(card.icon),
+      title: normalizeText(card.title),
+      description: normalizeText(card.description),
+    })),
+  };
+}
+
+export function hasServiceEquipmentTechnologyChanges(current: ServiceEquipmentTechnology, saved: ServiceEquipmentTechnology): boolean {
+  return isDifferent(normalizeServiceEquipmentTechnology(current), normalizeServiceEquipmentTechnology(saved));
 }
