@@ -1,45 +1,70 @@
+import { axiosClient } from "../../../config/axiosClient";
 import type { AccreditationQualitySystem } from "../domain/accreditation.types";
 
-const mockQualitySystem: AccreditationQualitySystem = {
-  seccionId: null,
-  sectionTitle: "Nuestro Sistema de Calidad",
-  sectionDescription: "Garantizamos la confiabilidad en cada etapa del proceso",
-  cards: [
-    {
-      id: "1",
-      icon: "document",
-      title: "1. Recepción",
-      description: "Registro detallado de muestras con trazabilidad completa",
-    },
-    {
-      id: "2",
-      icon: "settings",
-      title: "2. Preparación",
-      description: "Acondicionamiento según protocolos estandarizados",
-    },
-    {
-      id: "3",
-      icon: "search",
-      title: "3. Análisis",
-      description: "Ensayos con métodos validados y equipos calibrados",
-    },
-    {
-      id: "4",
-      icon: "shield",
-      title: "4. Validación",
-      description: "Revisión técnica y emisión de informes certificados",
-    },
-  ],
+type AccreditationQualitySystemApiPayload = {
+  seccionId: number | null;
+  sectionTitle: string;
+  sectionDescription: string;
+  cards: {
+    id: string;
+    elementId?: number | null;
+    icon: string;
+    title: string;
+    description: string;
+  }[];
 };
+
+type AccreditationQualitySystemApiResponse = {
+  message: string;
+  data: AccreditationQualitySystemApiPayload;
+};
+
+function mapQualitySystemFromApi(
+  data: AccreditationQualitySystemApiPayload
+): AccreditationQualitySystem {
+  return {
+    seccionId: data.seccionId,
+    sectionTitle: data.sectionTitle,
+    sectionDescription: data.sectionDescription ?? "",
+    cards: data.cards.map((card) => ({
+      id: card.id,
+      elementId: card.elementId ?? null,
+      icon: card.icon as AccreditationQualitySystem["cards"][number]["icon"],
+      title: card.title,
+      description: card.description,
+    })),
+  };
+}
 
 export const accreditationQualitySystemService = {
   async obtenerSistemaCalidad(): Promise<AccreditationQualitySystem> {
-    return mockQualitySystem;
+    const response = await axiosClient.get<AccreditationQualitySystemApiResponse>(
+      "/admin/accreditation/quality-system"
+    );
+
+    return mapQualitySystemFromApi(response.data.data);
   },
 
   async actualizarSistemaCalidad(
     data: AccreditationQualitySystem
   ): Promise<AccreditationQualitySystem> {
-    return data;
+    const payload = {
+      sectionTitle: data.sectionTitle,
+      sectionDescription: data.sectionDescription ?? "",
+      cards: data.cards.map((card) => ({
+        id: card.id,
+        elementId: card.elementId ?? null,
+        icon: card.icon,
+        title: card.title,
+        description: card.description,
+      })),
+    };
+
+    const response = await axiosClient.post<AccreditationQualitySystemApiResponse>(
+      "/admin/accreditation/quality-system",
+      payload
+    );
+
+    return mapQualitySystemFromApi(response.data.data);
   },
 };
