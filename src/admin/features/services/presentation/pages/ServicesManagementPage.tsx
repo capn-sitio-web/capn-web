@@ -8,13 +8,21 @@ import MicrobiologicalTab, { type MicrobiologicalTabHandle } from "../tabs/Micro
 import PhysicochemicalTab, { type PhysicochemicalTabHandle } from "../tabs/PhysicochemicalTab";
 import SensoryTab, { type SensoryTabHandle } from "../tabs/SensoryTab";
 import SpecializedTab, { type SpecializedTabHandle } from "../tabs/SpecializedTab";
+import WorkProcessTab, { type WorkProcessTabHandle } from "../tabs/WorkProcessTab";
 // Types
-import type { ServiceMicrobiological, ServicePhysicochemical, ServiceSensory, ServiceSpecialized } from "../../domain/services.types";
+import type {
+  ServiceMicrobiological,
+  ServicePhysicochemical,
+  ServiceSensory,
+  ServiceSpecialized,
+  ServiceWorkProcess,
+} from "../../domain/services.types";
 // Services
 import { servicesMicrobiologicalService } from "../../data/servicesMicrobiological.service";
 import { servicesPhysicochemicalService } from "../../data/servicesPhysicochemical.service";
 import { servicesSensoryService } from "../../data/servicesSensory.service";
 import { servicesSpecializedService } from "../../data/servicesSpecialized.service";
+import { servicesWorkProcessService } from "../../data/servicesWorkProcess.service";
 
 type ServicesTabKey =
   | "hero"
@@ -119,17 +127,33 @@ export default function ServicesManagementPage() {
     },
   });
 
+  const [savedWorkProcess, setSavedWorkProcess] = useState<ServiceWorkProcess>({
+    seccionId: null,
+    sectionTitle: "",
+    sectionDescription: "",
+    cards: [
+      {
+        id: "1",
+        icon: "document",
+        title: "",
+        description: "",
+      },
+    ],
+  });
+
   // Estados de carga por sección
   const [loadingMicrobiological, setLoadingMicrobiological] = useState(true);
   const [loadingPhysicochemical, setLoadingPhysicochemical] = useState(true);
   const [loadingSensory, setLoadingSensory] = useState(true);
   const [loadingSpecialized, setLoadingSpecialized] = useState(true);
+  const [loadingWorkProcess, setLoadingWorkProcess] = useState(true);
 
   // ref para ejecutar submit() desde el botón del header
   const microbiologicalRef = useRef<MicrobiologicalTabHandle | null>(null);
   const physicochemicalRef = useRef<PhysicochemicalTabHandle | null>(null);
   const sensoryRef = useRef<SensoryTabHandle | null>(null);
   const specializedRef = useRef<SpecializedTabHandle | null>(null);
+  const workProcessRef = useRef<WorkProcessTabHandle | null>(null);
 
   const cargarMicrobiologico = useCallback(async () => {
     try {
@@ -179,18 +203,32 @@ export default function ServicesManagementPage() {
     }
   }, []);
 
+  const cargarProcesoTrabajo = useCallback(async () => {
+    try {
+      setLoadingWorkProcess(true);
+      const response = await servicesWorkProcessService.obtenerProcesoTrabajo();
+      setSavedWorkProcess(response);
+    } catch (error) {
+      console.error("Error al obtener proceso de trabajo:", error);
+    } finally {
+      setLoadingWorkProcess(false);
+    }
+  }, []);
+
   useEffect(() => {
     cargarMicrobiologico();
     cargarFisicoquimico();
     cargarSensorial();
     cargarEspecializado();
-  }, [cargarMicrobiologico, cargarFisicoquimico, cargarSensorial, cargarEspecializado]);
+    cargarProcesoTrabajo();
+  }, [cargarMicrobiologico, cargarFisicoquimico, cargarSensorial, cargarEspecializado, cargarProcesoTrabajo]);
 
   const handleSave = useCallback(async () => {
     if (tab === "microbiologico") return (await microbiologicalRef.current?.submit()) ?? false;
     if (tab === "fisicoquimico") return (await physicochemicalRef.current?.submit()) ?? false;
     if (tab === "sensorial") return (await sensoryRef.current?.submit()) ?? false;
     if (tab === "especializado") return (await specializedRef.current?.submit()) ?? false;
+    if (tab === "procesoTrabajo") return (await workProcessRef.current?.submit()) ?? false;
     return false;
   }, [tab]);
 
@@ -321,16 +359,24 @@ export default function ServicesManagementPage() {
               />
             )
           ) : null}
-
+          {/* Proceso de trabajo */}
           {tab === "procesoTrabajo" ? (
-            <Box>
-              <Typography variant="h6" fontWeight={700}>
-                Proceso de Trabajo
-              </Typography>
-              <Typography color="text.secondary">
-                Aquí irá el formulario para editar las etapas del proceso de trabajo.
-              </Typography>
-            </Box>
+            loadingWorkProcess ? (
+              <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              <WorkProcessTab
+                ref={workProcessRef}
+                initialValue={savedWorkProcess}
+                onChanges={setHasChanges}
+                onCommitSave={async (nextSaved) => {
+                  const updated = await servicesWorkProcessService.actualizarProcesoTrabajo(nextSaved);
+                  setSavedWorkProcess(updated);
+                  setHasChanges(false);
+                }}
+              />
+            )
           ) : null}
 
           {tab === "equiposTecnologia" ? (

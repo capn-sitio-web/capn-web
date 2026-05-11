@@ -1,4 +1,11 @@
-import type { ServiceAnalysisSection, ServiceMicrobiological, ServicePhysicochemical, ServiceSensory, ServiceSpecialized } from "./services.types";
+import type {
+  ServiceAnalysisSection,
+  ServiceMicrobiological,
+  ServicePhysicochemical,
+  ServiceSensory,
+  ServiceSpecialized,
+  ServiceWorkProcess,
+} from "./services.types";
 
 function normalizeText(value: string | null | undefined): string {
   return (value ?? "")
@@ -63,4 +70,33 @@ export function hasServiceSensoryChanges(current: ServiceSensory, saved: Service
 /** ---- Análisis Especializados ---- */
 export function hasServiceSpecializedChanges(current: ServiceSpecialized, saved: ServiceSpecialized): boolean {
   return isDifferent(normalizeSectionListImage(current), normalizeSectionListImage(saved));
+}
+
+/** ---- Proceso de Trabajo ---- */
+type NormalizedServiceWorkProcess = {
+  sectionTitle: string;
+  sectionDescription: string;
+  cards: {
+    icon: string;
+    title: string;
+    description: string;
+  }[];
+};
+
+export function normalizeServiceWorkProcess(
+  data: ServiceWorkProcess
+): NormalizedServiceWorkProcess {
+  return {
+    sectionTitle: normalizeText(data.sectionTitle),
+    sectionDescription: normalizeText(data.sectionDescription),
+    cards: data.cards.map((card) => ({
+      icon: normalizeText(card.icon),
+      title: normalizeText(card.title),
+      description: normalizeText(card.description),
+    })),
+  };
+}
+
+export function hasServiceWorkProcessChanges(current: ServiceWorkProcess, saved: ServiceWorkProcess): boolean {
+  return isDifferent(normalizeServiceWorkProcess(current), normalizeServiceWorkProcess(saved));
 }
