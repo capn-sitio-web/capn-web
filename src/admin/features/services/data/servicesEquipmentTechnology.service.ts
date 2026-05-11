@@ -1,64 +1,70 @@
+import { axiosClient } from "../../../config/axiosClient";
 import type { ServiceEquipmentTechnology } from "../domain/services.types";
 
-const mockEquipmentTechnology: ServiceEquipmentTechnology = {
-  seccionId: null,
-  sectionTitle: "Equipos y Tecnología",
-  sectionDescription:
-    "Instrumentación de última generación para análisis precisos",
-  cards: [
-    {
-      id: "1",
-      icon: "flask",
-      title: "Cromatógrafo de Gases",
-      description:
-        "Shimadzu GC-2010 con detectores FID y ECD para análisis de residuos de plaguicidas.",
-    },
-    {
-      id: "2",
-      icon: "microscope",
-      title: "Cromatógrafo Líquido",
-      description:
-        "HPLC Agilent 1260 para determinación de vitaminas y micotoxinas.",
-    },
-    {
-      id: "3",
-      icon: "flask",
-      title: "Espectrofotómetro",
-      description:
-        "UV-Vis Thermo Scientific para análisis de composición y contaminantes.",
-    },
-    {
-      id: "4",
-      icon: "snowflake",
-      title: "Liofilizador",
-      description:
-        "Labconco para preparación de muestras y conservación de estándares.",
-    },
-    {
-      id: "5",
-      icon: "water",
-      title: "Digestor por Microondas",
-      description:
-        "CEM Mars 6 para digestión de muestras en análisis de metales pesados.",
-    },
-    {
-      id: "6",
-      icon: "scale",
-      title: "Balanza Analítica",
-      description:
-        "Mettler Toledo con precisión de 0.1 mg para preparación exacta de muestras.",
-    },
-  ],
+type ServiceEquipmentTechnologyApiPayload = {
+  seccionId: number | null;
+  sectionTitle: string;
+  sectionDescription: string;
+  cards: {
+    id: string;
+    elementId?: number | null;
+    icon: string;
+    title: string;
+    description: string;
+  }[];
 };
+
+type ServiceEquipmentTechnologyApiResponse = {
+  message: string;
+  data: ServiceEquipmentTechnologyApiPayload;
+};
+
+function mapServiceEquipmentTechnologyFromApi(
+  data: ServiceEquipmentTechnologyApiPayload
+): ServiceEquipmentTechnology {
+  return {
+    seccionId: data.seccionId,
+    sectionTitle: data.sectionTitle,
+    sectionDescription: data.sectionDescription ?? "",
+    cards: data.cards.map((card) => ({
+      id: card.id,
+      elementId: card.elementId ?? null,
+      icon: card.icon as ServiceEquipmentTechnology["cards"][number]["icon"],
+      title: card.title,
+      description: card.description,
+    })),
+  };
+}
 
 export const servicesEquipmentTechnologyService = {
   async obtenerEquiposTecnologia(): Promise<ServiceEquipmentTechnology> {
-    return mockEquipmentTechnology;
+    const response = await axiosClient.get<ServiceEquipmentTechnologyApiResponse>(
+      "/admin/services/equipment-technology"
+    );
+
+    return mapServiceEquipmentTechnologyFromApi(response.data.data);
   },
 
   async actualizarEquiposTecnologia(
     data: ServiceEquipmentTechnology
   ): Promise<ServiceEquipmentTechnology> {
-    return data;
+    const payload = {
+      sectionTitle: data.sectionTitle,
+      sectionDescription: data.sectionDescription ?? "",
+      cards: data.cards.map((card) => ({
+        id: card.id,
+        elementId: card.elementId ?? null,
+        icon: card.icon,
+        title: card.title,
+        description: card.description,
+      })),
+    };
+
+    const response = await axiosClient.post<ServiceEquipmentTechnologyApiResponse>(
+      "/admin/services/equipment-technology",
+      payload
+    );
+
+    return mapServiceEquipmentTechnologyFromApi(response.data.data);
   },
 };
