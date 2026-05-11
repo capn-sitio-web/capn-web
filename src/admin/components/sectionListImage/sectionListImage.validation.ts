@@ -6,7 +6,7 @@ export const sectionListImageSchema = z.object({
     .string()
     .trim()
     .min(1, "El título de la sección es obligatorio.")
-    .max(150, "El título es muy largo"),
+    .max(150, "El título no debe exceder los 150 caracteres"),
   sectionDescription: z.string().trim().optional(),
   items: z
     .array(

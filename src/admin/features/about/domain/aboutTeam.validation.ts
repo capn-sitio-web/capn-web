@@ -6,7 +6,7 @@ export const aboutTeamValidation = z.object({
     .string()
     .trim()
     .min(1, "El título de la sección es obligatorio.")
-    .max(150, "El título es muy largo"),
+    .max(150, "El título no debe exceder los 150 caracteres"),
   sectionDescription: z.string().trim().optional(),
   members: z
     .array(
@@ -28,11 +28,13 @@ export const aboutTeamValidation = z.object({
         name: z
           .string()
           .trim()
-          .min(1, "El nombre del integrante es obligatorio."),
+          .min(1, "El nombre del integrante es obligatorio.")
+          .max(120, "El nombre no debe exceder los 120 caracteres"),
         position: z
           .string()
           .trim()
-          .min(1, "El cargo del integrante es obligatorio."),
+          .min(1, "El cargo del integrante es obligatorio.")
+          .max(120, "El cargo no debe exceder los 120 caracteres"),
         description: z
           .string()
           .trim()
