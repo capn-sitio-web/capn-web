@@ -140,7 +140,6 @@ const ContactInfoTab = forwardRef<ContactInfoTabHandle, Props>(
                 label="Dirección"
                 fullWidth
                 multiline
-                minRows={2}
                 value={data.address}
                 onChange={(event) => handleChange("address", event.target.value)}
                 error={Boolean(errors.address)}
@@ -149,6 +148,7 @@ const ContactInfoTab = forwardRef<ContactInfoTabHandle, Props>(
               <TextField
                 label="Teléfono"
                 fullWidth
+                multiline
                 value={data.phone}
                 onChange={(event) => handleChange("phone", event.target.value)}
                 error={Boolean(errors.phone)}
@@ -157,6 +157,7 @@ const ContactInfoTab = forwardRef<ContactInfoTabHandle, Props>(
               <TextField
                 label="Email"
                 fullWidth
+                multiline
                 value={data.email}
                 onChange={(event) => handleChange("email", event.target.value)}
                 error={Boolean(errors.email)}
@@ -165,6 +166,7 @@ const ContactInfoTab = forwardRef<ContactInfoTabHandle, Props>(
               <TextField
                 label="Facebook"
                 fullWidth
+                multiline
                 value={data.facebookUrl}
                 onChange={(event) => handleChange("facebookUrl", event.target.value)}
                 error={Boolean(errors.facebookUrl)}

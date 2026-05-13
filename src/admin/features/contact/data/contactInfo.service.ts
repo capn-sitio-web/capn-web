@@ -1,20 +1,56 @@
+import { axiosClient } from "../../../config/axiosClient";
 import type { ContactInfo } from "../domain/contact.types";
 
-const mockContactInfo: ContactInfo = {
-  seccionId: null,
-  address: "UMSS - Facultad de Ciencias y Tecnología, Cochabamba, Bolivia",
-  phone: "+591 4 4234567",
-  email: "capn@umss.edu.bo",
-  facebookUrl: "https://www.facebook.com/",
-  mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d...",
+type ContactInfoApiPayload = {
+  seccionId: number | null;
+  address: string;
+  phone: string;
+  email: string;
+  facebookUrl: string;
+  mapEmbedUrl: string;
 };
+
+type ContactInfoApiResponse = {
+  message: string;
+  data: ContactInfoApiPayload;
+};
+
+function mapContactInfoFromApi(data: ContactInfoApiPayload): ContactInfo {
+  return {
+    seccionId: data.seccionId,
+    address: data.address ?? "",
+    phone: data.phone ?? "",
+    email: data.email ?? "",
+    facebookUrl: data.facebookUrl ?? "",
+    mapEmbedUrl: data.mapEmbedUrl ?? "",
+  };
+}
 
 export const contactInfoService = {
   async obtenerInformacionContacto(): Promise<ContactInfo> {
-    return mockContactInfo;
+    const response = await axiosClient.get<ContactInfoApiResponse>(
+      "/admin/contactos/"
+    );
+
+    return mapContactInfoFromApi(response.data.data);
   },
 
-  async actualizarInformacionContacto(data: ContactInfo): Promise<ContactInfo> {
-    return data;
+  async actualizarInformacionContacto(
+    data: ContactInfo
+  ): Promise<ContactInfo> {
+    const payload = {
+      address: data.address,
+      phone: data.phone,
+      email: data.email,
+      facebookUrl: data.facebookUrl ?? "",
+      mapEmbedUrl: data.mapEmbedUrl,
+    };
+
+    const response = await axiosClient.post<ContactInfoApiResponse>(
+      "/admin/contactos/",
+      payload
+    );
+
+    return mapContactInfoFromApi(response.data.data);
   },
 };
