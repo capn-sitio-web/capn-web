@@ -1,4 +1,6 @@
+import type { AccreditationBanner } from "./accreditation.types";
 import type { AccreditationQualitySystem } from "./accreditation.types";
+import { hasSectionBannerChanges } from "../../../components/sectionBanner/sectionBannerChangeDetection";
 
 function normalizeText(value: string | null | undefined): string {
   return (value ?? "")
@@ -9,6 +11,12 @@ function normalizeText(value: string | null | undefined): string {
 
 function isDifferent<N extends object>(a: N, b: N): boolean {
   return JSON.stringify(a) !== JSON.stringify(b);
+}
+
+
+/** ---- Banner ---- */
+export function hasAccreditationBannerChanges(current: AccreditationBanner, saved: AccreditationBanner): boolean {
+  return hasSectionBannerChanges(current, saved);
 }
 
 /** ---- Sistema de Calidad ---- */

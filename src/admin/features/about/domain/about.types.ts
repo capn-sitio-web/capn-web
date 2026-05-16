@@ -1,3 +1,4 @@
+import type { SectionBannerData } from "../../../components/sectionBanner/sectionBanner.types";
 import type { SectionCardsData } from "../../../components/sectionCardsIcon/sectionCards.types";
 
 // -------- Tipos base API --------
@@ -33,6 +34,11 @@ export type Image = {
   imageId: number | null;
   alt: string;
 };
+
+// -------- Banner --------
+export interface AboutBanner extends SectionBannerData {
+  seccionId: number | null;
+}
 
 // -------- Historia --------
 export type History = {

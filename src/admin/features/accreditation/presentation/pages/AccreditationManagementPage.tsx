@@ -4,19 +4,22 @@ import PageHeader from "../../../../components/PageHeader";
 import PageTabs, { type PageTabItem } from "../../../../components/PageTabs";
 import FeedbackSnackbar, { type FeedbackState } from "../../../../components/FeedbackSnackbar";
 // Tabs
+import AccreditationBannerTab, { type AccreditationBannerTabHandle } from "../tabs/AccreditationBannerTab";
 import QualitySystemTab, { type QualitySystemTabHandle } from "../tabs/QualitySystemTab";
 // Types
-import type { AccreditationQualitySystem } from "../../domain/accreditation.types";
+import type { AccreditationBanner, AccreditationQualitySystem } from "../../domain/accreditation.types";
 // Services
+import { accreditationBannerService } from "../../data/accreditationBanner.service";
 import { accreditationQualitySystemService } from "../../data/accreditationQualitySystem.service";
 
-type AccreditationTabKey = "sistemaCalidad";
+type AccreditationTabKey = "banner" | "sistemaCalidad";
 const ACCREDITATION_TABS: PageTabItem<AccreditationTabKey>[] = [
+  { value: "banner", label: "Portada" },
   { value: "sistemaCalidad", label: "Sistema de Calidad" },
 ];
 
 export default function AccreditationManagementPage() {
-  const [tab, setTab] = useState<AccreditationTabKey>("sistemaCalidad");
+  const [tab, setTab] = useState<AccreditationTabKey>("banner");
   const [hasChanges, setHasChanges] = useState(false);
 
   // Mensajes globales
@@ -28,6 +31,18 @@ export default function AccreditationManagementPage() {
   }, []);
 
   // Estado persistido por sección
+  const [savedBanner, setSavedBanner] = useState<AccreditationBanner>({
+    seccionId: null,
+    sectionTitle: "",
+    description: "",
+    image: {
+      file: null,
+      previewUrl: "",
+      imageId: null,
+      alt: "",
+    },
+  });
+  
   const [savedQualitySystem, setSavedQualitySystem] = useState<AccreditationQualitySystem>({
     seccionId: null,
     sectionTitle: "",
@@ -43,10 +58,24 @@ export default function AccreditationManagementPage() {
   });
 
   // Estados de carga por sección
+  const [loadingBanner, setLoadingBanner] = useState(true);
   const [loadingQualitySystem, setLoadingQualitySystem] = useState(true);
 
   // ref para ejecutar submit() desde el botón del header
+  const bannerRef = useRef<AccreditationBannerTabHandle | null>(null);
   const qualitySystemRef = useRef<QualitySystemTabHandle | null>(null);
+  
+  const cargarBanner = useCallback(async () => {
+    try {
+      setLoadingBanner(true);
+      const response = await accreditationBannerService.obtenerBanner();
+      setSavedBanner(response);
+    } catch (error) {
+      console.error("Error al obtener banner:", error);
+    } finally {
+      setLoadingBanner(false);
+    }
+  }, []);
 
   const cargarSistemaCalidad = useCallback(async () => {
     try {
@@ -61,10 +90,12 @@ export default function AccreditationManagementPage() {
   }, []);
 
   useEffect(() => {
+    cargarBanner();
     cargarSistemaCalidad();
-  }, [cargarSistemaCalidad]);
+  }, [cargarBanner, cargarSistemaCalidad]);
 
   const handleSave = useCallback(async () => {
+    if (tab === "banner") return (await bannerRef.current?.submit()) ?? false;
     if (tab === "sistemaCalidad") return (await qualitySystemRef.current?.submit()) ?? false;
     return false;
   }, [tab]);
@@ -114,6 +145,25 @@ export default function AccreditationManagementPage() {
         />
 
         <CardContent sx={{ mt: 1 }}>
+          {/* Banner */}
+          {tab === "banner" ? (
+            loadingBanner ? (
+              <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              <AccreditationBannerTab
+                ref={bannerRef}
+                initialValue={savedBanner}
+                onChanges={setHasChanges}
+                onCommitSave={async (nextSaved) => {
+                  const updated = await accreditationBannerService.actualizarBanner(nextSaved);
+                  setSavedBanner(updated);
+                  setHasChanges(false);
+                }}
+              />
+            )
+          ) : null}
           {/* Sistema de calidad */}
           {tab === "sistemaCalidad" ? (
             loadingQualitySystem ? (

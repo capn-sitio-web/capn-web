@@ -1,3 +1,6 @@
+import type { ServicesBanner } from "./services.types";
+import { hasSectionBannerChanges } from "../../../components/sectionBanner/sectionBannerChangeDetection";
+
 import type {
   ServiceAnalysisSection,
   ServiceMicrobiological,
@@ -27,6 +30,12 @@ function normalizeFile(file: File | null | undefined): string {
 
 function isDifferent<N extends object>(a: N, b: N): boolean {
   return JSON.stringify(a) !== JSON.stringify(b);
+}
+
+
+/** ---- Banner ---- */
+export function hasServicesBannerChanges(current: ServicesBanner, saved: ServicesBanner): boolean {
+  return hasSectionBannerChanges(current, saved);
 }
 
 /** ---- Análisis reutilizable ---- */

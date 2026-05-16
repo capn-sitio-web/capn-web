@@ -1,3 +1,4 @@
+import type { SectionBannerData } from "../../../components/sectionBanner/sectionBanner.types";
 import type { SectionListImageData } from "../../../components/sectionListImage/sectionListImage.types";
 import type { SectionCardsData } from "../../../components/sectionCardsIcon/sectionCards.types";
 
@@ -6,6 +7,11 @@ export type ServiceAnalysisSection =
   | ServicePhysicochemical
   | ServiceSensory
   | ServiceSpecialized;
+
+// -------- Banner --------
+export interface ServicesBanner extends SectionBannerData {
+  seccionId: number | null;
+}
 
 // -------- Análisis Microbiológicos --------
 export interface ServiceMicrobiological extends SectionListImageData {

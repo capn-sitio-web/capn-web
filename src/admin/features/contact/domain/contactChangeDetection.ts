@@ -1,4 +1,6 @@
+import type { ContactBanner } from "./contact.types";
 import type { ContactInfo } from "./contact.types";
+import { hasSectionBannerChanges } from "../../../components/sectionBanner/sectionBannerChangeDetection";
 
 function normalizeText(value: string | null | undefined): string {
   return (value ?? "")
@@ -9,6 +11,11 @@ function normalizeText(value: string | null | undefined): string {
 
 function isDifferent<N extends object>(a: N, b: N): boolean {
   return JSON.stringify(a) !== JSON.stringify(b);
+}
+
+/** ---- Banner ---- */
+export function hasContactBannerChanges(current: ContactBanner, saved: ContactBanner): boolean {
+  return hasSectionBannerChanges(current, saved);
 }
 
 /** ---- Datos de contacto ---- */

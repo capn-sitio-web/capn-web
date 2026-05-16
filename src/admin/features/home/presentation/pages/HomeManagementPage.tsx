@@ -4,28 +4,30 @@ import PageHeader from "../../../../components/PageHeader";
 import PageTabs, { type PageTabItem } from "../../../../components/PageTabs";
 import FeedbackSnackbar, { type FeedbackState } from "../../../../components/FeedbackSnackbar";
 // Tabs
+import HomeBannerTab, { type HomeBannerTabHandle } from "../tabs/HomeBannerTab";
 import ServicesTab, { type ServicesTabHandle } from "../tabs/ServicesTab";
 import QualityTab, { type QualityTabHandle } from "../tabs/QualityTab";
 // Types
-import type { HomeServices, HomeQuality } from "../../domain/home.types";
+import type { HomeBanner, HomeServices, HomeQuality } from "../../domain/home.types";
 // Services
+import { homeBannerService } from "../../data/homeBanner.service";
 import { homeServicesService } from "../../data/homeServices.service";
 import { homeQualityService } from "../../data/homeQuality.service";
 
 type HomeTabKey =
-  | "hero"
+  | "banner"
   | "servicios"
   | "calidad"
   | "clientes";
 const HOME_TABS: PageTabItem<HomeTabKey>[] = [
-  { value: "hero", label: "Portada" },
+  { value: "banner", label: "Portada" },
   { value: "servicios", label: "Servicios" },
   { value: "calidad", label: "Calidad Certificada" },
   { value: "clientes", label: "Clientes" },
 ];
 
 export default function HomeManagementPage() {
-  const [tab, setTab] = useState<HomeTabKey>("hero");
+  const [tab, setTab] = useState<HomeTabKey>("banner");
   const [hasChanges, setHasChanges] = useState(false);
 
   // Mensajes globales
@@ -37,6 +39,18 @@ export default function HomeManagementPage() {
   }, []);
 
   // Estado persistido por sección
+  const [savedBanner, setSavedBanner] = useState<HomeBanner>({
+    seccionId: null,
+    sectionTitle: "",
+    description: "",
+    image: {
+      file: null,
+      previewUrl: "",
+      imageId: null,
+      alt: "",
+    },
+  });
+
   const [savedServices, setSavedServices] = useState<HomeServices>({
     seccionId: null,
     sectionTitle: "",
@@ -70,12 +84,26 @@ export default function HomeManagementPage() {
   });
 
   // Estados de carga por sección
+  const [loadingBanner, setLoadingBanner] = useState(true);
   const [loadingServices, setLoadingServices] = useState(true);
   const [loadingQuality, setLoadingQuality] = useState(true);
 
   // ref para ejecutar submit() desde el botón del header
+  const bannerRef = useRef<HomeBannerTabHandle | null>(null);
   const servicesRef = useRef<ServicesTabHandle | null>(null);
   const qualityRef = useRef<QualityTabHandle | null>(null);
+
+  const cargarBanner = useCallback(async () => {
+    try {
+      setLoadingBanner(true);
+      const response = await homeBannerService.obtenerBanner();
+      setSavedBanner(response);
+    } catch (error) {
+      console.error("Error al obtener banner:", error);
+    } finally {
+      setLoadingBanner(false);
+    }
+  }, []);
 
   const cargarServicios = useCallback(async () => {
     try {
@@ -102,11 +130,13 @@ export default function HomeManagementPage() {
   }, []);
 
   useEffect(() => {
+    cargarBanner();
     cargarServicios();
     cargarCalidad();
-  }, [cargarServicios, cargarCalidad]);
+  }, [cargarBanner, cargarServicios, cargarCalidad]);
 
   const handleSave = useCallback(async () => {
+    if (tab === "banner") return (await bannerRef.current?.submit()) ?? false;
     if (tab === "servicios") return (await servicesRef.current?.submit()) ?? false;
     if (tab === "calidad") return (await qualityRef.current?.submit()) ?? false;
     return false;
@@ -153,15 +183,24 @@ export default function HomeManagementPage() {
         <PageTabs value={tab} tabs={HOME_TABS} onChange={handleTabChange} />
 
         <CardContent sx={{ mt: 1 }}>
-          {tab === "hero" ? (
-            <Box>
-              <Typography variant="h6" fontWeight={700}>
-                Portada principal
-              </Typography>
-              <Typography color="text.secondary">
-                Aquí irá el formulario para editar el título, descripción, botones e imagen principal.
-              </Typography>
-            </Box>
+          {/* Banner */}
+          {tab === "banner" ? (
+            loadingBanner ? (
+              <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              <HomeBannerTab
+                ref={bannerRef}
+                initialValue={savedBanner}
+                onChanges={setHasChanges}
+                onCommitSave={async (nextSaved) => {
+                  const updated = await homeBannerService.actualizarBanner(nextSaved);
+                  setSavedBanner(updated);
+                  setHasChanges(false);
+                }}
+              />
+            )
           ) : null}
           {/* Servicios */}
           {tab === "servicios" ? (
