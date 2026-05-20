@@ -1,0 +1,75 @@
+export type PublicBannerResponse = {
+  message: string;
+  data: PublicBannerData;
+};
+
+export type PublicBannerData = {
+  seccionId: number;
+  sectionTitle: string;
+  description: string;
+  image: {
+    previewUrl: string;
+    imageId: number | null;
+    alt: string;
+  } | null;
+};
+
+export type PublicSectionResponse = {
+  message: string;
+  data: PublicSectionData;
+};
+
+export type PublicSectionData = {
+  idseccion: number;
+  slug: string;
+  titulo: string;
+  descripcion: string | null;
+  created_at?: string;
+  updated_at?: string;
+
+  listas: PublicListItem[];
+  elementos: PublicElementItem[];
+  imagenes: PublicImageItem[];
+  personal: PublicPersonItem[];
+  contactos: unknown[];
+};
+
+export type PublicListItem = {
+  idlista_seccion: number;
+  seccion_idseccion: number;
+  texto_item: string;
+  created_at?: string;
+  updated_at?: string;
+};
+
+export type PublicElementItem = {
+  idelemento: number;
+  seccion_idseccion: number;
+  clave: string | null;
+  titulo: string;
+  descripcion: string;
+  icono: string | null;
+  imagen_url: string | null;
+  created_at?: string;
+  updated_at?: string;
+};
+
+export type PublicImageItem = {
+  idimagen_seccion: number;
+  seccion_idseccion: number;
+  imagen_url: string;
+  imagen_alt: string;
+  created_at?: string;
+  updated_at?: string;
+};
+
+export type PublicPersonItem = {
+  idpersonal: number;
+  seccion_idseccion: number;
+  nombre: string;
+  cargo: string;
+  descripcion: string;
+  foto_url: string | null;
+  created_at?: string;
+  updated_at?: string;
+};
