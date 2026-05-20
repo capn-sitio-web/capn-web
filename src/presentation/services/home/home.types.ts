@@ -8,7 +8,7 @@ export type PublicBannerResponse = {
     description: string;
     image: {
       previewUrl: string;
-      imageId: number;
+      imageId: number | null;
       alt: string;
     } | null;
   };
@@ -20,7 +20,7 @@ export type PublicSectionResponse = {
     idseccion: number;
     slug: string;
     titulo: string;
-    descripcion: string;
+    descripcion: string | null;
     listas: {
       idlista_seccion: number;
       texto_item: string;
@@ -40,16 +40,16 @@ export type PublicSectionResponse = {
   };
 };
 
-export type HomeServiceCardItem = {
-  icon: ReactNode;
-  title: string;
-  description: string;
-};
-
 export type HomeBanner = {
   title: string;
   subtitle: string;
   image: string;
+};
+
+export type HomeServiceCardItem = {
+  icon: ReactNode;
+  title: string;
+  description: string;
 };
 
 export type HomeServices = {
@@ -63,4 +63,35 @@ export type HomeQuality = {
   description: string;
   image: string;
   items: string[];
+};
+
+export type HomeStatItem = {
+  value: number;
+  suffix: string;
+  label: string;
+};
+
+export type HomeClientItem = {
+  name: string;
+  logo: string;
+};
+
+export type HomeCta = {
+  title: string;
+  subtitle: string;
+  primaryButton: {
+    label: string;
+  };
+  secondaryButton: {
+    label: string;
+  };
+};
+
+export type HomePageData = {
+  banner: HomeBanner;
+  services: HomeServices;
+  quality: HomeQuality;
+  stats: HomeStatItem[];
+  clients: HomeClientItem[];
+  cta: HomeCta;
 };

@@ -1,51 +1,77 @@
 import { useEffect, useState } from "react";
 import { HomeService } from "./home.service";
+
 import {
   mapBannerToHomeBanner,
   mapServiciosToHomeServices,
   mapCalidadToHomeQuality,
 } from "./home.mapper";
 
-import type { HomeBanner, HomeServices, HomeQuality } from "./home.types";
-
-type HomePageData = {
-  banner: HomeBanner | null;
-  services: HomeServices | null;
-  quality: HomeQuality | null;
-};
+import { homeFallbackData } from "./home.fallback";
+import type { HomePageData } from "./home.types";
 
 export function useHomePage() {
-  const [data, setData] = useState<HomePageData>({
-    banner: null,
-    services: null,
-    quality: null,
-  });
-
+  const [data, setData] = useState<HomePageData>(homeFallbackData);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadHomePage() {
-      try {
-        setLoading(true);
+      setLoading(true);
 
-        const [banner, services, quality] = await Promise.all([
+      const [bannerResult, servicesResult, qualityResult] =
+        await Promise.allSettled([
           HomeService.getBanner(),
           HomeService.getNuestrosServicios(),
           HomeService.getCalidadCertificada(),
         ]);
 
-        setData({
-          banner: mapBannerToHomeBanner(banner),
-          services: mapServiciosToHomeServices(services),
-          quality: mapCalidadToHomeQuality(quality),
-        });
-      } catch (error) {
-        console.error("Error al cargar la página de inicio:", error);
-        setError("No se pudo cargar la información de inicio.");
-      } finally {
-        setLoading(false);
-      }
+      const mappedBanner =
+        bannerResult.status === "fulfilled"
+          ? mapBannerToHomeBanner(bannerResult.value)
+          : homeFallbackData.banner;
+
+      const mappedServices =
+        servicesResult.status === "fulfilled"
+          ? mapServiciosToHomeServices(servicesResult.value)
+          : homeFallbackData.services;
+
+      const mappedQuality =
+        qualityResult.status === "fulfilled"
+          ? mapCalidadToHomeQuality(qualityResult.value)
+          : homeFallbackData.quality;
+
+      setData({
+        banner: {
+          ...homeFallbackData.banner,
+          ...mappedBanner,
+          image: mappedBanner.image || homeFallbackData.banner.image,
+        },
+
+        services: {
+          ...homeFallbackData.services,
+          ...mappedServices,
+          items:
+            mappedServices.items.length > 0
+              ? mappedServices.items
+              : homeFallbackData.services.items,
+        },
+
+        quality: {
+          ...homeFallbackData.quality,
+          ...mappedQuality,
+          image: mappedQuality.image || homeFallbackData.quality.image,
+          items:
+            mappedQuality.items.length > 0
+              ? mappedQuality.items
+              : homeFallbackData.quality.items,
+        },
+
+        stats: homeFallbackData.stats,
+        clients: homeFallbackData.clients,
+        cta: homeFallbackData.cta,
+      });
+
+      setLoading(false);
     }
 
     loadHomePage();
@@ -54,6 +80,5 @@ export function useHomePage() {
   return {
     data,
     loading,
-    error,
   };
 }

@@ -55,7 +55,7 @@ export function mapBannerToHomeBanner(data: {
 }): HomeBanner {
   return {
     title: data.sectionTitle,
-    subtitle: data.description,
+    subtitle: data.description ?? "",
     image: data.image?.previewUrl ?? "",
   };
 }
@@ -65,7 +65,7 @@ export function mapServiciosToHomeServices(
 ): HomeServices {
   return {
     title: data.titulo,
-    subtitle: data.descripcion,
+    subtitle: data.descripcion ?? "",
     items: data.elementos.map((item) => ({
       icon: mapIconNameToMui(item.icono),
       title: item.titulo,
@@ -79,7 +79,7 @@ export function mapCalidadToHomeQuality(
 ): HomeQuality {
   return {
     title: data.titulo,
-    description: data.descripcion,
+    description: data.descripcion ?? "",
     image: data.imagenes?.[0]?.imagen_url
       ? `${import.meta.env.VITE_API_BASE_URL?.replace("/api", "")}/${data.imagenes[0].imagen_url}`
       : "",
