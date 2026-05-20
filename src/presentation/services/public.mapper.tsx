@@ -19,6 +19,8 @@ import {
   OpacityOutlined,
   AcUnitOutlined,
   ScienceRounded,
+  Search,
+  VerifiedUser,
 } from "@mui/icons-material";
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL?.replace("/api", "");
@@ -77,6 +79,15 @@ export function mapIconNameToMui(iconName: string | null) {
       return <OpacityOutlined />;
     case "scale":
       return <ScaleOutlined />;
+
+    case "description":
+      return <Description sx={{ color: "#3B82F6" }} />;
+    case "search":
+      return <Search sx={{ color: "#F97316" }} />;
+    case "verified":
+      return <VerifiedUser sx={{ color: "#A855F7" }} />;
+    case "shield-check":
+      return <VerifiedUser sx={{ color: "#A855F7" }} />;
 
     default:
       return <Science />;
