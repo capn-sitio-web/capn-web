@@ -17,7 +17,7 @@ export const contactFallbackData: ContactPageData = {
     title: "Nuestra Ubicación",
     subtitle: "Visítanos en la Facultad de Ciencias y Tecnología - UMSS.",
     mapSrc: fallbackMapUrl,
-    locationName: "UMSS - Facultad de Ciencias y Tecnología Cochabamba, Bolivia",
+    locationName: "UMSS - Facultad de Ciencias y Tecnología",
     phone: "+591 4 4234567",
     email: "capn@umss.edu.bo",
     facebookUrl: "https://www.facebook.com/profile.php?id=100076011953997",

@@ -12,6 +12,7 @@ import { Facebook, LinkedIn, Email, Room, Phone } from "@mui/icons-material";
 import { ROUTES } from "../../../app/routes";
 import { Link } from "react-router-dom";
 import capnLogo from "/logo.png";
+import { useContactPage } from "../../services/contact/useContactPage";
 
 // Subcomponente: lista de enlaces
 interface FooterLinksProps {
@@ -54,7 +55,7 @@ interface SocialLinksProps {
 }
 
 const SocialLinks: React.FC<SocialLinksProps> = ({ socials }) => (
-   <>
+  <>
     {socials.map((social) => (
       <IconButton 
         color="inherit"
@@ -70,10 +71,13 @@ const SocialLinks: React.FC<SocialLinksProps> = ({ socials }) => (
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
+  const { data } = useContactPage();
+  const contact = data.location;
+  
   const socialLinks = [
-    { icon: <Facebook />, href: "https://www.facebook.com" },
+    { icon: <Facebook />, href: contact.facebookUrl },
     { icon: <LinkedIn />, href: "https://www.linkedin.com" },
-    { icon: <Email />, href: "mailto:capn@umss.edu.bo" },
+    { icon: <Email />, href: `mailto:${contact.email}` },
   ];
   const infoLinks = [
     { label: "Nosotros", path: ROUTES.ABOUT },
@@ -141,7 +145,7 @@ const Footer: React.FC = () => {
               <Box display="flex" alignItems="flex-start" mb={1}>
                 <Room fontSize="small" sx={{ mr: 1, mt: 0.5 }} />
                 <Typography variant="body2" sx={{ opacity: 0.8, maxWidth: 200 }}>
-                  UMSS - Facultad de Ciencias y Tecnología
+                  {contact.locationName}
                   <br />
                   Cochabamba, Bolivia
                 </Typography>
@@ -149,13 +153,13 @@ const Footer: React.FC = () => {
               <Box display="flex" alignItems="center" mb={1}>
                 <Phone fontSize="small" sx={{ mr: 1 }} />
                 <Typography variant="body2" sx={{ opacity: 0.8, maxWidth: 200 }}>
-                  +591 4 4234567
+                  {contact.phone}
                 </Typography>
               </Box>
               <Box display="flex" alignItems="center">
                 <Email fontSize="small" sx={{ mr: 1 }} />
                 <Typography variant="body2" sx={{ opacity: 0.8, maxWidth: 200 }}>
-                  capn@umss.edu.bo
+                  {contact.email}
                 </Typography>
               </Box>
             </Box>
