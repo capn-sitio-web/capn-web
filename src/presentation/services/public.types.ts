@@ -31,7 +31,7 @@ export type PublicSectionData = {
   elementos: PublicElementItem[];
   imagenes: PublicImageItem[];
   personal: PublicPersonItem[];
-  contactos: unknown[];
+  contactos: PublicContactItem[];
 };
 
 export type PublicListItem = {
@@ -70,6 +70,18 @@ export type PublicPersonItem = {
   cargo: string;
   descripcion: string;
   foto_url: string | null;
+  created_at?: string;
+  updated_at?: string;
+};
+
+export type PublicContactItem = {
+  idcontacto: number;
+  seccion_idseccion: number;
+  ubicacion_nombre: string;
+  ubicacion_url: string;
+  telefono: string;
+  correo: string;
+  facebook_url: string | null;
   created_at?: string;
   updated_at?: string;
 };
