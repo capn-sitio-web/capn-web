@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { AboutService } from "./about.service";
-
 import {
   mapBannerToAboutBanner,
   mapHistoriaToAboutHistory,
@@ -8,68 +7,36 @@ import {
   mapValoresToAboutCards,
   mapEquipoToAboutTeam,
 } from "./about.mapper";
-
-import { aboutFallbackData } from "./about.fallback";
-
 import type { AboutPageData } from "./about.types";
 
-export function useAboutPage() {
-  const [data, setData] = useState<AboutPageData>(aboutFallbackData);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function loadAboutPage() {
-      setLoading(true);
-
-      const [
-        bannerResult,
-        historyResult,
-        missionVisionResult,
-        valuesResult,
-        teamResult,
-      ] = await Promise.allSettled([
-        AboutService.getBanner(),
-        AboutService.getNuestraHistoria(),
-        AboutService.getMisionYVision(),
-        AboutService.getNuestrosValores(),
-        AboutService.getNuestroEquipo(),
-      ]);
-
-      setData({
-        banner:
-          bannerResult.status === "fulfilled"
-            ? mapBannerToAboutBanner(bannerResult.value)
-            : aboutFallbackData.banner,
-
-        history:
-          historyResult.status === "fulfilled"
-            ? mapHistoriaToAboutHistory(historyResult.value)
-            : aboutFallbackData.history,
-
-        missionVision:
-          missionVisionResult.status === "fulfilled"
-            ? mapMisionVisionToAboutCards(missionVisionResult.value)
-            : aboutFallbackData.missionVision,
-
-        values:
-          valuesResult.status === "fulfilled"
-            ? mapValoresToAboutCards(valuesResult.value)
-            : aboutFallbackData.values,
-
-        team:
-          teamResult.status === "fulfilled"
-            ? mapEquipoToAboutTeam(teamResult.value)
-            : aboutFallbackData.team,
-      });
-
-      setLoading(false);
-    }
-
-    loadAboutPage();
-  }, []);
+async function loadAboutPage(): Promise<AboutPageData> {
+  const [banner, history, missionVision, values, team] = await Promise.all([
+    AboutService.getBanner(),
+    AboutService.getNuestraHistoria(),
+    AboutService.getMisionYVision(),
+    AboutService.getNuestrosValores(),
+    AboutService.getNuestroEquipo(),
+  ]);
 
   return {
-    data,
-    loading,
+    banner: mapBannerToAboutBanner(banner),
+    history: mapHistoriaToAboutHistory(history),
+    missionVision: mapMisionVisionToAboutCards(missionVision),
+    values: mapValoresToAboutCards(values),
+    team: mapEquipoToAboutTeam(team),
+  };
+}
+
+export function useAboutPage() {
+  const query = useQuery({
+    queryKey: ["public", "about"],
+    queryFn: loadAboutPage,
+  });
+
+  return {
+    data: query.data,
+    loading: query.isLoading,
+    isFetching: query.isFetching,
+    error: query.error,
   };
 }

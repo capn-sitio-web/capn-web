@@ -1,4 +1,4 @@
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import aboutusHero from "../../assets/page-headers/aboutus.jpg";
 import historia from "../../assets/historia.jpeg";
 import PageHeader from "../components/containers/PageHeader";
@@ -10,11 +10,20 @@ import OutlinedImageCard from "../components/cards/OutlinedImageCard";
 import { useAboutPage } from "../services/about/useAboutPage";
 
 const AboutUsPage = () => {
-  const { data, loading } = useAboutPage();
+  const { data, loading, error } = useAboutPage();
   if (loading) {
     return (
       <Box display="flex" justifyContent="center" py={8}>
         <CircularProgress />
+      </Box>
+    );
+  }
+  if (error || !data) {
+    return (
+      <Box py={8} textAlign="center">
+        <Typography color="error">
+          No se pudo cargar la información de Nosotros.
+        </Typography>
       </Box>
     );
   }
