@@ -98,9 +98,9 @@ export type AboutSectionGroup<T> = {
 };
 
 export type AboutPageData = {
-  banner: AboutBanner;
-  history: AboutHistory;
-  missionVision: AboutSectionGroup<AboutCardItem>;
-  values: AboutSectionGroup<AboutCardItem>;
-  team: AboutSectionGroup<AboutTeamItem>;
+  banner: AboutBanner | null;
+  history: AboutHistory | null;
+  missionVision: AboutSectionGroup<AboutCardItem> | null;
+  values: AboutSectionGroup<AboutCardItem> | null;
+  team: AboutSectionGroup<AboutTeamItem> | null;
 };

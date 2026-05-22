@@ -1,4 +1,5 @@
 import { Box, CircularProgress, Typography } from "@mui/material";
+import contactHero from "../../assets/page-headers/contact.jpg";
 //import { DirectionsCar, DirectionsWalk, DirectionsBus } from "@mui/icons-material";
 import LocationSection from "../components/containers/LocationSection";
 import PageHeader from "../components/containers/PageHeader";
@@ -44,18 +45,22 @@ const ContactPage = () => {
   return (
     <Box>
       {/* Sección: Cabecera */}
-      <PageHeader
-        title={data.banner.title}
-        subtitle={data.banner.subtitle}
-        backgroundImage={data.banner.image}
-      />
+      {data.banner && (
+        <PageHeader
+          title={data.banner.title}
+          subtitle={data.banner.subtitle}
+          backgroundImage={data.banner.image || contactHero}
+        />
+      )}
       {/* Sección: Ubicación */}
-      <LocationSection
-        title={data.location.title}
-        subtitle={data.location.subtitle}
-        mapSrc={data.location.mapSrc}
-        //infoItems={infoItems}
-      />
+      {data.location && (
+        <LocationSection
+          title={data.location.title}
+          subtitle={data.location.subtitle}
+          mapSrc={data.location.mapSrc}
+          //infoItems={infoItems}
+        />
+      )}
     </Box>
   );
 };

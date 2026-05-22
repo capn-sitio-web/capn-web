@@ -10,7 +10,13 @@ import {
 import type { AboutPageData } from "./about.types";
 
 async function loadAboutPage(): Promise<AboutPageData> {
-  const [banner, history, missionVision, values, team] = await Promise.all([
+  const [
+    bannerResult,
+    historyResult,
+    missionVisionResult,
+    valuesResult,
+    teamResult,
+  ] = await Promise.allSettled([
     AboutService.getBanner(),
     AboutService.getNuestraHistoria(),
     AboutService.getMisionYVision(),
@@ -19,11 +25,26 @@ async function loadAboutPage(): Promise<AboutPageData> {
   ]);
 
   return {
-    banner: mapBannerToAboutBanner(banner),
-    history: mapHistoriaToAboutHistory(history),
-    missionVision: mapMisionVisionToAboutCards(missionVision),
-    values: mapValoresToAboutCards(values),
-    team: mapEquipoToAboutTeam(team),
+    banner:
+      bannerResult.status === "fulfilled"
+        ? mapBannerToAboutBanner(bannerResult.value)
+        : null,
+    history:
+      historyResult.status === "fulfilled"
+        ? mapHistoriaToAboutHistory(historyResult.value)
+        : null,
+    missionVision:
+      missionVisionResult.status === "fulfilled"
+        ? mapMisionVisionToAboutCards(missionVisionResult.value)
+        : null,
+    values:
+      valuesResult.status === "fulfilled"
+        ? mapValoresToAboutCards(valuesResult.value)
+        : null,
+    team:
+      teamResult.status === "fulfilled"
+        ? mapEquipoToAboutTeam(teamResult.value)
+        : null,
   };
 }
 

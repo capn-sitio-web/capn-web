@@ -15,6 +15,6 @@ export type ContactLocation = {
 };
 
 export type ContactPageData = {
-  banner: ContactBanner;
-  location: ContactLocation;
+  banner: ContactBanner | null;
+  location: ContactLocation | null;
 };

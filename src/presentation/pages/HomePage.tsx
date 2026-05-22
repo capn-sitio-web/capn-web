@@ -55,37 +55,43 @@ const HomePage = () => {
   return (
     <Box>
       {/* Sección: Hero */}
-      <HeroSection
-        title={data.banner.title}
-        subtitle={data.banner.subtitle}
-        image={data.banner.image}
-        buttons={[
-          { label: "Nuestros Servicios", color: "primary" },
-          { label: "Solicitar Análisis", color: "success" },
-          { label: "Ver Acreditación", color: "secondary" },
-        ]}
-      />
+      {data.banner && (
+        <HeroSection
+          title={data.banner.title}
+          subtitle={data.banner.subtitle}
+          image={data.banner.image || hero}
+          buttons={[
+            { label: "Nuestros Servicios", color: "primary" },
+            { label: "Solicitar Análisis", color: "success" },
+            { label: "Ver Acreditación", color: "secondary" },
+          ]}
+        />
+      )}
       {/* Sección: Nuestros Servicios */}
-      <GridSection
-        title={data.services.title}
-        subtitle={data.services.subtitle}
-        items={data.services.items}
-        CardComponent={OutlinedIconCard}
-        backgroundColor="#F9FAFB"
-      />
+      {data.services && (
+        <GridSection
+          title={data.services.title}
+          subtitle={data.services.subtitle}
+          items={data.services.items}
+          CardComponent={OutlinedIconCard}
+          backgroundColor="#F9FAFB"
+        />
+      )}
       {/* Sección: Calidad Certificada */}
-      <InfoImageSection
-        title={data.quality.title}
-        description={data.quality.description}
-        image={data.quality.image}
-        items={data.quality.items}
-        buttonText="Ver Certificación"
-        buttonColor="primary"
-      />
+      {data.quality && (
+        <InfoImageSection
+          title={data.quality.title}
+          description={data.quality.description}
+          image={data.quality.image}
+          items={data.quality.items}
+          buttonText="Ver Certificación"
+          buttonColor="primary"
+        />
+      )}
       {/* Sección: Nuestros asdfg */}
       <StatsSection
         stats={statsData}
-        backgroundImage={data.banner.image || hero}
+        backgroundImage={data.banner?.image || hero}
         duration={2000}
       />
       {/* Sección: Nuestros Clientes */}

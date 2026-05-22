@@ -7,14 +7,20 @@ import {
 import type { ContactPageData } from "./contact.types";
 
 async function loadContactPage(): Promise<ContactPageData> {
-  const [banner, informacion] = await Promise.all([
+  const [bannerResult, informacionResult] = await Promise.allSettled([
     ContactService.getBanner(),
     ContactService.getInformacion(),
   ]);
 
   return {
-    banner: mapBannerToContactBanner(banner),
-    location: mapInformacionToContactLocation(informacion),
+    banner:
+      bannerResult.status === "fulfilled"
+        ? mapBannerToContactBanner(bannerResult.value)
+        : null,
+    location:
+      informacionResult.status === "fulfilled"
+        ? mapInformacionToContactLocation(informacionResult.value)
+        : null,
   };
 }
 

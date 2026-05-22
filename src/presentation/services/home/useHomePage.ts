@@ -1,26 +1,33 @@
 import { useQuery } from "@tanstack/react-query";
-
 import { HomeService } from "./home.service";
-
 import {
   mapBannerToHomeBanner,
   mapServiciosToHomeServices,
   mapCalidadToHomeQuality,
 } from "./home.mapper";
-
 import type { HomePageData } from "./home.types";
 
 async function loadHomePage(): Promise<HomePageData> {
-  const [banner, services, quality] = await Promise.all([
-    HomeService.getBanner(),
-    HomeService.getNuestrosServicios(),
-    HomeService.getCalidadCertificada(),
-  ]);
+  const [bannerResult, servicesResult, qualityResult] =
+    await Promise.allSettled([
+      HomeService.getBanner(),
+      HomeService.getNuestrosServicios(),
+      HomeService.getCalidadCertificada(),
+    ]);
 
   return {
-    banner: mapBannerToHomeBanner(banner),
-    services: mapServiciosToHomeServices(services),
-    quality: mapCalidadToHomeQuality(quality),
+    banner:
+      bannerResult.status === "fulfilled"
+        ? mapBannerToHomeBanner(bannerResult.value)
+        : null,
+    services:
+      servicesResult.status === "fulfilled"
+        ? mapServiciosToHomeServices(servicesResult.value)
+        : null,
+    quality:
+      qualityResult.status === "fulfilled"
+        ? mapCalidadToHomeQuality(qualityResult.value)
+        : null,
   };
 }
 

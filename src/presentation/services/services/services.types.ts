@@ -25,27 +25,14 @@ export type ServicesSectionGroup<T> = {
   items: T[];
 };
 
-export type ServicesCta = {
-  title: string;
-  subtitle: string;
-  primaryButton: {
-    label: string;
-  };
-  secondaryButton: {
-    label: string;
-  };
-};
-
 export type ServicesPageData = {
-  banner: ServicesBanner;
+  banner: ServicesBanner | null;
 
-  microbiologico: ServiceInfoSection;
-  fisicoquimico: ServiceInfoSection;
-  sensorial: ServiceInfoSection;
-  especializado: ServiceInfoSection;
+  microbiologico: ServiceInfoSection | null;
+  fisicoquimico: ServiceInfoSection | null;
+  sensorial: ServiceInfoSection | null;
+  especializado: ServiceInfoSection | null;
 
-  procesoTrabajo: ServicesSectionGroup<ServiceCardItem>;
-  equiposTecnologia: ServicesSectionGroup<ServiceCardItem>;
-
-  cta: ServicesCta;
+  procesoTrabajo: ServicesSectionGroup<ServiceCardItem> | null;
+  equiposTecnologia: ServicesSectionGroup<ServiceCardItem> | null;
 };

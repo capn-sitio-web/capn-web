@@ -66,7 +66,7 @@ export type HomeQuality = {
 };
 
 export type HomePageData = {
-  banner: HomeBanner;
-  services: HomeServices;
-  quality: HomeQuality;
+  banner: HomeBanner | null;
+  services: HomeServices | null;
+  quality: HomeQuality | null;
 };

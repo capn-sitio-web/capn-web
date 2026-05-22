@@ -30,42 +30,52 @@ const AboutUsPage = () => {
   return (
     <Box>
       {/* Sección: Cabecera */}
-      <PageHeader
-        title={data.banner.title}
-        subtitle={data.banner.subtitle}
-        backgroundImage={data.banner.image || aboutusHero}
-      />
+      {data.banner && (
+        <PageHeader
+          title={data.banner.title}
+          subtitle={data.banner.subtitle}
+          backgroundImage={data.banner.image || aboutusHero}
+        />
+      )}
       {/* Sección: Nuestra Historia */}
-      <InfoImageSection
-        title={data.history.title}
-        description={data.history.description}
-        image={data.history.image || historia}
-      />
+      {data.history && (
+        <InfoImageSection
+          title={data.history.title}
+          description={data.history.description}
+          image={data.history.image || historia}
+        />
+      )}
       {/* Sección: Misión y Visión */}
-      <GridSection
-        title={data.missionVision.title}
-        items={data.missionVision.items}
-        CardComponent={OutlinedIconCard}
-        columns={2}
-        backgroundColor="#F9FAFB"
-      />
+      {data.missionVision && (
+        <GridSection
+          title={data.missionVision.title}
+          items={data.missionVision.items}
+          CardComponent={OutlinedIconCard}
+          columns={2}
+          backgroundColor="#F9FAFB"
+        />
+      )}
       {/* Sección: Nuestros Valores */}
-      <GridSection
-        title={data.values.title}
-        subtitle={data.values.subtitle}
-        items={data.values.items}
-        CardComponent={FlatIconCard}
-        columns={4}
-      />
+      {data.values && (
+        <GridSection
+          title={data.values.title}
+          subtitle={data.values.subtitle}
+          items={data.values.items}
+          CardComponent={FlatIconCard}
+          columns={4}
+        />
+      )}
       {/* Sección: Nuestro Equipo */}
-      <GridSection
-        title={data.team.title}
-        subtitle={data.team.subtitle}
-        items={data.team.items}
-        CardComponent={OutlinedImageCard}
-        columns={3}
-        backgroundColor="#F9FAFB"
-      />
+      {data.team && (
+        <GridSection
+          title={data.team.title}
+          subtitle={data.team.subtitle}
+          items={data.team.items}
+          CardComponent={OutlinedImageCard}
+          columns={3}
+          backgroundColor="#F9FAFB"
+        />
+      )}
     </Box>
   );
 }
