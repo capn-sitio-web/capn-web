@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+
 import { HomeService } from "./home.service";
 
 import {
@@ -7,78 +8,32 @@ import {
   mapCalidadToHomeQuality,
 } from "./home.mapper";
 
-import { homeFallbackData } from "./home.fallback";
 import type { HomePageData } from "./home.types";
 
-export function useHomePage() {
-  const [data, setData] = useState<HomePageData>(homeFallbackData);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function loadHomePage() {
-      setLoading(true);
-
-      const [bannerResult, servicesResult, qualityResult] =
-        await Promise.allSettled([
-          HomeService.getBanner(),
-          HomeService.getNuestrosServicios(),
-          HomeService.getCalidadCertificada(),
-        ]);
-
-      const mappedBanner =
-        bannerResult.status === "fulfilled"
-          ? mapBannerToHomeBanner(bannerResult.value)
-          : homeFallbackData.banner;
-
-      const mappedServices =
-        servicesResult.status === "fulfilled"
-          ? mapServiciosToHomeServices(servicesResult.value)
-          : homeFallbackData.services;
-
-      const mappedQuality =
-        qualityResult.status === "fulfilled"
-          ? mapCalidadToHomeQuality(qualityResult.value)
-          : homeFallbackData.quality;
-
-      setData({
-        banner: {
-          ...homeFallbackData.banner,
-          ...mappedBanner,
-          image: mappedBanner.image || homeFallbackData.banner.image,
-        },
-
-        services: {
-          ...homeFallbackData.services,
-          ...mappedServices,
-          items:
-            mappedServices.items.length > 0
-              ? mappedServices.items
-              : homeFallbackData.services.items,
-        },
-
-        quality: {
-          ...homeFallbackData.quality,
-          ...mappedQuality,
-          image: mappedQuality.image || homeFallbackData.quality.image,
-          items:
-            mappedQuality.items.length > 0
-              ? mappedQuality.items
-              : homeFallbackData.quality.items,
-        },
-
-        stats: homeFallbackData.stats,
-        clients: homeFallbackData.clients,
-        cta: homeFallbackData.cta,
-      });
-
-      setLoading(false);
-    }
-
-    loadHomePage();
-  }, []);
+async function loadHomePage(): Promise<HomePageData> {
+  const [banner, services, quality] = await Promise.all([
+    HomeService.getBanner(),
+    HomeService.getNuestrosServicios(),
+    HomeService.getCalidadCertificada(),
+  ]);
 
   return {
-    data,
-    loading,
+    banner: mapBannerToHomeBanner(banner),
+    services: mapServiciosToHomeServices(services),
+    quality: mapCalidadToHomeQuality(quality),
+  };
+}
+
+export function useHomePage() {
+  const query = useQuery({
+    queryKey: ["public", "home"],
+    queryFn: loadHomePage,
+  });
+
+  return {
+    data: query.data,
+    loading: query.isLoading,
+    isFetching: query.isFetching,
+    error: query.error,
   };
 }

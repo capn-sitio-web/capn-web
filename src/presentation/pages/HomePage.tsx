@@ -1,4 +1,5 @@
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
+import hero from "../../assets/hero-lab.jpeg";
 import cofadenaLogo from "../../assets/clients-logo/cofadena.png";
 import inlasaLogo from "../../assets/clients-logo/inlasa.png";
 import pilLogo from "../../assets/clients-logo/pil.svg";
@@ -16,6 +17,13 @@ import StatsSection from "../components/sections/StatsSection";
 import CallToActionSection from "../components/containers/CallToActionSection";
 import { useHomePage } from "../services/home/useHomePage";
 
+const statsData = [
+  { value: 15, suffix: "+", label: "Años de Experiencia" },
+  { value: 500, suffix: "+", label: "Análisis Realizados" },
+  { value: 200, suffix: "+", label: "Empresas Atendidas" },
+  { value: 98, suffix: "%", label: "Satisfacción del Cliente" },
+];
+
 const clientsData = [
   { name: "COFADENA", logo: cofadenaLogo },
   { name: "INLASA", logo: inlasaLogo },
@@ -27,11 +35,20 @@ const clientsData = [
 ];
 
 const HomePage = () => {
-  const { data, loading } = useHomePage();
+  const { data, loading, error } = useHomePage();
   if (loading) {
     return (
       <Box display="flex" justifyContent="center" py={8}>
         <CircularProgress />
+      </Box>
+    );
+  }
+  if (error || !data) {
+    return (
+      <Box py={8} textAlign="center">
+        <Typography color="error">
+          No se pudo cargar la información de inicio.
+        </Typography>
       </Box>
     );
   }
@@ -67,8 +84,8 @@ const HomePage = () => {
       />
       {/* Sección: Nuestros asdfg */}
       <StatsSection
-        stats={data.stats}
-        backgroundImage={data.banner.image}
+        stats={statsData}
+        backgroundImage={data.banner.image || hero}
         duration={2000}
       />
       {/* Sección: Nuestros Clientes */}
@@ -79,10 +96,10 @@ const HomePage = () => {
       />
       {/* Sección: Análisis de alimentos */}
       <CallToActionSection
-        title={data.cta.title}
-        subtitle={data.cta.subtitle}
-        primaryButton={data.cta.primaryButton}
-        secondaryButton={data.cta.secondaryButton}
+        title="¿Necesitas análisis de alimentos?"
+        subtitle="Contáctanos hoy mismo y obtén resultados confiables respaldados por nuestra certificación internacional"
+        primaryButton={{ label: "Solicitar Cotización" }}
+        secondaryButton={{ label: "Ver Todos los Servicios" }}
       />
     </Box>
   );

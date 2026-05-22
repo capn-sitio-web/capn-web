@@ -65,33 +65,8 @@ export type HomeQuality = {
   items: string[];
 };
 
-export type HomeStatItem = {
-  value: number;
-  suffix: string;
-  label: string;
-};
-
-export type HomeClientItem = {
-  name: string;
-  logo: string;
-};
-
-export type HomeCta = {
-  title: string;
-  subtitle: string;
-  primaryButton: {
-    label: string;
-  };
-  secondaryButton: {
-    label: string;
-  };
-};
-
 export type HomePageData = {
   banner: HomeBanner;
   services: HomeServices;
   quality: HomeQuality;
-  stats: HomeStatItem[];
-  clients: HomeClientItem[];
-  cta: HomeCta;
 };
