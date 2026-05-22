@@ -72,12 +72,12 @@ const SocialLinks: React.FC<SocialLinksProps> = ({ socials }) => (
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
   const { data } = useContactPage();
-  const contact = data.location;
+  const contact = data?.location;
   
   const socialLinks = [
-    { icon: <Facebook />, href: contact.facebookUrl },
+    { icon: <Facebook />, href: contact?.facebookUrl ?? "" },
     { icon: <LinkedIn />, href: "https://www.linkedin.com" },
-    { icon: <Email />, href: `mailto:${contact.email}` },
+    { icon: <Email />, href: contact?.email ? `mailto:${contact.email}` : "" },
   ];
   const infoLinks = [
     { label: "Nosotros", path: ROUTES.ABOUT },
@@ -145,7 +145,7 @@ const Footer: React.FC = () => {
               <Box display="flex" alignItems="flex-start" mb={1}>
                 <Room fontSize="small" sx={{ mr: 1, mt: 0.5 }} />
                 <Typography variant="body2" sx={{ opacity: 0.8, maxWidth: 200 }}>
-                  {contact.locationName}
+                  {contact?.locationName ?? ""}
                   <br />
                   Cochabamba, Bolivia
                 </Typography>
@@ -153,13 +153,13 @@ const Footer: React.FC = () => {
               <Box display="flex" alignItems="center" mb={1}>
                 <Phone fontSize="small" sx={{ mr: 1 }} />
                 <Typography variant="body2" sx={{ opacity: 0.8, maxWidth: 200 }}>
-                  {contact.phone}
+                  {contact?.phone ?? ""}
                 </Typography>
               </Box>
               <Box display="flex" alignItems="center">
                 <Email fontSize="small" sx={{ mr: 1 }} />
                 <Typography variant="body2" sx={{ opacity: 0.8, maxWidth: 200 }}>
-                  {contact.email}
+                  {contact?.email ?? ""}
                 </Typography>
               </Box>
             </Box>

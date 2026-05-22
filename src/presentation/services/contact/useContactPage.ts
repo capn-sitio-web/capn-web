@@ -1,74 +1,33 @@
-import { useEffect, useState } from "react";
-
+import { useQuery } from "@tanstack/react-query";
 import { ContactService } from "./contact.service";
-import { contactFallbackData } from "./contact.fallback";
-
 import {
   mapBannerToContactBanner,
   mapInformacionToContactLocation,
 } from "./contact.mapper";
+import type { ContactPageData } from "./contact.types";
 
-import type { ContactLocation, ContactPageData } from "./contact.types";
+async function loadContactPage(): Promise<ContactPageData> {
+  const [banner, informacion] = await Promise.all([
+    ContactService.getBanner(),
+    ContactService.getInformacion(),
+  ]);
 
-function mergeLocationWithFallback(
-  mapped: ContactLocation,
-  fallback: ContactLocation
-): ContactLocation {
   return {
-    ...fallback,
-    ...mapped,
-    mapSrc: mapped.mapSrc || fallback.mapSrc,
-    locationName: mapped.locationName || fallback.locationName,
-    phone: mapped.phone || fallback.phone,
-    email: mapped.email || fallback.email,
-    facebookUrl: mapped.facebookUrl || fallback.facebookUrl,
+    banner: mapBannerToContactBanner(banner),
+    location: mapInformacionToContactLocation(informacion),
   };
 }
 
 export function useContactPage() {
-  const [data, setData] = useState<ContactPageData>(contactFallbackData);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function loadContactPage() {
-      setLoading(true);
-
-      const [bannerResult, informacionResult] = await Promise.allSettled([
-        ContactService.getBanner(),
-        ContactService.getInformacion(),
-      ]);
-
-      const mappedBanner =
-        bannerResult.status === "fulfilled"
-          ? mapBannerToContactBanner(bannerResult.value)
-          : contactFallbackData.banner;
-
-      const mappedLocation =
-        informacionResult.status === "fulfilled"
-          ? mapInformacionToContactLocation(informacionResult.value)
-          : contactFallbackData.location;
-
-      setData({
-        banner: {
-          ...contactFallbackData.banner,
-          ...mappedBanner,
-          image: mappedBanner.image || contactFallbackData.banner.image,
-        },
-
-        location: mergeLocationWithFallback(
-          mappedLocation,
-          contactFallbackData.location
-        ),
-      });
-
-      setLoading(false);
-    }
-
-    loadContactPage();
-  }, []);
+  const query = useQuery({
+    queryKey: ["public", "contact"],
+    queryFn: loadContactPage,
+  });
 
   return {
-    data,
-    loading,
+    data: query.data,
+    loading: query.isLoading,
+    isFetching: query.isFetching,
+    error: query.error,
   };
 }

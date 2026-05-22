@@ -1,15 +1,24 @@
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 //import { DirectionsCar, DirectionsWalk, DirectionsBus } from "@mui/icons-material";
 import LocationSection from "../components/containers/LocationSection";
 import PageHeader from "../components/containers/PageHeader";
 import { useContactPage } from "../services/contact/useContactPage";
 
 const ContactPage = () => {
-  const { data, loading } = useContactPage();
+  const { data, loading, error } = useContactPage();
   if (loading) {
     return (
       <Box display="flex" justifyContent="center" py={8}>
         <CircularProgress />
+      </Box>
+    );
+  }
+  if (error || !data) {
+    return (
+      <Box py={8} textAlign="center">
+        <Typography color="error">
+          No se pudo cargar la información de contacto.
+        </Typography>
       </Box>
     );
   }
