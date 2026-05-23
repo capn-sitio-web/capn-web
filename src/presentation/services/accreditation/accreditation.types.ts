@@ -18,19 +18,7 @@ export type AccreditationSectionGroup<T> = {
   items: T[];
 };
 
-export type AccreditationCta = {
-  title: string;
-  subtitle: string;
-  primaryButton: {
-    label: string;
-  };
-  secondaryButton: {
-    label: string;
-  };
-};
-
 export type AccreditationPageData = {
-  banner: AccreditationBanner;
-  sistemaCalidad: AccreditationSectionGroup<AccreditationQualityItem>;
-  cta: AccreditationCta;
+  banner: AccreditationBanner | null;
+  sistemaCalidad: AccreditationSectionGroup<AccreditationQualityItem> | null;
 };
