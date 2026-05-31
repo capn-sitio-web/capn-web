@@ -1,4 +1,5 @@
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import ImageRightPageSkeleton from "../components/skeletons/ImageRightPageSkeleton";
 import aboutusHero from "../../assets/page-headers/aboutus.jpg";
 import historia from "../../assets/historia.jpeg";
 import PageHeader from "../components/containers/PageHeader";
@@ -12,11 +13,7 @@ import { useAboutPage } from "../services/about/useAboutPage";
 const AboutUsPage = () => {
   const { data, loading, error } = useAboutPage();
   if (loading) {
-    return (
-      <Box display="flex" justifyContent="center" py={8}>
-        <CircularProgress />
-      </Box>
-    );
+    return <ImageRightPageSkeleton />;
   }
   if (error || !data) {
     return (

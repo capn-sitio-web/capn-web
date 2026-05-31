@@ -1,4 +1,5 @@
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import CardPageSkeleton from "../components/skeletons/CardPageSkeleton";
 import hero from "../../assets/hero-lab.jpeg";
 import cofadenaLogo from "../../assets/clients-logo/cofadena.png";
 import inlasaLogo from "../../assets/clients-logo/inlasa.png";
@@ -37,11 +38,7 @@ const clientsData = [
 const HomePage = () => {
   const { data, loading, error } = useHomePage();
   if (loading) {
-    return (
-      <Box display="flex" justifyContent="center" py={8}>
-        <CircularProgress />
-      </Box>
-    );
+    return <CardPageSkeleton />;
   }
   if (error || !data) {
     return (

@@ -1,4 +1,5 @@
-import { Box, CircularProgress, Typography } from "@mui/material"
+import { Box, Typography } from "@mui/material"
+import ImageRightPageSkeleton from "../components/skeletons/ImageRightPageSkeleton";
 import PageHeader from "../components/containers/PageHeader";
 import InfoImageSection from "../components/containers/InfoImageSection";
 import GridSection from "../components/containers/GridSection";
@@ -18,11 +19,7 @@ const ctaData = {
 const ServicesPage = () => {
   const { data, loading, error } = useServicesPage();
   if (loading) {
-    return (
-      <Box display="flex" justifyContent="center" py={8}>
-        <CircularProgress />
-      </Box>
-    );
+    return <ImageRightPageSkeleton />;
   }
   if (error || !data) {
     return (

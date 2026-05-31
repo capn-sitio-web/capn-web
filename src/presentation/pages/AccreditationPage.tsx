@@ -1,4 +1,5 @@
-import { Box, CircularProgress, Typography } from "@mui/material"
+import { Box, Typography } from "@mui/material"
+import CardPageSkeleton from "../components/skeletons/CardPageSkeleton";
 import accreditationHero from "../../assets/page-headers/accreditation.jpg";
 import PageHeader from "../components/containers/PageHeader";
 import GridSection from "../components/containers/GridSection";
@@ -17,11 +18,7 @@ const ctaData = {
 const AccreditationPage = () => {
   const { data, loading, error } = useAccreditationPage();
   if (loading) {
-    return (
-      <Box display="flex" justifyContent="center" py={8}>
-        <CircularProgress />
-      </Box>
-    );
+    return <CardPageSkeleton />;
   }
   if (error || !data) {
     return (
