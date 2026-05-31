@@ -1,18 +1,20 @@
-import type {
-  PublicBannerData,
-  PublicSectionData,
-} from "../public.types";
-
 import {
   getFullImageUrl,
   mapIconNameToMui,
 } from "../public.mapper";
 
 import type {
+  PublicBannerData,
+  PublicSectionData,
+} from "../public.types";
+
+import type {
   ServicesBanner,
   ServiceInfoSection,
   ServiceCardItem,
   ServicesSectionGroup,
+  ServicesPageData,
+  PublicServicesPageResponse,
 } from "./services.types";
 
 export function mapBannerToServicesBanner(
@@ -47,5 +49,37 @@ export function mapSectionToCardGroup(
       title: item.titulo,
       description: item.descripcion,
     })),
+  };
+}
+
+export function mapServicesPageToServicesPageData(
+  data: PublicServicesPageResponse["data"]
+): ServicesPageData {
+  return {
+    banner: data.banner ? mapBannerToServicesBanner(data.banner) : null,
+
+    microbiologico: data.analisisMicrobiologico
+      ? mapSectionToServiceInfo(data.analisisMicrobiologico)
+      : null,
+
+    fisicoquimico: data.analisisFisicoquimico
+      ? mapSectionToServiceInfo(data.analisisFisicoquimico)
+      : null,
+
+    sensorial: data.analisisSensorial
+      ? mapSectionToServiceInfo(data.analisisSensorial)
+      : null,
+
+    especializado: data.analisisEspecializado
+      ? mapSectionToServiceInfo(data.analisisEspecializado)
+      : null,
+
+    procesoTrabajo: data.procesoTrabajo
+      ? mapSectionToCardGroup(data.procesoTrabajo)
+      : null,
+
+    equiposTecnologia: data.equiposTecnologia
+      ? mapSectionToCardGroup(data.equiposTecnologia)
+      : null,
   };
 }

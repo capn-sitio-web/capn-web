@@ -1,4 +1,20 @@
 import type { ReactNode } from "react";
+import type { PublicBannerData, PublicSectionData } from "../public.types";
+
+export type PublicServicesPageResponse = {
+  message: string;
+  data: {
+    banner: PublicBannerData | null;
+
+    analisisMicrobiologico: PublicSectionData | null;
+    analisisFisicoquimico: PublicSectionData | null;
+    analisisSensorial: PublicSectionData | null;
+    analisisEspecializado: PublicSectionData | null;
+
+    procesoTrabajo: PublicSectionData | null;
+    equiposTecnologia: PublicSectionData | null;
+  };
+};
 
 export type ServicesBanner = {
   title: string;
