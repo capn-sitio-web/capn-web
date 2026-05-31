@@ -1,42 +1,63 @@
 import type { ReactNode } from "react";
 
-export type PublicBannerResponse = {
-  message: string;
-  data: {
-    seccionId: number;
-    sectionTitle: string;
-    description: string;
-    image: {
-      previewUrl: string;
-      imageId: number | null;
-      alt: string;
-    } | null;
-  };
+export type PublicBannerData = {
+  seccionId: number;
+  sectionTitle: string;
+  description: string;
+  image: {
+    previewUrl: string;
+    imageId: number | null;
+    alt: string;
+  } | null;
 };
 
-export type PublicSectionResponse = {
+export type PublicSectionData = {
+  idseccion: number;
+  slug: string;
+  titulo: string;
+  descripcion: string | null;
+  created_at?: string;
+  updated_at?: string;
+
+  listas: {
+    idlista_seccion: number;
+    seccion_idseccion?: number;
+    texto_item: string;
+    created_at?: string;
+    updated_at?: string;
+  }[];
+
+  elementos: {
+    idelemento: number;
+    seccion_idseccion?: number;
+    clave?: string | null;
+    titulo: string;
+    descripcion: string;
+    icono: string | null;
+    imagen_url: string | null;
+    created_at?: string;
+    updated_at?: string;
+  }[];
+
+  imagenes: {
+    idimagen_seccion: number;
+    seccion_idseccion?: number;
+    imagen_url: string;
+    imagen_alt: string;
+    created_at?: string;
+    updated_at?: string;
+  }[];
+
+  personal?: unknown[];
+  contactos?: unknown[];
+};
+
+export type PublicHomePageResponse = {
   message: string;
   data: {
-    idseccion: number;
-    slug: string;
-    titulo: string;
-    descripcion: string | null;
-    listas: {
-      idlista_seccion: number;
-      texto_item: string;
-    }[];
-    elementos: {
-      idelemento: number;
-      titulo: string;
-      descripcion: string;
-      icono: string | null;
-      imagen_url: string | null;
-    }[];
-    imagenes: {
-      idimagen_seccion: number;
-      imagen_url: string;
-      imagen_alt: string;
-    }[];
+    banner: PublicBannerData | null;
+    nuestrosServicios: PublicSectionData | null;
+    calidadCertificada: PublicSectionData | null;
   };
 };
 
