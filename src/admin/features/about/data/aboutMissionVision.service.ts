@@ -1,64 +1,94 @@
 import { axiosClient } from "../../../config/axiosClient";
-import type { MissionVision, SectionResponse } from "../domain/about.types";
+import type { MissionVision } from "../domain/about.types";
 
-type SeccionApiResponse = {
-  message: string;
-  data: SectionResponse;
+type MissionVisionCardResponse = {
+  id: string;
+  elementId: number;
+  key: string | null;
+  icon: string;
+  title: string;
+  description: string;
 };
 
+type MissionVisionResponse = {
+  message: string;
+  data: {
+    seccionId: number;
+    sectionTitle: string;
+    sectionDescription: string;
+    cards: MissionVisionCardResponse[];
+  };
+};
+
+type MissionVisionPayload = {
+  sectionTitle: string;
+  sectionDescription: string;
+  cards: {
+    elementId: number | null;
+    key: string;
+    icon: string;
+    title: string;
+    description: string;
+  }[];
+};
+
+function mapResponseToMissionVision(
+  response: MissionVisionResponse["data"]
+): MissionVision {
+  const missionCard = response.cards.find((card) => card.key === "mision");
+  const visionCard = response.cards.find((card) => card.key === "vision");
+
+  return {
+    seccionId: response.seccionId,
+    missionElementId: missionCard?.elementId ?? null,
+    visionElementId: visionCard?.elementId ?? null,
+    mission: missionCard?.description ?? "",
+    vision: visionCard?.description ?? "",
+  };
+}
+
+function mapMissionVisionToPayload(data: MissionVision): MissionVisionPayload {
+  return {
+    sectionTitle: "Misión y Visión",
+    sectionDescription: "",
+    cards: [
+      {
+        elementId: data.missionElementId,
+        key: "mision",
+        icon: "shield",
+        title: "Nuestra Misión",
+        description: data.mission,
+      },
+      {
+        elementId: data.visionElementId,
+        key: "vision",
+        icon: "eye",
+        title: "Nuestra Visión",
+        description: data.vision,
+      },
+    ],
+  };
+}
+
 export const aboutMissionVisionService = {
-  async obtenerMisionVision(): Promise<MissionVision> {
-    const response = await axiosClient.get<SeccionApiResponse>(
-      "/public/nosotros/mision-y-vision"
+  obtenerMisionVision: async (): Promise<MissionVision> => {
+    const response = await axiosClient.get<MissionVisionResponse>(
+      "/admin/about/mission-vision"
     );
 
-    const seccion = response.data.data;
-
-    const missionElement = seccion.elementos.find(
-      (elemento) => elemento.clave === "mision"
-    );
-
-    const visionElement = seccion.elementos.find(
-      (elemento) => elemento.clave === "vision"
-    );
-
-    if (!missionElement || !visionElement) {
-      throw new Error("No se encontraron los elementos de misión y visión.");
-    }
-
-    return {
-      seccionId: seccion.idseccion,
-      missionElementId: missionElement.idelemento,
-      visionElementId: visionElement.idelemento,
-      mission: missionElement.descripcion ?? "",
-      vision: visionElement.descripcion ?? "",
-    };
+    return mapResponseToMissionVision(response.data.data);
   },
 
-  async actualizarMisionVision(data: MissionVision): Promise<MissionVision> {
-    if (!data.seccionId || !data.missionElementId || !data.visionElementId) {
-      throw new Error("Faltan identificadores para actualizar misión y visión.");
-    }
+  actualizarMisionVision: async (
+    data: MissionVision
+  ): Promise<MissionVision> => {
+    const payload = mapMissionVisionToPayload(data);
 
-    await Promise.all([
-      axiosClient.put(`/admin/elementos-seccion/${data.missionElementId}`, {
-        seccion_idseccion: data.seccionId,
-        clave: "mision",
-        titulo: "Nuestra Misión",
-        descripcion: data.mission,
-        icono: null,
-        imagen_url: null,
-      }),
-      axiosClient.put(`/admin/elementos-seccion/${data.visionElementId}`, {
-        seccion_idseccion: data.seccionId,
-        clave: "vision",
-        titulo: "Nuestra Visión",
-        descripcion: data.vision,
-        icono: null,
-        imagen_url: null,
-      }),
-    ]);
+    const response = await axiosClient.post<MissionVisionResponse>(
+      "/admin/about/mission-vision",
+      payload
+    );
 
-    return data;
+    return mapResponseToMissionVision(response.data.data);
   },
 };

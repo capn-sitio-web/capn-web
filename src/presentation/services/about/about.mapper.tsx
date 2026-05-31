@@ -1,16 +1,9 @@
 import {
-  Security,
-  EmojiEvents,
-  Favorite,
-  Visibility,
-  Shield,
-  Science,
-  Restaurant,
-  ColorLens,
-  LocalHospital,
-  Description,
-  Settings,
-} from "@mui/icons-material";
+  getFullImageUrl,
+  mapIconNameToMui,
+} from "../public.mapper";
+
+import type { PublicSectionData } from "../public.types";
 
 import type {
   AboutBanner,
@@ -18,49 +11,9 @@ import type {
   AboutCardItem,
   AboutTeamItem,
   AboutSectionGroup,
-  PublicSectionResponse,
+  AboutPageData,
+  PublicAboutPageResponse,
 } from "./about.types";
-
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL?.replace("/api", "");
-
-function getFullImageUrl(imageUrl?: string | null) {
-  if (!imageUrl) return "";
-
-  if (imageUrl.startsWith("http")) {
-    return imageUrl;
-  }
-
-  return `${apiBaseUrl}/${imageUrl}`;
-}
-
-function mapIconNameToMui(iconName: string | null) {
-  switch (iconName) {
-    case "security":
-      return <Security sx={{ color: "#3B82F6" }} />;
-    case "shield":
-      return <Shield sx={{ color: "#3B82F6" }} />;
-    case "eye":
-      return <Visibility sx={{ color: "#22C55E" }} />;
-    case "trophy":
-      return <EmojiEvents sx={{ color: "#22C55E" }} />;
-    case "heart":
-      return <Favorite sx={{ color: "#F97316" }} />;
-    case "flask":
-      return <Science sx={{ color: "#3B82F6" }} />;
-    case "utensils":
-      return <Restaurant sx={{ color: "#22C55E" }} />;
-    case "palette":
-      return <ColorLens sx={{ color: "#F97316" }} />;
-    case "medical":
-      return <LocalHospital sx={{ color: "#A855F7" }} />;
-    case "document":
-      return <Description sx={{ color: "#3B82F6" }} />;
-    case "settings":
-      return <Settings sx={{ color: "#3B82F6" }} />;
-    default:
-      return <Security sx={{ color: "#3B82F6" }} />;
-  }
-}
 
 export function mapBannerToAboutBanner(data: {
   sectionTitle: string;
@@ -73,12 +26,12 @@ export function mapBannerToAboutBanner(data: {
   return {
     title: data.sectionTitle,
     subtitle: data.description,
-    image: data.image?.previewUrl ?? "",
+    image: data.image?.previewUrl || "",
   };
 }
 
 export function mapHistoriaToAboutHistory(
-  data: PublicSectionResponse["data"]
+  data: PublicSectionData
 ): AboutHistory {
   return {
     title: data.titulo,
@@ -88,7 +41,7 @@ export function mapHistoriaToAboutHistory(
 }
 
 export function mapMisionVisionToAboutCards(
-  data: PublicSectionResponse["data"]
+  data: PublicSectionData
 ): AboutSectionGroup<AboutCardItem> {
   return {
     title: data.titulo,
@@ -103,7 +56,7 @@ export function mapMisionVisionToAboutCards(
 }
 
 export function mapValoresToAboutCards(
-  data: PublicSectionResponse["data"]
+  data: PublicSectionData
 ): AboutSectionGroup<AboutCardItem> {
   return {
     title: data.titulo,
@@ -112,21 +65,46 @@ export function mapValoresToAboutCards(
       icon: mapIconNameToMui(item.icono),
       title: item.titulo,
       description: item.descripcion,
+      txtAlign: "center",
     })),
   };
 }
 
 export function mapEquipoToAboutTeam(
-  data: PublicSectionResponse["data"]
+  data: PublicSectionData
 ): AboutSectionGroup<AboutTeamItem> {
   return {
     title: data.titulo,
     subtitle: data.descripcion ?? undefined,
-    items: data.personal.map((person) => ({
+    items: data.personal?.map((person) => ({
       image: getFullImageUrl(person.foto_url),
       title: person.nombre,
       subtitle: person.cargo,
       description: person.descripcion,
-    })),
+    })) ?? [],
+  };
+}
+
+export function mapAboutPageToAboutPageData(
+  data: PublicAboutPageResponse["data"]
+): AboutPageData {
+  return {
+    banner: data.banner ? mapBannerToAboutBanner(data.banner) : null,
+
+    history: data.nuestraHistoria
+      ? mapHistoriaToAboutHistory(data.nuestraHistoria)
+      : null,
+
+    missionVision: data.misionYVision
+      ? mapMisionVisionToAboutCards(data.misionYVision)
+      : null,
+
+    values: data.nuestrosValores
+      ? mapValoresToAboutCards(data.nuestrosValores)
+      : null,
+
+    team: data.nuestroEquipo
+      ? mapEquipoToAboutTeam(data.nuestroEquipo)
+      : null,
   };
 }

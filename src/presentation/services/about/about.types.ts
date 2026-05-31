@@ -1,67 +1,14 @@
 import type { ReactNode } from "react";
+import type { PublicBannerData, PublicSectionData } from "../public.types";
 
-export type PublicBannerResponse = {
+export type PublicAboutPageResponse = {
   message: string;
   data: {
-    seccionId: number;
-    sectionTitle: string;
-    description: string;
-    image: {
-      previewUrl: string;
-      imageId: number | null;
-      alt: string;
-    } | null;
-  };
-};
-
-export type PublicSectionResponse = {
-  message: string;
-  data: {
-    idseccion: number;
-    slug: string;
-    titulo: string;
-    descripcion: string | null;
-    created_at?: string;
-    updated_at?: string;
-
-    listas: {
-      idlista_seccion: number;
-      texto_item: string;
-    }[];
-
-    elementos: {
-      idelemento: number;
-      seccion_idseccion: number;
-      clave: string | null;
-      titulo: string;
-      descripcion: string;
-      icono: string | null;
-      imagen_url: string | null;
-      created_at?: string;
-      updated_at?: string;
-    }[];
-
-    imagenes: {
-      idimagen_seccion: number;
-      seccion_idseccion: number;
-      imagen_url: string;
-      imagen_alt: string;
-      created_at?: string;
-      updated_at?: string;
-    }[];
-
-    personal: {
-      idpersonal: number;
-      seccion_idseccion: number;
-      nombre: string;
-      cargo: string;
-      descripcion: string;
-      foto_url: string | null;
-      created_at?: string;
-      updated_at?: string;
-    }[];
-
-    contactos: unknown[];
+    banner: PublicBannerData | null;
+    nuestraHistoria: PublicSectionData | null;
+    misionYVision: PublicSectionData | null;
+    nuestrosValores: PublicSectionData | null;
+    nuestroEquipo: PublicSectionData | null;
   };
 };
 

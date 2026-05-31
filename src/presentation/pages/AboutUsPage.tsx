@@ -66,7 +66,7 @@ const AboutUsPage = () => {
         />
       )}
       {/* Sección: Nuestro Equipo */}
-      {data.team && (
+      {data.team && data.team.items.length > 0 && (
         <GridSection
           title={data.team.title}
           subtitle={data.team.subtitle}
