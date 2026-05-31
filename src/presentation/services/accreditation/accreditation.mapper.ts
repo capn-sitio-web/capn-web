@@ -1,14 +1,16 @@
+import { mapIconNameToMui } from "../public.mapper";
+
 import type {
   PublicBannerData,
   PublicSectionData,
 } from "../public.types";
 
-import { mapIconNameToMui } from "../public.mapper";
-
 import type {
   AccreditationBanner,
   AccreditationQualityItem,
   AccreditationSectionGroup,
+  AccreditationPageData,
+  PublicAccreditationPageResponse,
 } from "./accreditation.types";
 
 export function mapBannerToAccreditationBanner(
@@ -32,5 +34,16 @@ export function mapSistemaCalidadToCards(
       title: item.titulo,
       description: item.descripcion,
     })),
+  };
+}
+
+export function mapAccreditationPageToAccreditationPageData(
+  data: PublicAccreditationPageResponse["data"]
+): AccreditationPageData {
+  return {
+    banner: data.banner ? mapBannerToAccreditationBanner(data.banner) : null,
+    sistemaCalidad: data.sistemaCalidad
+      ? mapSistemaCalidadToCards(data.sistemaCalidad)
+      : null,
   };
 }

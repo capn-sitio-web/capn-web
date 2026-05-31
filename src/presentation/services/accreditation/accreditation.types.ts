@@ -1,4 +1,13 @@
 import type { ReactNode } from "react";
+import type { PublicBannerData, PublicSectionData } from "../public.types";
+
+export type PublicAccreditationPageResponse = {
+  message: string;
+  data: {
+    banner: PublicBannerData | null;
+    sistemaCalidad: PublicSectionData | null;
+  };
+};
 
 export type AccreditationBanner = {
   title: string;
