@@ -1,27 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { ContactService } from "./contact.service";
-import {
-  mapBannerToContactBanner,
-  mapInformacionToContactLocation,
-} from "./contact.mapper";
+import { mapContactPageToContactPageData } from "./contact.mapper";
 import type { ContactPageData } from "./contact.types";
 
 async function loadContactPage(): Promise<ContactPageData> {
-  const [bannerResult, informacionResult] = await Promise.allSettled([
-    ContactService.getBanner(),
-    ContactService.getInformacion(),
-  ]);
-
-  return {
-    banner:
-      bannerResult.status === "fulfilled"
-        ? mapBannerToContactBanner(bannerResult.value)
-        : null,
-    location:
-      informacionResult.status === "fulfilled"
-        ? mapInformacionToContactLocation(informacionResult.value)
-        : null,
-  };
+  const contactPageData = await ContactService.getContactPage();
+  return mapContactPageToContactPageData(contactPageData);
 }
 
 export function useContactPage() {
@@ -29,7 +13,6 @@ export function useContactPage() {
     queryKey: ["public", "contact"],
     queryFn: loadContactPage,
   });
-
   return {
     data: query.data,
     loading: query.isLoading,

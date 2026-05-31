@@ -1,3 +1,13 @@
+import type { PublicBannerData, PublicSectionData } from "../public.types";
+
+export type PublicContactPageResponse = {
+  message: string;
+  data: {
+    banner: PublicBannerData | null;
+    informacion: PublicSectionData | null;
+  };
+};
+
 export type ContactBanner = {
   title: string;
   subtitle: string;
