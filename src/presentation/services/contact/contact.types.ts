@@ -1,0 +1,30 @@
+import type { PublicBannerData, PublicSectionData } from "../public.types";
+
+export type PublicContactPageResponse = {
+  message: string;
+  data: {
+    banner: PublicBannerData | null;
+    informacion: PublicSectionData | null;
+  };
+};
+
+export type ContactBanner = {
+  title: string;
+  subtitle: string;
+  image: string;
+};
+
+export type ContactLocation = {
+  title: string;
+  subtitle: string;
+  mapSrc: string;
+  locationName: string;
+  phone: string;
+  email: string;
+  facebookUrl: string;
+};
+
+export type ContactPageData = {
+  banner: ContactBanner | null;
+  location: ContactLocation | null;
+};

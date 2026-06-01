@@ -1,7 +1,6 @@
-import { Box } from "@mui/material";
-import { Science, Restaurant, ColorLens, LocalHospital } from "@mui/icons-material";
+import { Box, Typography } from "@mui/material";
+import CardPageSkeleton from "../components/skeletons/CardPageSkeleton";
 import hero from "../../assets/hero-lab.jpeg";
-import calidad from "../../assets/calidad-certificada.jpg";
 import cofadenaLogo from "../../assets/clients-logo/cofadena.png";
 import inlasaLogo from "../../assets/clients-logo/inlasa.png";
 import pilLogo from "../../assets/clients-logo/pil.svg";
@@ -9,6 +8,7 @@ import senasagLogo from "../../assets/clients-logo/senasag.png";
 import umssLogo from "../../assets/clients-logo/umss.svg";
 import oberonLogo from "../../assets/clients-logo/oberon.png";
 import fcapfLogo from "../../assets/clients-logo/fcapf.png";
+
 import HeroSection from "../components/containers/HeroSection";
 import GridSection from "../components/containers/GridSection";
 import OutlinedIconCard from "../components/cards/OutlinedIconCard";
@@ -16,29 +16,7 @@ import InfoImageSection from "../components/containers/InfoImageSection";
 import ClientsSection from "../components/sections/ClientsSection";
 import StatsSection from "../components/sections/StatsSection";
 import CallToActionSection from "../components/containers/CallToActionSection";
-
-const servicesData = [
-  {
-    icon: <Science />,
-    title: "Análisis Microbiológicos",
-    description: "Detección de microorganismos indicadores y patógenos en alimentos y agua.",
-  },
-  {
-    icon: <Restaurant />,
-    title: "Análisis Fisicoquímicos",
-    description: "Determinación de nutrientes y parámetros de calidad en alimentos.",
-  },
-  {
-    icon: <ColorLens />,
-    title: "Análisis Sensoriales",
-    description: "Evaluaciones con paneles de catadores entrenados para garantizar calidad.",
-  },
-  {
-    icon: <LocalHospital />,
-    title: "Análisis Especializados",
-    description: "Residuos de plaguicidas, metales pesados, micotoxinas y más.",
-  },
-];
+import { useHomePage } from "../services/home/useHomePage";
 
 const statsData = [
   { value: 15, suffix: "+", label: "Años de Experiencia" },
@@ -58,45 +36,59 @@ const clientsData = [
 ];
 
 const HomePage = () => {
+  const { data, loading, error } = useHomePage();
+  if (loading) {
+    return <CardPageSkeleton />;
+  }
+  if (error || !data) {
+    return (
+      <Box py={8} textAlign="center">
+        <Typography color="error">
+          No se pudo cargar la información de inicio.
+        </Typography>
+      </Box>
+    );
+  }
   return (
     <Box>
       {/* Sección: Hero */}
-      <HeroSection
-        title="Centro de Alimentos y Productos Naturales"
-        subtitle="Laboratorio especializado en análisis microbiológicos, fisicoquímicos y sensoriales. Certificado ISO/IEC 17025 para garantizar la calidad y seguridad alimentaria."
-        image={hero}
-        buttons={[
-          { label: "Nuestros Servicios", color: "primary" },
-          { label: "Solicitar Análisis", color: "success" },
-          { label: "Ver Acreditación", color: "secondary" },
-        ]}
-      />
+      {data.banner && (
+        <HeroSection
+          title={data.banner.title}
+          subtitle={data.banner.subtitle}
+          image={data.banner.image || hero}
+          buttons={[
+            { label: "Nuestros Servicios", color: "primary" },
+            { label: "Solicitar Análisis", color: "success" },
+            { label: "Ver Acreditación", color: "secondary" },
+          ]}
+        />
+      )}
       {/* Sección: Nuestros Servicios */}
-      <GridSection
-        title="Nuestros Servicios"
-        subtitle="Ofrecemos análisis especializados con tecnología de punta y personal altamente calificado."
-        items={servicesData}
-        CardComponent={OutlinedIconCard}
-        backgroundColor="#F9FAFB"
-      />
+      {data.services && (
+        <GridSection
+          title={data.services.title}
+          subtitle={data.services.subtitle}
+          items={data.services.items}
+          CardComponent={OutlinedIconCard}
+          backgroundColor="#F9FAFB"
+        />
+      )}
       {/* Sección: Calidad Certificada */}
-      <InfoImageSection
-        title="Calidad Certificada"
-        description="Somos el primer laboratorio en Bolivia certificado bajo la norma ISO/IEC 17025 para análisis de alimentos, garantizando resultados confiables y reconocidos internacionalmente."
-        image={calidad}
-        items={[
-          "Certificación ISO/IEC 17025",
-          "Personal técnico especializado",
-          "Equipos de última generación",
-          "Resultados internacionalmente válidos",
-        ]}
-        buttonText="Ver Certificación"
-        buttonColor="primary"
-      />
+      {data.quality && (
+        <InfoImageSection
+          title={data.quality.title}
+          description={data.quality.description}
+          image={data.quality.image}
+          items={data.quality.items}
+          buttonText="Ver Certificación"
+          buttonColor="primary"
+        />
+      )}
       {/* Sección: Nuestros asdfg */}
       <StatsSection
         stats={statsData}
-        backgroundImage={hero}
+        backgroundImage={data.banner?.image || hero}
         duration={2000}
       />
       {/* Sección: Nuestros Clientes */}

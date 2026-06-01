@@ -1,4 +1,6 @@
+import type { HomeBanner } from "./home.types";
 import type { HomeServices, HomeQuality } from "./home.types";
+import { hasSectionBannerChanges } from "../../../components/sectionBanner/sectionBannerChangeDetection";
 
 function normalizeText(value: string | null | undefined): string {
   return (value ?? "")
@@ -19,6 +21,11 @@ function normalizeFile(file: File | null | undefined): string {
 
 function isDifferent<N extends object>(a: N, b: N): boolean {
   return JSON.stringify(a) !== JSON.stringify(b);
+}
+
+/** ---- Banner ---- */
+export function hasHomeBannerChanges(current: HomeBanner, saved: HomeBanner): boolean {
+  return hasSectionBannerChanges(current, saved);
 }
 
 /** ---- Servicios de Inicio ---- */

@@ -1,13 +1,26 @@
-import { Box } from "@mui/material";
-//import { DirectionsCar, DirectionsWalk, DirectionsBus } from "@mui/icons-material";
+import { Box, Typography } from "@mui/material";
+import CardPageSkeleton from "../components/skeletons/CardPageSkeleton";
 import contactHero from "../../assets/page-headers/contact.jpg";
+//import { DirectionsCar, DirectionsWalk, DirectionsBus } from "@mui/icons-material";
 import LocationSection from "../components/containers/LocationSection";
 import PageHeader from "../components/containers/PageHeader";
+import { useContactPage } from "../services/contact/useContactPage";
 
 const ContactPage = () => {
-  const mapUrl =
-    "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1903.696612959249!2d-66.1452607671082!3d-17.392906671602976!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x93e373461dd2a507%3A0xf7dfd911f9012582!2sCentro%20de%20Alimentos%20y%20Productos%20Naturales%2C%20UMSS!5e0!3m2!1ses-419!2sbo!4v1763854558834!5m2!1ses-419!2sbo";
-    //https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1084.0581216126302!2d-66.14561821693667!3d-17.39297686976564!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x93e373461dd2a507%3A0xf7dfd911f9012582!2sCentro%20de%20Alimentos%20y%20Productos%20Naturales%2C%20UMSS!5e1!3m2!1ses-419!2sbo!4v1763690418229!5m2!1ses-419!2sbo
+  const { data, loading, error } = useContactPage();
+  if (loading) {
+    return <CardPageSkeleton />;
+  }
+  if (error || !data) {
+    return (
+      <Box py={8} textAlign="center">
+        <Typography color="error">
+          No se pudo cargar la información de contacto.
+        </Typography>
+      </Box>
+    );
+  }
+
   /*const infoItems = [
     {
       icon: <DirectionsCar sx={{ color: "#3B82F6" }} />,
@@ -29,18 +42,22 @@ const ContactPage = () => {
   return (
     <Box>
       {/* Sección: Cabecera */}
-      <PageHeader
-        title="Contacto"
-        subtitle="Estamos aquí para ayudarte con todos tus requerimientos de análisis de alimentos"
-        backgroundImage={contactHero}
-      />
+      {data.banner && (
+        <PageHeader
+          title={data.banner.title}
+          subtitle={data.banner.subtitle}
+          backgroundImage={data.banner.image || contactHero}
+        />
+      )}
       {/* Sección: Ubicación */}
-      <LocationSection
-        title="Nuestra Ubicación"
-        subtitle="Visítanos en la Facultad de Ciencias y Tecnología - UMSS"
-        mapSrc={mapUrl}
-        //infoItems={infoItems}
-      />
+      {data.location && (
+        <LocationSection
+          title={data.location.title}
+          subtitle={data.location.subtitle}
+          mapSrc={data.location.mapSrc}
+          //infoItems={infoItems}
+        />
+      )}
     </Box>
   );
 };

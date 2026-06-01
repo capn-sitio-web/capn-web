@@ -1,4 +1,6 @@
+import type { AboutBanner } from "./about.types";
 import type { History, MissionVision, Values, Team } from "./about.types";
+import { hasSectionBannerChanges } from "../../../components/sectionBanner/sectionBannerChangeDetection";
 
 function normalizeText(value: string | null | undefined): string {
   return (value ?? "")
@@ -19,6 +21,11 @@ function normalizeFile(file: File | null | undefined): string {
 
 function isDifferent<N extends object>(a: N, b: N): boolean {
   return JSON.stringify(a) !== JSON.stringify(b);
+}
+
+/** ---- Banner ---- */
+export function hasAboutBannerChanges(current: AboutBanner, saved: AboutBanner): boolean {
+  return hasSectionBannerChanges(current, saved);
 }
 
 /** ---- Historia ---- */

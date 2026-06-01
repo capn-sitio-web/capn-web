@@ -4,20 +4,23 @@ import PageHeader from "../../../../components/PageHeader";
 import PageTabs, { type PageTabItem } from "../../../../components/PageTabs";
 import FeedbackSnackbar, { type FeedbackState } from "../../../../components/FeedbackSnackbar";
 // Tabs
+import AboutBannerTab, { type AboutBannerTabHandle } from "../tabs/AboutBannerTab";
 import HistoryTab, { type HistoryTabHandle } from "../tabs/HistoryTab";
 import MissionVisionTab, { type MissionVisionTabHandle } from "../tabs/MissionVisionTab";
 import ValuesTab, { type ValuesTabHandle } from "../tabs/ValuesTab";
 import TeamTab, { type TeamTabHandle } from "../tabs/TeamTab";
 // Types
-import type { History, MissionVision, Values, Team } from "../../domain/about.types";
+import type { AboutBanner, History, MissionVision, Values, Team } from "../../domain/about.types";
 // Services
+import { aboutBannerService } from "../../data/aboutBanner.service";
 import { aboutHistoryService } from "../../data/aboutHistory.service";
 import { aboutMissionVisionService } from "../../data/aboutMissionVision.service";
 import { aboutValuesService } from "../../data/aboutValues.service";
 import { aboutTeamService } from "../../data/aboutTeam.service";
 
-type AboutTabKey = "historia" | "misionVision" | "valores" | "equipo";
+type AboutTabKey = "banner" | "historia" | "misionVision" | "valores" | "equipo";
 const ABOUT_TABS: PageTabItem<AboutTabKey>[] = [
+  { value: "banner", label: "Portada" },
   { value: "historia", label: "Historia" },
   { value: "misionVision", label: "Misión y Visión" },
   { value: "valores", label: "Valores" },
@@ -25,7 +28,7 @@ const ABOUT_TABS: PageTabItem<AboutTabKey>[] = [
 ];
 
 export default function AboutManagementPage() {
-  const [tab, setTab] = useState<AboutTabKey>("historia");
+  const [tab, setTab] = useState<AboutTabKey>("banner");
   const [hasChanges, setHasChanges] = useState(false);
   
   // Mensajes globales
@@ -37,6 +40,18 @@ export default function AboutManagementPage() {
   }, []);
 
   // Estado persistido por sección
+  const [savedBanner, setSavedBanner] = useState<AboutBanner>({
+    seccionId: null,
+    sectionTitle: "",
+    description: "",
+    image: {
+      file: null,
+      previewUrl: "",
+      imageId: null,
+      alt: "",
+    },
+  });
+
   const [savedHistory, setSavedHistory] = useState<History>({
     seccionId: null,
     sectionTitle: "",
@@ -93,16 +108,30 @@ export default function AboutManagementPage() {
   });
 
   // Estados de carga por sección
+  const [loadingBanner, setLoadingBanner] = useState(true);
   const [loadingHistory, setLoadingHistory] = useState(true);
   const [loadingMissionVision, setLoadingMissionVision] = useState(true);
   const [loadingValues, setLoadingValues] = useState(true);
   const [loadingTeam, setLoadingTeam] = useState(true);
   
   // ref para ejecutar submit() desde el botón del header
+  const bannerRef = useRef<AboutBannerTabHandle | null>(null);
   const historyRef = useRef<HistoryTabHandle | null>(null);
   const missionVisionRef = useRef<MissionVisionTabHandle | null>(null);
   const valuesRef = useRef<ValuesTabHandle | null>(null);
   const teamRef = useRef<TeamTabHandle | null>(null);
+
+  const cargarBanner = useCallback(async () => {
+    try {
+      setLoadingBanner(true);
+      const response = await aboutBannerService.obtenerBanner();
+      setSavedBanner(response);
+    } catch (error) {
+      console.error("Error al obtener banner:", error);
+    } finally {
+      setLoadingBanner(false);
+    }
+  }, []);
 
   const cargarHistoria = useCallback(async () => {
     try {
@@ -153,13 +182,15 @@ export default function AboutManagementPage() {
   }, []);
 
   useEffect(() => {
+    cargarBanner();
     cargarHistoria();
     cargarMisionVision();
     cargarValores();
     cargarEquipo();
-  }, [cargarHistoria, cargarMisionVision, cargarValores, cargarEquipo]);
+  }, [cargarBanner, cargarHistoria, cargarMisionVision, cargarValores, cargarEquipo]);
 
   const handleSave = useCallback(async () => {
+    if (tab === "banner") return (await bannerRef.current?.submit()) ?? false;
     if (tab === "historia") return (await historyRef.current?.submit()) ?? false;
     if (tab === "misionVision") return (await missionVisionRef.current?.submit()) ?? false;
     if (tab === "valores") return (await valuesRef.current?.submit()) ?? false;
@@ -206,6 +237,25 @@ export default function AboutManagementPage() {
       <Card variant="outlined" sx={{ borderRadius: 3 }}>
         <PageTabs value={tab} tabs={ABOUT_TABS} onChange={handleTabChange} />
         <CardContent sx={{ mt: 1 }}>
+          {/* Banner */}
+          {tab === "banner" ? (
+            loadingBanner ? (
+              <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              <AboutBannerTab
+                ref={bannerRef}
+                initialValue={savedBanner}
+                onChanges={setHasChanges}
+                onCommitSave={async (nextSaved) => {
+                  const updated = await aboutBannerService.actualizarBanner(nextSaved);
+                  setSavedBanner(updated);
+                  setHasChanges(false);
+                }}
+              />
+            )
+          ) : null}
           {/* Historia */}
           {tab === "historia" ? (
             loadingHistory ? (

@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Box, Card, CardContent, CircularProgress, Typography } from "@mui/material";
+import { Box, Card, CardContent, CircularProgress } from "@mui/material";
 import PageHeader from "../../../../components/PageHeader";
 import PageTabs, { type PageTabItem } from "../../../../components/PageTabs";
 import FeedbackSnackbar, { type FeedbackState } from "../../../../components/FeedbackSnackbar";
 // Tabs
+import ServicesBannerTab, { type ServicesBannerTabHandle } from "../tabs/ServicesBannerTab";
 import MicrobiologicalTab, { type MicrobiologicalTabHandle } from "../tabs/MicrobiologicalTab";
 import PhysicochemicalTab, { type PhysicochemicalTabHandle } from "../tabs/PhysicochemicalTab";
 import SensoryTab, { type SensoryTabHandle } from "../tabs/SensoryTab";
@@ -12,6 +13,7 @@ import WorkProcessTab, { type WorkProcessTabHandle } from "../tabs/WorkProcessTa
 import EquipmentTechnologyTab, { type EquipmentTechnologyTabHandle } from "../tabs/EquipmentTechnologyTab";
 // Types
 import type {
+  ServicesBanner,
   ServiceMicrobiological,
   ServicePhysicochemical,
   ServiceSensory,
@@ -20,6 +22,7 @@ import type {
   ServiceEquipmentTechnology,
 } from "../../domain/services.types";
 // Services
+import { servicesBannerService } from "../../data/servicesBanner.service";
 import { servicesMicrobiologicalService } from "../../data/servicesMicrobiological.service";
 import { servicesPhysicochemicalService } from "../../data/servicesPhysicochemical.service";
 import { servicesSensoryService } from "../../data/servicesSensory.service";
@@ -28,7 +31,7 @@ import { servicesWorkProcessService } from "../../data/servicesWorkProcess.servi
 import { servicesEquipmentTechnologyService } from "../../data/servicesEquipmentTechnology.service";
 
 type ServicesTabKey =
-  | "hero"
+  | "banner"
   | "microbiologico"
   | "fisicoquimico"
   | "sensorial"
@@ -36,7 +39,7 @@ type ServicesTabKey =
   | "procesoTrabajo"
   | "equiposTecnologia";
 const SERVICES_TABS: PageTabItem<ServicesTabKey>[] = [
-  { value: "hero", label: "Portada" },
+  { value: "banner", label: "Portada" },
   { value: "microbiologico", label: "Microbiológico" },
   { value: "fisicoquimico", label: "Fisicoquímico" },
   { value: "sensorial", label: "Sensorial" },
@@ -46,7 +49,7 @@ const SERVICES_TABS: PageTabItem<ServicesTabKey>[] = [
 ];
 
 export default function ServicesManagementPage() {
-  const [tab, setTab] = useState<ServicesTabKey>("hero");
+  const [tab, setTab] = useState<ServicesTabKey>("banner");
   const [hasChanges, setHasChanges] = useState(false);
   
   // Mensajes globales
@@ -58,6 +61,18 @@ export default function ServicesManagementPage() {
   }, []);
 
   // Estado persistido por sección
+  const [savedBanner, setSavedBanner] = useState<ServicesBanner>({
+    seccionId: null,
+    sectionTitle: "",
+    description: "",
+    image: {
+      file: null,
+      previewUrl: "",
+      imageId: null,
+      alt: "",
+    },
+  });
+  
   const [savedMicrobiological, setSavedMicrobiological] = useState<ServiceMicrobiological>({
     seccionId: null,
     sectionTitle: "",
@@ -159,6 +174,7 @@ export default function ServicesManagementPage() {
   });
 
   // Estados de carga por sección
+  const [loadingBanner, setLoadingBanner] = useState(true);
   const [loadingMicrobiological, setLoadingMicrobiological] = useState(true);
   const [loadingPhysicochemical, setLoadingPhysicochemical] = useState(true);
   const [loadingSensory, setLoadingSensory] = useState(true);
@@ -167,12 +183,25 @@ export default function ServicesManagementPage() {
   const [loadingEquipmentTechnology, setLoadingEquipmentTechnology] = useState(true);
 
   // ref para ejecutar submit() desde el botón del header
+  const bannerRef = useRef<ServicesBannerTabHandle | null>(null);
   const microbiologicalRef = useRef<MicrobiologicalTabHandle | null>(null);
   const physicochemicalRef = useRef<PhysicochemicalTabHandle | null>(null);
   const sensoryRef = useRef<SensoryTabHandle | null>(null);
   const specializedRef = useRef<SpecializedTabHandle | null>(null);
   const workProcessRef = useRef<WorkProcessTabHandle | null>(null);
   const equipmentTechnologyRef = useRef<EquipmentTechnologyTabHandle | null>(null);
+  
+  const cargarBanner = useCallback(async () => {
+    try {
+      setLoadingBanner(true);
+      const response = await servicesBannerService.obtenerBanner();
+      setSavedBanner(response);
+    } catch (error) {
+      console.error("Error al obtener banner:", error);
+    } finally {
+      setLoadingBanner(false);
+    }
+  }, []);
 
   const cargarMicrobiologico = useCallback(async () => {
     try {
@@ -247,15 +276,17 @@ export default function ServicesManagementPage() {
   }, []);
 
   useEffect(() => {
+    cargarBanner();
     cargarMicrobiologico();
     cargarFisicoquimico();
     cargarSensorial();
     cargarEspecializado();
     cargarProcesoTrabajo();
     cargarEquiposTecnologia();
-  }, [cargarMicrobiologico, cargarFisicoquimico, cargarSensorial, cargarEspecializado, cargarProcesoTrabajo, cargarEquiposTecnologia]);
+  }, [cargarBanner, cargarMicrobiologico, cargarFisicoquimico, cargarSensorial, cargarEspecializado, cargarProcesoTrabajo, cargarEquiposTecnologia]);
 
   const handleSave = useCallback(async () => {
+    if (tab === "banner") return (await bannerRef.current?.submit()) ?? false;
     if (tab === "microbiologico") return (await microbiologicalRef.current?.submit()) ?? false;
     if (tab === "fisicoquimico") return (await physicochemicalRef.current?.submit()) ?? false;
     if (tab === "sensorial") return (await sensoryRef.current?.submit()) ?? false;
@@ -305,16 +336,24 @@ export default function ServicesManagementPage() {
       <Card variant="outlined" sx={{ borderRadius: 3 }}>
         <PageTabs value={tab} tabs={SERVICES_TABS} onChange={handleTabChange} />
         <CardContent sx={{ mt: 1 }}>
-
-          {tab === "hero" ? (
-            <Box>
-              <Typography variant="h6" fontWeight={700}>
-                Portada de Servicios
-              </Typography>
-              <Typography color="text.secondary">
-                Aquí irá el formulario para editar el título, descripción e imagen superior de Servicios.
-              </Typography>
-            </Box>
+          {/* Banner */}
+          {tab === "banner" ? (
+            loadingBanner ? (
+              <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              <ServicesBannerTab
+                ref={bannerRef}
+                initialValue={savedBanner}
+                onChanges={setHasChanges}
+                onCommitSave={async (nextSaved) => {
+                  const updated = await servicesBannerService.actualizarBanner(nextSaved);
+                  setSavedBanner(updated);
+                  setHasChanges(false);
+                }}
+              />
+            )
           ) : null}
           {/* Analisis Microbiologico */}
           {tab === "microbiologico" ? (
