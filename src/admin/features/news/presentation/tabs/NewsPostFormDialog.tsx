@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Alert,
   Box,
@@ -458,14 +458,27 @@ const NewsPostFormDialog = ({
   );
 };
 
-function GalleryImageCard({
-  image,
-  onRemove,
-}: {
+function GalleryImageCard({ image, onRemove }: {
   image: NewsGalleryImage;
   onRemove: () => void;
 }) {
-  const src = image.previewUrl || (image.file ? URL.createObjectURL(image.file) : "");
+  const [fileUrl, setFileUrl] = useState("");
+
+  useEffect(() => {
+    if (!image.file) {
+      setFileUrl("");
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(image.file);
+    setFileUrl(objectUrl);
+
+    return () => {
+      URL.revokeObjectURL(objectUrl);
+    };
+  }, [image.file]);
+
+  const src = fileUrl || image.previewUrl;
 
   return (
     <Box

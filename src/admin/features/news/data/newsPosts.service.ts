@@ -1,143 +1,261 @@
-import type { NewsCategory, NewsPost, NewsPostForm } from "../domain/news.types";
+import { axiosClient } from "../../../config/axiosClient";
+import type {
+  NewsCategory,
+  NewsGalleryImage,
+  NewsPost,
+  NewsPostForm,
+} from "../domain/news.types";
 
-const mockCategories: NewsCategory[] = [
-  {
-    id: 1,
-    name: "Acreditaciones",
-    slug: "acreditaciones",
-  },
-  {
-    id: 2,
-    name: "Equipamiento",
-    slug: "equipamiento",
-  },
-  {
-    id: 3,
-    name: "Eventos",
-    slug: "eventos",
-  },
-  {
-    id: 4,
-    name: "Servicios",
-    slug: "servicios",
-  },
-  {
-    id: 5,
-    name: "Investigación",
-    slug: "investigacion",
-  },
-];
+type CategoriaApi = {
+  idcategoria_noticia: number;
+  nombre: string;
+  slug: string;
+};
 
-let mockPosts: NewsPost[] = [
-  {
-    id: "1",
-    noticiaId: 1,
-    categoryId: 1,
-    categoryName: "Acreditaciones",
-    title: "CAPN obtiene renovación de acreditación ISO/IEC 17025",
-    content:
-      "El laboratorio ha renovado exitosamente su acreditación internacional para análisis de alimentos, fortaleciendo la confiabilidad de sus resultados y la calidad de sus servicios.",
-    coverImage: {
-      file: null,
-      previewUrl: "",
-      imageId: null,
-      alt: "Certificado de acreditación CAPN",
-    },
-    publicationDate: "2024-01-15",
-    isPublished: true,
-    isFeatured: true,
-    galleryImages: [],
-  },
-  {
-    id: "2",
-    noticiaId: 2,
-    categoryId: 2,
-    categoryName: "Equipamiento",
-    title: "Nuevo equipo de espectrometría de masas instalado",
-    content:
-      "Incorporamos tecnología de última generación para análisis de contaminantes en alimentos y productos naturales.",
-    coverImage: {
-      file: null,
-      previewUrl: "",
-      imageId: null,
-      alt: "Equipo de espectrometría de masas",
-    },
-    publicationDate: "2024-01-13",
-    isPublished: true,
-    isFeatured: false,
-    galleryImages: [],
-  },
-  {
-    id: "3",
-    noticiaId: 3,
-    categoryId: 3,
-    categoryName: "Eventos",
-    title: "Participación en congreso internacional de seguridad alimentaria",
-    content:
-      "Nuestro equipo presentó investigaciones sobre métodos innovadores de detección y control de calidad alimentaria.",
-    coverImage: {
-      file: null,
-      previewUrl: "",
-      imageId: null,
-      alt: "Congreso internacional de seguridad alimentaria",
-    },
-    publicationDate: "2024-01-19",
-    isPublished: false,
-    isFeatured: false,
-    galleryImages: [],
-  },
-];
+type ImagenNoticiaApi = {
+  idimagen_noticia: number;
+  noticia_idnoticia: number;
+  imagen_url: string;
+  imagen_alt: string | null;
+  orden: number;
+};
 
-function clonePost(post: NewsPost): NewsPost {
+type NoticiaApi = {
+  idnoticia: number;
+  categoria_noticia_idcategoria_noticia: number;
+  titulo: string;
+  contenido: string;
+  imagen_url: string | null;
+  imagen_alt: string | null;
+  fecha_publicacion: string;
+  estado: boolean;
+  es_destacada: boolean;
+  categoria?: CategoriaApi | null;
+  imagenes?: ImagenNoticiaApi[];
+};
+
+type ApiListResponse<T> = {
+  message: string;
+  data: T[];
+};
+
+type ApiItemResponse<T> = {
+  message: string;
+  data: T;
+};
+
+function getBackendBaseUrl(): string {
+  const apiBaseUrl = String(axiosClient.defaults.baseURL ?? "");
+  return apiBaseUrl.replace(/\/api\/?$/, "");
+}
+
+function toAbsoluteImageUrl(path: string | null | undefined): string {
+  if (!path) return "";
+
+  if (path.startsWith("http://") || path.startsWith("https://")) {
+    return path;
+  }
+
+  return `${getBackendBaseUrl()}/${path.replace(/^\/+/, "")}`;
+}
+
+function normalizeDate(value: string | null | undefined): string {
+  if (!value) return "";
+  return value.slice(0, 10);
+}
+
+function mapCategoria(category: CategoriaApi): NewsCategory {
   return {
-    ...post,
-    coverImage: { ...post.coverImage },
-    galleryImages: post.galleryImages.map((image) => ({ ...image })),
+    id: category.idcategoria_noticia,
+    name: category.nombre,
+    slug: category.slug,
   };
 }
 
-function getCategoryName(categoryId: number | null): string {
-  return mockCategories.find((category) => category.id === categoryId)?.name ?? "";
+function mapGalleryImages(images: ImagenNoticiaApi[] = []): NewsGalleryImage[] {
+  return images.map((image) => ({
+    id: String(image.idimagen_noticia),
+    imageId: image.idimagen_noticia,
+    file: null,
+    previewUrl: toAbsoluteImageUrl(image.imagen_url),
+    alt: image.imagen_alt ?? "",
+    order: image.orden,
+  }));
+}
+
+function mapNoticia(post: NoticiaApi): NewsPost {
+  return {
+    id: String(post.idnoticia),
+    noticiaId: post.idnoticia,
+    categoryId: post.categoria_noticia_idcategoria_noticia,
+    categoryName: post.categoria?.nombre ?? "",
+    title: post.titulo,
+    content: post.contenido,
+    coverImage: {
+      file: null,
+      previewUrl: toAbsoluteImageUrl(post.imagen_url),
+      imageId: null,
+      alt: post.imagen_alt ?? "",
+    },
+    publicationDate: normalizeDate(post.fecha_publicacion),
+    isPublished: Boolean(post.estado),
+    isFeatured: Boolean(post.es_destacada),
+    galleryImages: mapGalleryImages(post.imagenes ?? []),
+  };
+}
+
+function buildNewsFormData(form: NewsPostForm): FormData {
+  const formData = new FormData();
+
+  formData.append(
+    "categoria_noticia_idcategoria_noticia",
+    String(form.categoryId ?? "")
+  );
+  formData.append("titulo", form.title);
+  formData.append("contenido", form.content);
+  formData.append("fecha_publicacion", form.publicationDate);
+  formData.append("estado", form.isPublished ? "1" : "0");
+  formData.append("es_destacada", form.isFeatured ? "1" : "0");
+  formData.append("imagen_alt", form.coverImage.alt ?? "");
+
+  if (form.coverImage.file) {
+    formData.append("imagen", form.coverImage.file);
+  }
+
+  return formData;
+}
+
+async function uploadGalleryImages(
+  noticiaId: number,
+  images: NewsGalleryImage[]
+): Promise<void> {
+  const newImages = images.filter((image) => image.file);
+
+  await Promise.all(
+    newImages.map(async (image) => {
+      const formData = new FormData();
+      formData.append("imagen", image.file as File);
+      formData.append("imagen_alt", image.alt ?? "");
+      formData.append("orden", String(image.order));
+
+      await axiosClient.post(
+        `/admin/news/posts/${noticiaId}/images`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+    })
+  );
+}
+
+async function deleteGalleryImages(
+  noticiaId: number,
+  imageIds: number[]
+): Promise<void> {
+  await Promise.all(
+    imageIds.map((imageId) =>
+      axiosClient.delete(`/admin/news/posts/${noticiaId}/images/${imageId}`)
+    )
+  );
 }
 
 export const newsPostsService = {
   async listarCategorias(): Promise<NewsCategory[]> {
-    return mockCategories;
+    const response = await axiosClient.get<ApiListResponse<CategoriaApi>>(
+      "/admin/news/categories"
+    );
+
+    return response.data.data.map(mapCategoria);
   },
 
   async listarNoticias(): Promise<NewsPost[]> {
-    return mockPosts.map(clonePost);
-  },
-
-  async crearNoticia(data: NewsPostForm): Promise<NewsPost> {
-    const nextId = Date.now();
-
-    const created: NewsPost = {
-      ...data,
-      id: String(nextId),
-      noticiaId: nextId,
-      categoryName: getCategoryName(data.categoryId),
-    };
-
-    mockPosts = [created, ...mockPosts];
-
-    return clonePost(created);
-  },
-
-  async actualizarNoticia(data: NewsPostForm): Promise<NewsPost> {
-    const updated: NewsPost = {
-      ...data,
-      categoryName: getCategoryName(data.categoryId),
-    };
-
-    mockPosts = mockPosts.map((post) =>
-      post.id === data.id ? updated : post
+    const response = await axiosClient.get<ApiListResponse<NoticiaApi>>(
+      "/admin/news/posts"
     );
 
-    return clonePost(updated);
+    return response.data.data.map(mapNoticia);
   },
 
-  async eliminarNoticia(id: string): Promise<void> {
-    mockPosts = mockPosts.filter((post) => post.id !== id);
+  async obtenerNoticia(idnoticia: number): Promise<NewsPost> {
+    const response = await axiosClient.get<ApiItemResponse<NoticiaApi>>(
+      `/admin/news/posts/${idnoticia}`
+    );
+
+    return mapNoticia(response.data.data);
+  },
+
+  async crearNoticia(form: NewsPostForm): Promise<NewsPost> {
+    const formData = buildNewsFormData(form);
+
+    const createResponse = await axiosClient.post<ApiItemResponse<NoticiaApi>>(
+      "/admin/news/posts",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    const noticiaId = createResponse.data.data.idnoticia;
+
+    if (form.galleryImages.length > 0) {
+      await uploadGalleryImages(noticiaId, form.galleryImages);
+    }
+
+    return this.obtenerNoticia(noticiaId);
+  },
+
+  async actualizarNoticia(form: NewsPostForm): Promise<NewsPost> {
+    if (!form.noticiaId) {
+      throw new Error("La noticia no tiene id para actualizar.");
+    }
+
+    const noticiaActual = await this.obtenerNoticia(form.noticiaId);
+
+    const existingGalleryIds = noticiaActual.galleryImages
+      .map((image) => image.imageId)
+      .filter((imageId): imageId is number => imageId !== null);
+
+    const nextGalleryIds = form.galleryImages
+      .map((image) => image.imageId)
+      .filter((imageId): imageId is number => imageId !== null);
+
+    const deletedGalleryIds = existingGalleryIds.filter(
+      (imageId) => !nextGalleryIds.includes(imageId)
+    );
+
+    const formData = buildNewsFormData(form);
+
+    await axiosClient.post(
+      `/admin/news/posts/${form.noticiaId}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    if (deletedGalleryIds.length > 0) {
+      await deleteGalleryImages(form.noticiaId, deletedGalleryIds);
+    }
+
+    const newGalleryImages = form.galleryImages.filter(
+      (image) => image.imageId === null && image.file
+    );
+
+    if (newGalleryImages.length > 0) {
+      await uploadGalleryImages(form.noticiaId, newGalleryImages);
+    }
+
+    return this.obtenerNoticia(form.noticiaId);
+  },
+
+  async eliminarNoticia(id: string | number): Promise<void> {
+    await axiosClient.delete(`/admin/news/posts/${id}`);
   },
 };
