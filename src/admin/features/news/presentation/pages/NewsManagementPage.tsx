@@ -5,15 +5,16 @@ import PageTabs, { type PageTabItem } from "../../../../components/PageTabs";
 import FeedbackSnackbar, { type FeedbackState } from "../../../../components/FeedbackSnackbar";
 // Tabs
 import NewsBannerTab, { type NewsBannerTabHandle } from "../tabs/NewsBannerTab";
+import NewsPostsTab from "../tabs/NewsPostsTab";
 // Types
 import type { NewsBanner } from "../../domain/news.types";
 // Services
 import { newsBannerService } from "../../data/newsBanner.service";
 
-type NewsTabKey =
-  | "banner";
+type NewsTabKey = "banner" | "noticias";
 const NEWS_TABS: PageTabItem<NewsTabKey>[] = [
   { value: "banner", label: "Portada" },
+  { value: "noticias", label: "Noticias" },
 ];
 
 export default function NewsManagementPage() {
@@ -99,8 +100,8 @@ export default function NewsManagementPage() {
   return (
     <Box>
       <PageHeader
-        title="Gestión de Inicio"
-        subtitle="Administra el contenido principal de la página Inicio"
+        title="Gestión de Noticias"
+        subtitle="Administra las publicaciones y noticias del laboratorio"
         disableSave={!hasChanges}
         onSave={handleSaveWithFeedback}
       />
@@ -126,6 +127,10 @@ export default function NewsManagementPage() {
                 }}
               />
             )
+          ) : null}
+          {/* Noticias */}
+          {tab === "noticias" ? (
+            <NewsPostsTab onFeedback={showFeedback} />
           ) : null}
         </CardContent>
       </Card>
