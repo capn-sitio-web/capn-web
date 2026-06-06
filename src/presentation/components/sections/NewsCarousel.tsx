@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Box, Typography, Button, Container } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
@@ -10,7 +11,8 @@ interface NewsItem {
   date: string;
   description: string;
   image: string;
-  link?: string;
+  imageAlt?: string;
+  link: string;
 }
 
 interface NewsCarouselProps {
@@ -18,6 +20,7 @@ interface NewsCarouselProps {
 }
 
 const NewsCarousel: React.FC<NewsCarouselProps> = ({ news }) => {
+  if (news.length === 0) return null;
   return (
     <Box sx={{ py: 6 }}>
       <Container>
@@ -26,7 +29,7 @@ const NewsCarousel: React.FC<NewsCarouselProps> = ({ news }) => {
           //navigation // muestra el boton de atras y adelante
           pagination={{ clickable: true }}
           autoplay={{ delay: 7000, disableOnInteraction: false }}
-          loop
+          loop={news.length > 1}
           autoHeight={true} // cada slide toma su propia altura
           style={{ paddingBottom: "40px" }}
         >
@@ -62,24 +65,23 @@ const NewsCarousel: React.FC<NewsCarouselProps> = ({ news }) => {
                     {item.description}
                   </Typography>
 
-                  {item.link && (
-                    <Button
-                      variant="contained"
-                      sx={{
-                        textTransform: "none",
-                      }}
-                      href={item.link}
-                    >
-                      Leer Noticia Completa
-                    </Button>
-                  )}
+                  <Button
+                    component={Link}
+                    to={item.link}
+                    variant="contained"
+                    sx={{
+                      textTransform: "none",
+                    }}
+                  >
+                    Leer Noticia Completa
+                  </Button>
                 </Box>
 
                 {/* Image */}
                 <Box
                   component="img"
                   src={item.image}
-                  alt={item.title}
+                  alt={item.imageAlt ?? item.title}
                   sx={{
                     width: { xs: "100%", md: "50%" },
                     objectFit: "cover",

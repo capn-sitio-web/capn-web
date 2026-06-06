@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Box, Typography, Chip, Button } from "@mui/material";
 
 interface NewsCardProps {
@@ -7,7 +8,8 @@ interface NewsCardProps {
   title: string;
   description: string;
   image: string;
-  link?: string;
+  imageAlt?: string;
+  link: string;
 }
 
 const categoryColors: Record<string, string> = {
@@ -25,7 +27,8 @@ const NewsCard: React.FC<NewsCardProps> = ({
   title,
   description,
   image,
-  link = "#",
+  imageAlt,
+  link,
 }) => {
   return (
     <Box
@@ -48,7 +51,7 @@ const NewsCard: React.FC<NewsCardProps> = ({
         className="news-image"
         component="img"
         src={image}
-        alt={title}
+        alt={imageAlt ?? title}
         sx={{
           width: "100%",
           height: 180,
@@ -56,7 +59,6 @@ const NewsCard: React.FC<NewsCardProps> = ({
           transition: "transform 0.4s ease",
         }}
       />
-
       {/* Text */}
       <Box sx={{ p: 3, textAlign: "left" }}>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
@@ -83,8 +85,9 @@ const NewsCard: React.FC<NewsCardProps> = ({
         </Typography>
 
         <Button
+          component={Link}
+          to={link}
           size="small"
-          href={link}
           sx={{
             mt: 2,
             textTransform: "none",

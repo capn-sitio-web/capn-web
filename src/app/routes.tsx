@@ -5,6 +5,7 @@ export const ROUTES = {
   SERVICES: "/servicios",
   ACCREDITATION: "/acreditacion",
   NEWS: "/noticias",
+  NEWS_DETAIL: "/noticias/:idnoticia",
   CONTACT: "/contacto",
   // CMS
   ADMIN: "/admin",

@@ -21,6 +21,15 @@ const Navbar = () => {
     { label: "Noticias", path: ROUTES.NEWS },
     { label: "Contacto", path: ROUTES.CONTACT },
   ];
+
+  // Para detectar la ruta actual
+  const activePath =
+    menuItems.find((item) => {
+      if (item.path === ROUTES.HOME) {
+        return location.pathname === item.path;
+      }
+      return location.pathname.startsWith(item.path);
+    })?.path || false;
   
   return (
     <AppBar 
@@ -39,7 +48,7 @@ const Navbar = () => {
 
           {/* Desktop menu */}
           {!isMobile && (
-            <Tabs value={location.pathname} textColor="primary" indicatorColor="primary">
+            <Tabs value={activePath} textColor="primary" indicatorColor="primary">
               {menuItems.map((item) => (
                 <Tab
                   label={item.label}
@@ -87,8 +96,8 @@ const Navbar = () => {
                             primary={item.label}
                             primaryTypographyProps={{
                               color:
-                                location.pathname === item.path ? "primary.main" : "text.primary",
-                              fontWeight: location.pathname === item.path ? "bold" : 500,
+                                activePath === item.path ? "primary.main" : "text.primary",
+                              fontWeight: activePath === item.path ? "bold" : 500,
                               fontSize: "1.1rem",
                               letterSpacing: "1px",
                             }}

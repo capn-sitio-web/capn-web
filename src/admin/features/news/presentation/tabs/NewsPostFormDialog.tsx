@@ -232,6 +232,7 @@ const NewsPostFormDialog = ({
                   placeholder="Escribe el título de la noticia..."
                   value={form.title}
                   onChange={(event) => updateForm("title", event.target.value)}
+                  multiline
                   error={Boolean(formErrors.title)}
                   helperText={formErrors.title}
                 />
