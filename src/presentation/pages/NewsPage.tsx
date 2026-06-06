@@ -1,14 +1,17 @@
 import { useState } from "react";
 import { Box, Typography } from "@mui/material";
+import CardPageSkeleton from "../components/skeletons/CardPageSkeleton";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../app/routes";
 import newsHero from "../../assets/page-headers/news.jpg";
 import PageHeader from "../components/containers/PageHeader";
 import NewsCarousel from "../components/sections/NewsCarousel";
 import NewsGridSection from "../components/sections/NewsGridSection";
 import CallToActionSection from "../components/containers/CallToActionSection";
-import CardPageSkeleton from "../components/skeletons/CardPageSkeleton";
 import { useNewsPage } from "../services/news/useNewsPage";
 
 const NewsPage = () => {
+  const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
@@ -61,8 +64,8 @@ const NewsPage = () => {
       <CallToActionSection
         title="¿Tienes una noticia para compartir?"
         subtitle="Si eres parte de nuestra comunidad científica y tienes información relevante, contáctanos"
-        primaryButton={{ label: "Contactar Redación" }}
-        secondaryButton={{ label: "Conocer Nuestro Equipo" }}
+        primaryButton={{ label: "Contactar Redación", onClick: () => navigate(ROUTES.CONTACT) }}
+        secondaryButton={{ label: "Conocer Nuestro Equipo", onClick: () => navigate(ROUTES.ABOUT) }}
       />
     </Box>
   );

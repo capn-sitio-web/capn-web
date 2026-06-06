@@ -1,5 +1,7 @@
 import { Box, Typography } from "@mui/material"
 import CardPageSkeleton from "../components/skeletons/CardPageSkeleton";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../app/routes";
 import accreditationHero from "../../assets/page-headers/accreditation.jpg";
 import PageHeader from "../components/containers/PageHeader";
 import GridSection from "../components/containers/GridSection";
@@ -7,15 +9,8 @@ import CallToActionSection from "../components/containers/CallToActionSection";
 import FlatIconCard from "../components/cards/FlatIconCard";
 import { useAccreditationPage } from "../services/accreditation/useAccreditationPage";
 
-const ctaData = {
-  title: "¿Necesitas resultados certificados?",
-  subtitle:
-    "Solicita nuestros servicios acreditados y obtén resultados con validez internacional.",
-  primaryButton: { label: "Solicitar Análisis" },
-  secondaryButton: { label: "Conocer Nuestro Equipo" },
-};
-
 const AccreditationPage = () => {
+  const navigate = useNavigate();
   const { data, loading, error } = useAccreditationPage();
   if (loading) {
     return <CardPageSkeleton />;
@@ -51,10 +46,10 @@ const AccreditationPage = () => {
       )}
       {/* Sección: Resultados certificados */}
       <CallToActionSection
-        title={ctaData.title}
-        subtitle={ctaData.subtitle}
-        primaryButton={ctaData.primaryButton}
-        secondaryButton={ctaData.secondaryButton}
+        title="¿Necesitas resultados certificados?"
+        subtitle="Solicita nuestros servicios acreditados y obtén resultados con validez internacional."
+        primaryButton={{ label: "Solicitar Análisis", onClick: () => navigate(ROUTES.CONTACT) }}
+        secondaryButton={{ label: "Conocer Nuestro Equipo", onClick: () => navigate(ROUTES.ABOUT) }}
       />
     </Box>
   );

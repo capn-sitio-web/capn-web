@@ -1,6 +1,7 @@
 import { Box, Container, Typography, Chip, Button } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Link as RouterLink, useParams } from "react-router-dom";
+import { ROUTES } from "../../app/routes";
 import NewsGallerySection from "../components/sections/NewsGallerySection";
 import CardPageSkeleton from "../components/skeletons/CardPageSkeleton";
 import { useNewsDetail } from "../services/news/useNewsDetail";
@@ -49,7 +50,7 @@ const NewsDetailPage = () => {
         {/* boton de volver a noticias */}
         <Button
           component={RouterLink}
-          to="/noticias"
+          to={ROUTES.NEWS}
           startIcon={<ArrowBackIcon />}
           sx={{
             position: "absolute",

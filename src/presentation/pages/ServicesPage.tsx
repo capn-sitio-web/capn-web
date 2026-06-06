@@ -1,5 +1,7 @@
 import { Box, Typography } from "@mui/material"
 import ImageRightPageSkeleton from "../components/skeletons/ImageRightPageSkeleton";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../app/routes";
 import PageHeader from "../components/containers/PageHeader";
 import InfoImageSection from "../components/containers/InfoImageSection";
 import GridSection from "../components/containers/GridSection";
@@ -8,15 +10,8 @@ import FlatIconCard from "../components/cards/FlatIconCard";
 import OutlinedIconCard from "../components/cards/OutlinedIconCard";
 import { useServicesPage } from "../services/services/useServicesPage";
 
-const ctaData = {
-  title: "¿Necesitas un análisis específico?",
-  subtitle:
-    "Contáctanos para una consulta personalizada y cotización detallada de nuestros servicios.",
-  primaryButton: { label: "Solicitar Cotización" },
-  secondaryButton: { label: "Ver Todos los Servicios" },
-};
-
 const ServicesPage = () => {
+  const navigate = useNavigate();
   const { data, loading, error } = useServicesPage();
   if (loading) {
     return <ImageRightPageSkeleton />;
@@ -49,6 +44,7 @@ const ServicesPage = () => {
           items={data.microbiologico.items}
           buttonText="Solicitar Información"
           buttonColor="primary"
+          buttonOnClick={() => navigate(ROUTES.CONTACT)}
         />
       )}
       {/* Sección: Análisis Fisicoquímico */}
@@ -60,6 +56,7 @@ const ServicesPage = () => {
           items={data.fisicoquimico.items}
           buttonText="Solicitar Información"
           buttonColor="success"
+          buttonOnClick={() => navigate(ROUTES.CONTACT)}
           reverse
           backgroundColor="#F9FAFB"
         />
@@ -73,6 +70,7 @@ const ServicesPage = () => {
           items={data.sensorial.items}
           buttonText="Solicitar Información"
           buttonColor="primary"
+          buttonOnClick={() => navigate(ROUTES.CONTACT)}
         />
       )}
       {/* Sección: Análisis Especializado */}
@@ -84,6 +82,7 @@ const ServicesPage = () => {
           items={data.especializado.items}
           buttonText="Solicitar Información"
           buttonColor="success"
+          buttonOnClick={() => navigate(ROUTES.CONTACT)}
           reverse
           backgroundColor="#F9FAFB"
         />
@@ -110,10 +109,10 @@ const ServicesPage = () => {
       )}
       {/* Sección: Análisis específico */}
       <CallToActionSection
-        title={ctaData.title}
-        subtitle={ctaData.subtitle}
-        primaryButton={ctaData.primaryButton}
-        secondaryButton={ctaData.secondaryButton}
+        title="¿Necesitas un análisis específico?"
+        subtitle="Contáctanos para una consulta personalizada y cotización detallada de nuestros servicios."
+        primaryButton={{ label: "Solicitar Cotización", onClick: () => navigate(ROUTES.CONTACT) }}
+        secondaryButton={{ label: "Ver Todos los Servicios", onClick: () => navigate(ROUTES.SERVICES) }}
         background="white"
       />
     </Box>

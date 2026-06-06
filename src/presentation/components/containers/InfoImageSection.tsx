@@ -9,6 +9,7 @@ interface InfoImageSectionProps {
   items?: string[];
   buttonText?: string;
   buttonColor?: "primary" | "secondary" | "success" | "error" | "info";
+  buttonOnClick?: () => void;
   reverse?: boolean; // para cambiar el orden texto/imagen
   backgroundColor?: string;
 }
@@ -20,6 +21,7 @@ const InfoImageSection: React.FC<InfoImageSectionProps> = ({
   items = [],
   buttonText,
   buttonColor = "primary",
+  buttonOnClick,
   reverse = false,
   backgroundColor = "transparent",
 }) => {
@@ -58,7 +60,12 @@ const InfoImageSection: React.FC<InfoImageSectionProps> = ({
             )}
 
             {buttonText && (
-              <Button variant="contained" color={buttonColor} sx={{ mt: 2, textTransform: "none" }}>
+              <Button
+                variant="contained"
+                color={buttonColor}
+                onClick={buttonOnClick}
+                sx={{ mt: 2, textTransform: "none"
+              }}>
                 {buttonText}
               </Button>
             )}

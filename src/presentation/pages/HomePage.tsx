@@ -1,5 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import CardPageSkeleton from "../components/skeletons/CardPageSkeleton";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../app/routes";
 import hero from "../../assets/hero-lab.jpeg";
 import cofadenaLogo from "../../assets/clients-logo/cofadena.png";
 import inlasaLogo from "../../assets/clients-logo/inlasa.png";
@@ -36,6 +38,7 @@ const clientsData = [
 ];
 
 const HomePage = () => {
+  const navigate = useNavigate();
   const { data, loading, error } = useHomePage();
   if (loading) {
     return <CardPageSkeleton />;
@@ -58,9 +61,9 @@ const HomePage = () => {
           subtitle={data.banner.subtitle}
           image={data.banner.image || hero}
           buttons={[
-            { label: "Nuestros Servicios", color: "primary" },
-            { label: "Solicitar Análisis", color: "success" },
-            { label: "Ver Acreditación", color: "secondary" },
+            { label: "Nuestros Servicios", color: "primary", onClick: () => navigate(ROUTES.SERVICES) },
+            { label: "Solicitar Análisis", color: "success", onClick: () => navigate(ROUTES.CONTACT) },
+            { label: "Ver Acreditación", color: "secondary", onClick: () => navigate(ROUTES.ACCREDITATION) },
           ]}
         />
       )}
@@ -83,6 +86,7 @@ const HomePage = () => {
           items={data.quality.items}
           buttonText="Ver Certificación"
           buttonColor="primary"
+          buttonOnClick={() => navigate(ROUTES.ACCREDITATION)}
         />
       )}
       {/* Sección: Nuestros asdfg */}
@@ -101,8 +105,8 @@ const HomePage = () => {
       <CallToActionSection
         title="¿Necesitas análisis de alimentos?"
         subtitle="Contáctanos hoy mismo y obtén resultados confiables respaldados por nuestra certificación internacional"
-        primaryButton={{ label: "Solicitar Cotización" }}
-        secondaryButton={{ label: "Ver Todos los Servicios" }}
+        primaryButton={{ label: "Solicitar Cotización", onClick: () => navigate(ROUTES.CONTACT) }}
+        secondaryButton={{ label: "Ver Todos los Servicios", onClick: () => navigate(ROUTES.SERVICES) }}
       />
     </Box>
   );
