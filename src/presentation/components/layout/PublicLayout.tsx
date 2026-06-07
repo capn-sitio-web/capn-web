@@ -2,8 +2,10 @@ import { Outlet } from "react-router-dom";
 import { Box, useMediaQuery, useTheme } from "@mui/material";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import { usePageTracking } from "../../services/analytics/usePageTracking";
 
 export default function PublicLayout() {
+  usePageTracking();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const appBarHeight = isMobile ? 56 : 64;
