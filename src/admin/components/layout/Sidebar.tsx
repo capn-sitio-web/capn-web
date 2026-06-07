@@ -1,4 +1,5 @@
 import { Drawer, Divider, Toolbar, Box, List, ListItemButton, ListItemIcon, ListItemText, Typography } from "@mui/material";
+import { ROUTES } from "../../../app/routes";
 import { NavLink } from "react-router-dom";
 import capnLogo from "/logo.png";
 import { NavItems } from "./NavItems";
@@ -32,6 +33,7 @@ export default function Sidebar({ mobileOpen, onCloseMobile }: Props) {
               key={item.to}
               component={NavLink}
               to={item.to}
+              end={item.to === ROUTES.ADMIN}
               onClick={onCloseMobile}
               sx={{
                 borderRadius: 2,

@@ -6,10 +6,12 @@ interface CallToActionSectionProps {
   subtitle: string;
   primaryButton: {
     label: string;
+    onClick?: () => void;
   };
   secondaryButton?: {
     label: string;
     variant?: "outlined" | "contained";
+    onClick?: () => void;
   };
   background?: "white" | "gradient";
 }
@@ -58,6 +60,7 @@ const CallToActionSection: React.FC<CallToActionSectionProps> = ({
       >
         <Button
           variant="contained"
+          onClick={primaryButton.onClick}
           sx={{
             textTransform: "none",
             color: 
@@ -77,6 +80,7 @@ const CallToActionSection: React.FC<CallToActionSectionProps> = ({
         {secondaryButton && (
           <Button
             variant={secondaryButton.variant || "outlined"}
+            onClick={secondaryButton.onClick}
             sx={{
               textTransform: "none",
               color:

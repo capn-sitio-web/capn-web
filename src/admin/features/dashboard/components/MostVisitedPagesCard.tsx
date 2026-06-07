@@ -1,5 +1,5 @@
 import { Card, CardContent, Typography, Box, LinearProgress } from "@mui/material";
-import type { MostVisitedPageItem } from "../types/dashboard.types";
+import type { MostVisitedPageItem } from "../services/dashboard.types";
 
 type Props = {
   items: MostVisitedPageItem[];

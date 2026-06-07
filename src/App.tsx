@@ -8,6 +8,7 @@ import AboutUsPage from "./presentation/pages/AboutUsPage";
 import ServicesPage from "./presentation/pages/ServicesPage";
 import AccreditationPage from "./presentation/pages/AccreditationPage";
 import NewsPage from "./presentation/pages/NewsPage";
+import NewsDetailPage from "./presentation/pages/NewsDetailPage";
 import ContactPage from "./presentation/pages/ContactPage";
 {/* CMS */}
 import AdminGate from "./admin/features/auth/presentation/AdminGate";
@@ -30,6 +31,7 @@ function App() {
           <Route path={ROUTES.SERVICES} element={<ServicesPage />} />
           <Route path={ROUTES.ACCREDITATION} element={<AccreditationPage />} />
           <Route path={ROUTES.NEWS} element={<NewsPage />} />
+          <Route path={ROUTES.NEWS_DETAIL} element={<NewsDetailPage />} />
           <Route path={ROUTES.CONTACT} element={<ContactPage />} />
         </Route>
         {/* CMS */}

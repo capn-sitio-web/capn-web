@@ -1,76 +1,94 @@
-import React, { useState } from "react";
-import { Box, Chip, Container, Grid, Pagination } from "@mui/material";
+import React from "react";
+import { Box, Chip, Container, Grid, Pagination, Typography } from "@mui/material";
 import NewsCard from "../cards/NewsCard";
 
 interface NewsItem {
   id: number;
   category: string;
+  categorySlug: string | null;
   date: string;
   title: string;
   description: string;
   image: string;
-  link?: string;
+  imageAlt?: string;
+  link: string;
+}
+
+interface NewsCategory {
+  id: number;
+  name: string;
+  slug: string;
+}
+
+interface NewsPaginationData {
+  currentPage: number;
+  lastPage: number;
+  total: number;
 }
 
 interface NewsGridSectionProps {
   news: NewsItem[];
+  categories: NewsCategory[];
+  selectedCategory: string | null;
+  pagination: NewsPaginationData;
+  onCategoryChange: (categorySlug: string | null) => void;
+  onPageChange: (page: number) => void;
 }
 
-const NewsGridSection: React.FC<NewsGridSectionProps> = ({ news }) => {
-  const [selectedCategory, setSelectedCategory] = useState<string>("Todas");
-  const categories = ["Todas", ...new Set(news.map((item) => item.category))];
-  const [page, setPage] = useState<number>(1);
-  const itemsPerPage = 6;
-
-  const filteredNews =
-    selectedCategory === "Todas"
-      ? news
-      : news.filter((item) => item.category === selectedCategory);
-
-  const totalPages = Math.ceil(filteredNews.length / itemsPerPage);
-  const startIndex = (page - 1) * itemsPerPage;
-  const paginatedNews = filteredNews.slice(startIndex, startIndex + itemsPerPage);
-
-  const handleCategoryChange = (cat: string) => {
-    setSelectedCategory(cat);
-    setPage(1); // Reset page
-  };
-
+const NewsGridSection: React.FC<NewsGridSectionProps> = ({
+  news,
+  categories,
+  selectedCategory,
+  pagination,
+  onCategoryChange,
+  onPageChange,
+}) => {
   return (
     <Box sx={{ py: 6 }}>
       <Container>
         {/* Filters */}
         <Box sx={{ display: "flex", gap: 2, justifyContent: "center", flexWrap: "wrap", mb: 4 }}>
-          {categories.map((cat) => (
+          <Chip
+            onClick={() => onCategoryChange(null)}
+            variant={!selectedCategory ? "filled" : "outlined"}
+            color="primary"
+            sx={{ p: 1.5 }}
+            label="Todas"
+          />
+          {categories.map((category) => (
             <Chip
-              key={cat}
-              onClick={() => handleCategoryChange(cat)}
-              variant={selectedCategory === cat ? "filled" : "outlined"}
+              key={category.id}
+              onClick={() => onCategoryChange(category.slug)}
+              variant={ selectedCategory === category.slug ? "filled" : "outlined" }
               color="primary"
-              sx={{
-                p: 1.5,
-              }}
-              label={`${cat} (${cat === "Todas" ? news.length : news.filter((n) => n.category === cat).length})`}
+              sx={{ p: 1.5 }}
+              label={category.name}
             />
           ))}
         </Box>
 
-        {/* News */}
-        <Grid container spacing={4} justifyContent="center">
-          {paginatedNews.map((item) => (
-            <Grid item xs={12} sm={6} md={4} key={item.id}>
-              <NewsCard {...item} />
-            </Grid>
-          ))}
-        </Grid>
+        {/* Si no hay noticias en una categoria */}
+        {news.length === 0 ? (
+          <Typography textAlign="center" color="text.secondary">
+            No se encontraron noticias para esta categoría.
+          </Typography>
+        ) : (
+          <Grid container spacing={4} justifyContent="center">
+            {news.map((item) => (
+              <Grid item xs={12} sm={6} md={4} key={item.id}>
+                <NewsCard {...item} />
+              </Grid>
+            ))}
+          </Grid>
+        )}
 
         {/* Pagination */}
-        {totalPages > 1 && (
+        {pagination.lastPage > 1 && (
           <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
             <Pagination
-              count={totalPages}
-              page={page}
-              onChange={(_, value) => setPage(value)}
+              count={pagination.lastPage}
+              page={pagination.currentPage}
+              onChange={(_, value) => onPageChange(value)}
               color="primary"
               size="large"
             />

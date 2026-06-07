@@ -1,6 +1,6 @@
 import { Card, CardContent, Typography, Box } from "@mui/material";
 import { TrendingUpRounded, TrendingDownRounded, RemoveRounded } from "@mui/icons-material";
-import type { DashboardKpi } from "../types/dashboard.types";
+import type { DashboardKpi } from "../services/dashboard.types";
 
 type Props = {
   item: DashboardKpi;
@@ -20,7 +20,7 @@ export default function StatCard({ item, rightIcon }: Props) {
               {item.label}
             </Typography>
             <Typography variant="h5" fontWeight={800} sx={{ mt: 0.5 }}>
-              {item.value}
+              {item.value.toLocaleString("es-BO")}
             </Typography>
           </Box>
           {rightIcon ? (
