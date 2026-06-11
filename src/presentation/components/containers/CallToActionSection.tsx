@@ -28,11 +28,11 @@ const CallToActionSection: React.FC<CallToActionSectionProps> = ({
       sx={{
         background:
           background === "gradient"
-            ? "linear-gradient(90deg, #0A53E4 0%, #1966F0 100%)"
-            : "white",
+            ? "linear-gradient(90deg, #075E7D 0%, #0B7EA7 55%, #0F172A 100%)"
+            : "background.paper",
         color: background === "gradient" ? "white" : "text.primary",
         textAlign: "center",
-        py: 8,
+        py: { xs: 7, md: 8 },
         px: 2,
       }}
     >
@@ -63,11 +63,9 @@ const CallToActionSection: React.FC<CallToActionSectionProps> = ({
           onClick={primaryButton.onClick}
           sx={{
             textTransform: "none",
-            color: 
-              background === "gradient"
-                ? "#1976D2"
-                : "white",
-            bgcolor: background === "gradient" ? "#fff" : "#1976D2",
+            color: background === "gradient" ? "primary.dark" : "common.white",
+            bgcolor: background === "gradient" ? "common.white" : "primary.main",
+            fontWeight: 700,
             "&:hover": {
               color: background === "gradient" ? "#1976D2" : undefined,
               backgroundColor: background === "gradient" ? "rgba(255,255,255,0.9)" : undefined,
@@ -86,7 +84,7 @@ const CallToActionSection: React.FC<CallToActionSectionProps> = ({
               color:
                 background === "gradient"
                   ? "white"
-                  : "#1976D2",
+                  : "primary.main",
               borderColor:
                 background === "gradient" ? "rgba(255,255,255,0.6)" : "#1976D2",
               "&:hover": {

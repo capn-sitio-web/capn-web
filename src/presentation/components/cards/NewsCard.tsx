@@ -33,30 +33,34 @@ const NewsCard: React.FC<NewsCardProps> = ({
   return (
     <Box
       sx={{
-        borderRadius: 3,
         height: "100%",
-        boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
+        minHeight: 410,
+        display: "flex",
+        flexDirection: "column",
+        borderRadius: "15px",
         overflow: "hidden",
-        transition: "transform 0.3s ease, box-shadow 0.3s ease",
+        bgcolor: "background.paper",
+        border: "1px solid",
+        borderColor: "divider",
+        boxShadow: "0 12px 30px rgba(15, 23, 42, 0.06)",
+        transition: "box-shadow 0.25s ease, border-color 0.25s ease",
         "&:hover": {
-          boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
-        },
-        "&:hover .news-image": {
-          transform: "scale(1.06)",
+          boxShadow: "0 16px 36px rgba(15, 23, 42, 0.10)",
+          borderColor: "primary.light",
         },
       }}
     >
       {/* Image */}
       <Box
-        className="news-image"
         component="img"
         src={image}
         alt={imageAlt ?? title}
         sx={{
           width: "100%",
-          height: 180,
+          height: 155,
           objectFit: "cover",
-          transition: "transform 0.4s ease",
+          display: "block",
+          bgcolor: "primary.light",
         }}
       />
       {/* Text */}
@@ -76,27 +80,47 @@ const NewsCard: React.FC<NewsCardProps> = ({
           </Typography>
         </Box>
 
-        <Typography variant="h6" fontWeight="bold" color="text.primary" gutterBottom>
+        <Typography
+          variant="h6"
+          fontWeight={800}
+          color="text.primary"
+          gutterBottom
+          sx={{
+            lineHeight: 1.35,
+          }}
+        >
           {title}
         </Typography>
 
-        <Typography variant="body2" color="text.secondary">
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{
+            lineHeight: 1.6,
+          }}
+        >
           {description}
         </Typography>
 
-        <Button
-          component={Link}
-          to={link}
-          size="small"
-          sx={{
-            mt: 2,
-            textTransform: "none",
-            fontWeight: "bold",
-            "&:hover": { textDecoration: "underline" },
-          }}
-        >
-          Leer más →
-        </Button>
+        <Box sx={{ mt: "auto", pt: 2 }}>
+          <Button
+            component={Link}
+            to={link}
+            size="small"
+            sx={{
+              textTransform: "none",
+              fontWeight: 800,
+              color: "primary.main",
+              px: 0,
+              "&:hover": {
+                bgcolor: "transparent",
+                textDecoration: "underline",
+              },
+            }}
+          >
+            Leer más →
+          </Button>
+        </Box>
       </Box>
     </Box>
   );

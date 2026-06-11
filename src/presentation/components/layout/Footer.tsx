@@ -13,6 +13,7 @@ import { ROUTES } from "../../../app/routes";
 import { Link } from "react-router-dom";
 import capnLogo from "/logo.png";
 import { useContactPage } from "../../services/contact/useContactPage";
+import { capnColors } from "../../config/theme";
 
 // Subcomponente: lista de enlaces
 interface FooterLinksProps {
@@ -57,7 +58,7 @@ interface SocialLinksProps {
 const SocialLinks: React.FC<SocialLinksProps> = ({ socials }) => (
   <>
     {socials.map((social) => (
-      <IconButton 
+      <IconButton
         color="inherit"
         size="small"
         href={social.href}
@@ -73,7 +74,7 @@ const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
   const { data } = useContactPage();
   const contact = data?.location;
-  
+
   const socialLinks = [
     { icon: <Facebook />, href: contact?.facebookUrl ?? "" },
     { icon: <LinkedIn />, href: "https://www.linkedin.com" },
@@ -96,7 +97,8 @@ const Footer: React.FC = () => {
     <Box
       component="footer"
       sx={{
-        bgcolor: "#111827", 
+        bgcolor: capnColors.navy,
+        color: "rgba(255,255,255,0.88)",
         pt: 6,
         pb: 2,
         mt: "auto",
@@ -107,7 +109,17 @@ const Footer: React.FC = () => {
           {/* Columna 1: Logo, descripción y redes sociales */}
           <Grid item xs={12} sm={6} md={3}>
             <Box display="flex" alignItems="center" mb={2}>
-              <img src={capnLogo} alt="CAPN Logo" style={{ height: 45, marginRight: 8 }} />
+              <img
+                src={capnLogo}
+                alt="CAPN Logo"
+                style={{
+                  height: 48,
+                  marginRight: 10,
+                  background: "white",
+                  borderRadius: 8,
+                  padding: 3,
+                }}
+              />
               <Typography variant="h6" fontWeight="bold">
                 CAPN
               </Typography>
@@ -133,7 +145,7 @@ const Footer: React.FC = () => {
 
           {/* Columna 4: Contacto */}
           <Grid item xs={12} sm={6} md={3}>
-            <Box 
+            <Box
               display='flex'
               flexDirection='column'
               alignItems={{ xs: 'center', sm: 'flex-start' }}
@@ -163,7 +175,7 @@ const Footer: React.FC = () => {
                 </Typography>
               </Box>
             </Box>
-            
+
           </Grid>
         </Grid>
 

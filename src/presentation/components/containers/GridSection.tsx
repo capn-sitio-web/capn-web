@@ -4,10 +4,11 @@ import { Box, Grid, Typography, Container } from "@mui/material";
 interface GridSectionProps<T extends object> {
   title: string;
   subtitle?: string;
-  items: T[]; // el tipo genérico reemplaza al any[]
+  items: T[];
   CardComponent: React.ComponentType<T>;
   columns?: 2 | 3 | 4;
   backgroundColor?: string;
+  variant?: "default" | "process";
 }
 
 const GridSection = <T extends object>({
@@ -17,6 +18,7 @@ const GridSection = <T extends object>({
   CardComponent,
   columns = 4,
   backgroundColor = "transparent",
+  variant = "default",
 }: GridSectionProps<T>) => {
   return (
     <Box bgcolor={backgroundColor} pt={6} pb={9}>
@@ -52,10 +54,44 @@ const GridSection = <T extends object>({
               key={index}
               xs={12}
               sm={6}
-              md={columns===4 ? 4 : 6}
+              md={columns === 4 ? 4 : 6}
               lg={12 / columns}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+              }}
             >
-              <CardComponent {...item} />
+              <Box
+                sx={{
+                  width: "100%",
+                  maxWidth: variant === "process" ? 260 : "none",
+                  height: "100%",
+
+                  ...(variant === "process" && {
+                    textAlign: "center",
+
+                    "& .MuiTypography-h6": {
+                      minHeight: 58,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      textAlign: "center",
+                      lineHeight: 1.35,
+                      mb: 1.2,
+                    },
+
+                    "& .MuiTypography-body2": {
+                      maxWidth: 240,
+                      mx: "auto",
+                      //textAlign: "justify",
+                      textAlignLast: "center",
+                      lineHeight: 1.6,
+                    },
+                  }),
+                }}
+              >
+                <CardComponent {...item} />
+              </Box>
             </Grid>
           ))}
         </Grid>

@@ -11,7 +11,7 @@ const Navbar = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [openDrawer, setOpenDrawer] = useState(false);
   const appBarHeight = isMobile ? 56 : 64;
-  
+
   // Menú de navegación
   const menuItems = [
     { label: "Inicio", path: ROUTES.HOME },
@@ -30,32 +30,55 @@ const Navbar = () => {
       }
       return location.pathname.startsWith(item.path);
     })?.path || false;
-  
+
   return (
-    <AppBar 
+    <AppBar
       color="inherit"
-      //elevation={1}
+      elevation={0}
       sx={{
-        zIndex: (theme) => theme.zIndex.drawer + 1, // asegura que quede arriba del Drawer
+        zIndex: (theme) => theme.zIndex.drawer + 1,
+        bgcolor: "rgba(255,255,255,0.96)",
+        backdropFilter: "blur(10px)",
+        borderBottom: "1px solid",
+        borderColor: "divider",
       }}
     >
       <Container>
         <Toolbar sx={{ justifyContent: "space-between" }}>
           {/* Logo */}
           <Box component={Link} to="/" sx={{ display: "flex" }}>
-            <img src={capnLogo} alt="CAPN Logo" style={{ height: 60 }} />
+            <img src={capnLogo} alt="CAPN Logo" style={{ height: 54 }} />
           </Box>
 
           {/* Desktop menu */}
           {!isMobile && (
-            <Tabs value={activePath} textColor="primary" indicatorColor="primary">
+            <Tabs
+              value={activePath}
+              textColor="primary"
+              indicatorColor="primary"
+              sx={{
+                minHeight: 64,
+                "& .MuiTabs-indicator": {
+                  height: 3,
+                  borderRadius: 3,
+                },
+              }}
+            >
               {menuItems.map((item) => (
                 <Tab
                   label={item.label}
                   value={item.path}
                   component={Link}
                   to={item.path}
-                  sx={{ textTransform: "none" }}
+                  sx={{
+                    textTransform: "none",
+                    fontWeight: activePath === item.path ? 800 : 600,
+                    color: activePath === item.path ? "primary.main" : "text.secondary",
+                    px: 2,
+                    "&:hover": {
+                      color: "primary.main",
+                    },
+                  }}
                 />
               ))}
             </Tabs>

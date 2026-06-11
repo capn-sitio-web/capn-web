@@ -15,7 +15,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ title, subtitle, image, butto
         height: { xs: "70vh", md: "80vh" },
         display: "flex",
         alignItems: "center",
-				justifyContent: "center",
+        justifyContent: "center",
         backgroundImage: `url(${image})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
@@ -23,29 +23,51 @@ const HeroSection: React.FC<HeroSectionProps> = ({ title, subtitle, image, butto
           content: '""',
           position: "absolute",
           inset: 0,
-          backgroundColor: "rgba(0,0,0,0.45)",
+          background:
+            "linear-gradient(90deg, rgba(15, 23, 42, 0.78) 0%, rgba(11, 126, 167, 0.48) 55%, rgba(15, 23, 42, 0.55) 100%)",
         },
       }}
     >
-      <Container sx={{ position: "relative" }}>
+      <Container sx={{ position: "relative", textAlign: "center" }}>
         <Grid item xs={12} md={7}>
-          <Typography variant="h3" fontWeight="bold" color="#bebce5ff" gutterBottom>
+          <Typography
+            variant="h2"
+            fontWeight="bold"
+            gutterBottom
+            sx={{
+              color: "common.white",
+              fontSize: { xs: "2.2rem", md: "3.4rem" },
+              lineHeight: 1.1,
+              maxWidth: 900,
+              mx: "auto",
+            }}
+          >
             {title}
           </Typography>
-          <Typography variant="h6" sx={{ mb: 3 }}>
+          <Typography
+            variant="h6"
+            sx={{
+              mb: 4,
+              color: "rgba(255,255,255,0.92)",
+              fontWeight: 600,
+              maxWidth: 820,
+              mx: "auto",
+              lineHeight: 1.6,
+            }}
+          >
             {subtitle}
           </Typography>
-					<Stack
-						direction={{ xs: "column", sm: "row" }}
-						spacing={2}
-						justifyContent={{ xs: "center"}}
-					>
-						{buttons.map((btn) => (
-							<Button
-								key={btn.label}
-								variant="outlined"
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            spacing={2}
+            justifyContent={{ xs: "center" }}
+          >
+            {buttons.map((btn) => (
+              <Button
+                key={btn.label}
+                variant="outlined"
                 /*color={btn.color || "primary"}*/
-								onClick={btn.onClick}
+                onClick={btn.onClick}
                 sx={{
                   color: "#fff",
                   borderColor: "#fff",
@@ -54,11 +76,11 @@ const HeroSection: React.FC<HeroSectionProps> = ({ title, subtitle, image, butto
                     backgroundColor: "rgba(255,255,255,0.1)",
                   },
                 }}
-							>
-								{btn.label}
-							</Button>
-						))}
-					</Stack>
+              >
+                {btn.label}
+              </Button>
+            ))}
+          </Stack>
         </Grid>
       </Container>
     </Box>

@@ -94,6 +94,8 @@ const ServicesPage = () => {
           subtitle={data.procesoTrabajo.subtitle}
           items={data.procesoTrabajo.items}
           CardComponent={FlatIconCard}
+          columns={4}
+          variant="process"
         />
       )}
       {/* Sección: Equipos y Tecnología */}

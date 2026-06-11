@@ -26,7 +26,12 @@ const InfoImageSection: React.FC<InfoImageSectionProps> = ({
   backgroundColor = "transparent",
 }) => {
   return (
-    <Box bgcolor={backgroundColor} py={6}>
+    <Box
+      sx={{
+        bgcolor: backgroundColor,
+        py: { xs: 7, md: 9 },
+      }}
+    >
       <Container>
         <Grid
           container
@@ -38,7 +43,13 @@ const InfoImageSection: React.FC<InfoImageSectionProps> = ({
         >
           {/* Texto */}
           <Grid item xs={12} md={6}>
-            <Typography variant="h4" fontWeight="bold" gutterBottom color="text.primary">
+            <Typography
+              variant="h4"
+              fontWeight="bold"
+              gutterBottom
+              color="text.primary"
+              sx={{ lineHeight: 1.2 }}
+            >
               {title}
             </Typography>
 
@@ -53,7 +64,7 @@ const InfoImageSection: React.FC<InfoImageSectionProps> = ({
                     <ListItemIcon sx={{ minWidth: 32 }}>
                       <CheckCircleIcon color={buttonColor} />
                     </ListItemIcon>
-                    <ListItemText primary={item} sx={{ color:"text.secondary" }} />
+                    <ListItemText primary={item} sx={{ color: "text.secondary" }} />
                   </ListItem>
                 ))}
               </List>
@@ -64,8 +75,9 @@ const InfoImageSection: React.FC<InfoImageSectionProps> = ({
                 variant="contained"
                 color={buttonColor}
                 onClick={buttonOnClick}
-                sx={{ mt: 2, textTransform: "none"
-              }}>
+                sx={{
+                  mt: 2, textTransform: "none"
+                }}>
                 {buttonText}
               </Button>
             )}
@@ -79,18 +91,19 @@ const InfoImageSection: React.FC<InfoImageSectionProps> = ({
               alt={title}
               sx={{
                 width: "100%",
-                maxWidth: 500,
-                height: "auto",
-                maxHeight: 350,
-                borderRadius: 2,
-                boxShadow: 5,
-                objectFit: "cover", // mantiene la proporción sin deformar
+                maxWidth: 520,
+                height: { xs: 240, md: 330 },
+                borderRadius: "15px",
+                boxShadow: "0 18px 45px rgba(15, 23, 42, 0.12)",
+                objectFit: "cover",
                 display: "block",
-                margin: "0 auto", // centra la imagen
-                filter: "brightness(0.9)", // oscurece la imagen
-                transition: "transform 0.3s ease",
+                margin: "0 auto",
+                border: "1px solid",
+                borderColor: "divider",
+                transition: "transform 0.3s ease, box-shadow 0.3s ease",
                 "&:hover": {
-                  transform: "scale(1.02)",
+                  transform: "translateY(-4px)",
+                  boxShadow: "0 24px 55px rgba(15, 23, 42, 0.16)",
                 },
               }}
             />
