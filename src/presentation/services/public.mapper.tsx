@@ -9,17 +9,23 @@ import {
   EmojiEvents,
   Description,
   Settings,
+  Search,
+  Verified,
+  Biotech,
+  AcUnit,
+  WaterDrop,
+  Scale,
+
   LooksOne,
   LooksTwo,
   Looks3,
   Looks4,
   ScienceOutlined,
   BiotechOutlined,
-  ScaleOutlined,
-  OpacityOutlined,
+  //ScaleOutlined,
+  //OpacityOutlined,
   AcUnitOutlined,
   ScienceRounded,
-  Search,
   VerifiedUser,
 } from "@mui/icons-material";
 
@@ -58,6 +64,19 @@ export function mapIconNameToMui(iconName: string | null) {
     case "settings":
       return <Settings />;
 
+    case "search":
+      return <Search />;
+    case "check":
+      return <Verified />;
+    case "microscope":
+      return <Biotech />;
+    case "snowflake":
+      return <AcUnit />;
+    case "water":
+      return <WaterDrop />;
+    case "scale":
+      return <Scale />;
+
     case "1-square":
       return <LooksOne sx={{ color: "#3B82F6" }} />;
     case "2-square":
@@ -75,15 +94,15 @@ export function mapIconNameToMui(iconName: string | null) {
       return <ScienceRounded />;
     case "freezer":
       return <AcUnitOutlined />;
-    case "water":
+    /*case "water":
       return <OpacityOutlined />;
     case "scale":
-      return <ScaleOutlined />;
+      return <ScaleOutlined />;*/
 
     case "description":
       return <Description sx={{ color: "#3B82F6" }} />;
-    case "search":
-      return <Search sx={{ color: "#F97316" }} />;
+    /*case "search":
+      return <Search sx={{ color: "#F97316" }} />;*/
     case "verified":
       return <VerifiedUser sx={{ color: "#A855F7" }} />;
     case "shield-check":
