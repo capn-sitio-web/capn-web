@@ -1,5 +1,4 @@
 import {
-  getFullImageUrl,
   mapIconNameToMui,
 } from "../public.mapper";
 
@@ -33,7 +32,7 @@ export function mapSectionToServiceInfo(
   return {
     title: data.titulo,
     description: data.descripcion ?? "",
-    image: getFullImageUrl(data.imagenes?.[0]?.imagen_url),
+    image: data.image?.previewUrl ?? "",
     items: data.listas.map((item) => item.texto_item),
   };
 }
@@ -47,7 +46,7 @@ export function mapSectionToCardGroup(
     items: data.elementos.map((item) => ({
       icon: mapIconNameToMui(item.icono),
       title: item.titulo,
-      description: item.descripcion,
+      description: item.descripcion ?? "",
     })),
   };
 }
