@@ -77,6 +77,7 @@ export default function ServicesManagementPage() {
     seccionId: null,
     sectionTitle: "",
     sectionDescription: "",
+    extendedContent: "",
     items: [
       {
         id: "1",
@@ -89,12 +90,15 @@ export default function ServicesManagementPage() {
       imageId: null,
       alt: "",
     },
+    galleryImages: [],
+    galleryImagesToDelete: [],
   });
 
   const [savedPhysicochemical, setSavedPhysicochemical] = useState<ServicePhysicochemical>({
     seccionId: null,
     sectionTitle: "",
     sectionDescription: "",
+    extendedContent: "",
     items: [
       {
         id: "1",
@@ -107,12 +111,15 @@ export default function ServicesManagementPage() {
       imageId: null,
       alt: "",
     },
+    galleryImages: [],
+    galleryImagesToDelete: [],
   });
 
   const [savedSensory, setSavedSensory] = useState<ServiceSensory>({
     seccionId: null,
     sectionTitle: "",
     sectionDescription: "",
+    extendedContent: "",
     items: [
       {
         id: "1",
@@ -125,12 +132,15 @@ export default function ServicesManagementPage() {
       imageId: null,
       alt: "",
     },
+    galleryImages: [],
+    galleryImagesToDelete: [],
   });
 
   const [savedSpecialized, setSavedSpecialized] = useState<ServiceSpecialized>({
     seccionId: null,
     sectionTitle: "",
     sectionDescription: "",
+    extendedContent: "",
     items: [
       {
         id: "1",
@@ -143,6 +153,8 @@ export default function ServicesManagementPage() {
       imageId: null,
       alt: "",
     },
+    galleryImages: [],
+    galleryImagesToDelete: [],
   });
 
   const [savedWorkProcess, setSavedWorkProcess] = useState<ServiceWorkProcess>({

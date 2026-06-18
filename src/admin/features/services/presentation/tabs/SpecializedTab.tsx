@@ -5,12 +5,14 @@ import {
   useMemo,
   useState,
 } from "react";
-import { Alert, Box } from "@mui/material";
+import { Alert, Box, Button } from "@mui/material";
+import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import axios from "axios";
 import SectionListImageEditor from "../../../../components/sectionListImage/SectionListImageEditor";
-import type { ServiceSpecialized } from "../../domain/services.types";
+import type { ServiceAnalysisDetail, ServiceSpecialized } from "../../domain/services.types";
 import { validateSectionListImage, type SectionListImageFormErrors } from "../../../../components/sectionListImage/sectionListImage.validation";
 import { hasServiceSpecializedChanges } from "../../domain/servicesChangeDetection";
+import AnalysisDetailDialog from "./AnalysisDetailDialog";
 
 export type SpecializedTabHandle = {
   submit: () => Promise<boolean>;
@@ -27,6 +29,7 @@ const SpecializedTab = forwardRef<SpecializedTabHandle, Props>(
     const [data, setData] = useState<ServiceSpecialized>(initialValue);
     const [errors, setErrors] = useState<SectionListImageFormErrors>({});
     const [saveError, setSaveError] = useState("");
+    const [detailOpen, setDetailOpen] = useState(false);
 
     useEffect(() => {
       setData(initialValue);
@@ -59,8 +62,8 @@ const SpecializedTab = forwardRef<SpecializedTabHandle, Props>(
       }
     };
 
-    const validateAndCommit = async (): Promise<boolean> => {
-      const validation = validateSectionListImage(data);
+    const commitData = async (nextData: ServiceSpecialized): Promise<boolean> => {
+      const validation = validateSectionListImage(nextData);
 
       if (!validation.success) {
         setErrors(validation.errors);
@@ -73,7 +76,7 @@ const SpecializedTab = forwardRef<SpecializedTabHandle, Props>(
         setSaveError("");
 
         const nextSaved: ServiceSpecialized = {
-          ...data,
+          ...nextData,
           sectionTitle: validation.data.sectionTitle,
           sectionDescription: validation.data.sectionDescription ?? "",
           items: validation.data.items,
@@ -95,6 +98,27 @@ const SpecializedTab = forwardRef<SpecializedTabHandle, Props>(
       }
     };
 
+    const validateAndCommit = async (): Promise<boolean> => {
+      return commitData(data);
+    };
+
+    const handleSaveDetail = async (nextDetail: ServiceAnalysisDetail) => {
+      const nextData: ServiceSpecialized = {
+        ...data,
+        extendedContent: nextDetail.extendedContent,
+        galleryImages: nextDetail.galleryImages,
+        galleryImagesToDelete: nextDetail.galleryImagesToDelete ?? [],
+      };
+      const savedOk = await commitData(nextData);
+      if (!savedOk) {
+        throw new Error("No se pudo guardar el detalle.");
+      }
+      setData({
+        ...nextData,
+        galleryImagesToDelete: [],
+      });
+    };
+
     useImperativeHandle(ref, () => ({
       submit: validateAndCommit,
     }));
@@ -107,6 +131,16 @@ const SpecializedTab = forwardRef<SpecializedTabHandle, Props>(
           </Alert>
         ) : null}
 
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button
+            variant="outlined"
+            startIcon={<ArticleOutlinedIcon />}
+            onClick={() => setDetailOpen(true)}
+          >
+            Editar detalle
+          </Button>
+        </Box>
+
         <SectionListImageEditor
           value={data}
           onChange={(nextValue) =>
@@ -118,6 +152,18 @@ const SpecializedTab = forwardRef<SpecializedTabHandle, Props>(
           errors={errors}
           itemsTitle="Tipos de análisis especializados"
           imageLabel="Imagen de análisis especializado"
+        />
+
+        <AnalysisDetailDialog
+          open={detailOpen}
+          title="Detalle de análisis especializado"
+          initialValue={{
+            extendedContent: data.extendedContent,
+            galleryImages: data.galleryImages,
+            galleryImagesToDelete: data.galleryImagesToDelete ?? [],
+          }}
+          onClose={() => setDetailOpen(false)}
+          onSave={handleSaveDetail}
         />
       </Box>
     );
