@@ -5,15 +5,43 @@ import { ROUTES } from "../../app/routes";
 import NewsGallerySection from "../components/sections/NewsGallerySection";
 import CardPageSkeleton from "../components/skeletons/CardPageSkeleton";
 import { useNewsDetail } from "../services/news/useNewsDetail";
+import { useServiceDetail } from "../services/services/useServiceDetail";
 
-const NewsDetailPage = () => {
-  const { idnoticia } = useParams();
+type ContentDetailPageProps = {
+  type: "news" | "service";
+};
 
-  const parsedId = idnoticia ? Number(idnoticia) : null;
+function hasHtmlTags(value: string): boolean {
+  return /<\/?[a-z][\s\S]*>/i.test(value);
+}
 
-  const { data, loading, error } = useNewsDetail(
-    Number.isFinite(parsedId) ? parsedId : null
+function normalizeContent(content: string): string {
+  if (hasHtmlTags(content)) {
+    return content;
+  }
+  return content.replace(/\n/g, "<br />");
+}
+
+const ContentDetailPage = ({ type }: ContentDetailPageProps) => {
+  const { idnoticia, slug } = useParams();
+  const parsedNewsId = idnoticia ? Number(idnoticia) : null;
+
+  const newsQuery = useNewsDetail(
+    type === "news" && Number.isFinite(parsedNewsId) ? parsedNewsId : null
   );
+
+  const serviceQuery = useServiceDetail(type === "service" ? slug ?? null : null);
+
+  const data = type === "news" ? newsQuery.data : serviceQuery.data;
+  const loading = type === "news" ? newsQuery.loading : serviceQuery.loading;
+  const error = type === "news" ? newsQuery.error : serviceQuery.error;
+
+  const backTo = type === "news" ? ROUTES.NEWS : ROUTES.SERVICES;
+  const backLabel = type === "news" ? "Volver a noticias" : "Volver a servicios";
+  const errorMessage =
+    type === "news"
+      ? "No se pudo cargar la noticia solicitada."
+      : "No se pudo cargar el detalle del servicio.";
 
   if (loading) {
     return <CardPageSkeleton />;
@@ -22,9 +50,7 @@ const NewsDetailPage = () => {
   if (error || !data) {
     return (
       <Box py={8} textAlign="center">
-        <Typography color="error">
-          No se pudo cargar la noticia solicitada.
-        </Typography>
+        <Typography color="error">{errorMessage}</Typography>
       </Box>
     );
   }
@@ -38,6 +64,7 @@ const NewsDetailPage = () => {
           backgroundImage: `url(${data.image})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
+          backgroundColor: "#0F172A",
         }}
       >
         <Box
@@ -47,10 +74,10 @@ const NewsDetailPage = () => {
             bgcolor: "rgba(0,0,0,0.45)",
           }}
         />
-        {/* boton de volver a noticias */}
+
         <Button
           component={RouterLink}
-          to={ROUTES.NEWS}
+          to={backTo}
           startIcon={<ArrowBackIcon />}
           sx={{
             position: "absolute",
@@ -70,7 +97,7 @@ const NewsDetailPage = () => {
             },
           }}
         >
-          Volver a noticias
+          {backLabel}
         </Button>
 
         <Container
@@ -83,26 +110,23 @@ const NewsDetailPage = () => {
             pb: { xs: 3, md: 5 },
           }}
         >
-          <Box
-            color="white"
-            sx={{ textAlign: "left" }}
-          >
+          <Box color="white" sx={{ textAlign: "left" }}>
             <Typography
               variant="h3"
               fontWeight="bold"
-              //sx={{ maxWidth: 900 }}
               sx={{
                 maxWidth: 900,
                 lineHeight: 1.15,
                 fontSize: {
-                  xs: "1.9rem",  // celulares
-                  sm: "2.4rem",  // tablets pequeñas
-                  md: "3rem",    // pantallas medianas
+                  xs: "1.9rem",
+                  sm: "2.4rem",
+                  md: "3rem",
                 },
               }}
             >
               {data.title}
             </Typography>
+
             <Box
               sx={{
                 display: "flex",
@@ -122,7 +146,8 @@ const NewsDetailPage = () => {
                   }}
                 />
               )}
-              <Typography>{data.date}</Typography>
+
+              {data.date && <Typography>{data.date}</Typography>}
             </Box>
           </Box>
         </Container>
@@ -130,26 +155,46 @@ const NewsDetailPage = () => {
 
       <Container maxWidth="md">
         <Box py={8}>
-          <Typography
-            variant="body1"
-            color="text.primary"
-            textAlign={"left"}
+          <Box
             sx={{
-              whiteSpace: "pre-line",
+              textAlign: "left",
+              color: "text.primary",
               lineHeight: 2,
               fontSize: "1.05rem",
+
+              "& p": {
+                marginTop: 0,
+                marginBottom: "1rem",
+              },
+
+              "& b, & strong": {
+                fontWeight: 700,
+              },
+
+              "& ul, & ol": {
+                paddingLeft: "1.5rem",
+                marginTop: "0.5rem",
+                marginBottom: "1rem",
+              },
+
+              "& li": {
+                marginBottom: "0.4rem",
+              },
+
+              "& div": {
+                marginBottom: "0.5rem",
+              },
             }}
-          >
-            {data.content}
-          </Typography>
+            dangerouslySetInnerHTML={{
+              __html: normalizeContent(data.content),
+            }}
+          />
         </Box>
       </Container>
 
-      {data.gallery.length > 0 && (
-        <NewsGallerySection images={data.gallery} />
-      )}
+      {data.gallery.length > 0 && <NewsGallerySection images={data.gallery} />}
     </Box>
   );
 };
 
-export default NewsDetailPage;
+export default ContentDetailPage;

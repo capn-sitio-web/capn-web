@@ -16,6 +16,11 @@ export type PublicServicesPageResponse = {
   };
 };
 
+export type PublicServiceDetailResponse = {
+  message: string;
+  data: PublicSectionData;
+};
+
 export type ServicesBanner = {
   title: string;
   subtitle: string;
@@ -23,9 +28,11 @@ export type ServicesBanner = {
 };
 
 export type ServiceInfoSection = {
+  slug: string;
   title: string;
   description: string;
   image: string;
+  imageAlt: string;
   items: string[];
 };
 
@@ -51,4 +58,15 @@ export type ServicesPageData = {
 
   procesoTrabajo: ServicesSectionGroup<ServiceCardItem> | null;
   equiposTecnologia: ServicesSectionGroup<ServiceCardItem> | null;
+};
+
+export type ServiceDetail = {
+  slug: string;
+  title: string;
+  date: string;
+  category: string | null;
+  image: string;
+  imageAlt: string;
+  content: string;
+  gallery: string[];
 };

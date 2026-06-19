@@ -1,11 +1,5 @@
-import {
-  mapIconNameToMui,
-} from "../public.mapper";
-
-import type {
-  PublicBannerData,
-  PublicSectionData,
-} from "../public.types";
+import { mapIconNameToMui } from "../public.mapper";
+import type { PublicBannerData, PublicSectionData } from "../public.types";
 
 import type {
   ServicesBanner,
@@ -14,6 +8,7 @@ import type {
   ServicesSectionGroup,
   ServicesPageData,
   PublicServicesPageResponse,
+  ServiceDetail,
 } from "./services.types";
 
 export function mapBannerToServicesBanner(
@@ -30,9 +25,11 @@ export function mapSectionToServiceInfo(
   data: PublicSectionData
 ): ServiceInfoSection {
   return {
+    slug: data.slug,
     title: data.titulo,
     description: data.descripcion ?? "",
     image: data.image?.previewUrl ?? "",
+    imageAlt: data.image?.alt ?? data.titulo,
     items: data.listas.map((item) => item.texto_item),
   };
 }
@@ -80,5 +77,20 @@ export function mapServicesPageToServicesPageData(
     equiposTecnologia: data.equiposTecnologia
       ? mapSectionToCardGroup(data.equiposTecnologia)
       : null,
+  };
+}
+
+export function mapServiceSectionToServiceDetail(
+  data: PublicSectionData
+): ServiceDetail {
+  return {
+    slug: data.slug,
+    title: data.titulo,
+    date: "",
+    category: "Servicio",
+    image: data.image?.previewUrl ?? "",
+    imageAlt: data.image?.alt ?? data.titulo,
+    content: data.contenido_extenso ?? data.descripcion ?? "",
+    gallery: data.galleryImages?.map((image) => image.previewUrl) ?? [],
   };
 }

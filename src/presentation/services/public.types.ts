@@ -25,30 +25,41 @@ export type PublicSectionData = {
   titulo: string;
   descripcion: string | null;
   contenido_extenso?: string | null;
-  created_at?: string;
-  updated_at?: string;
+
   listas: PublicListItem[];
   elementos: PublicElementItem[];
-  personal: PublicPersonItem[];
-  contactos: PublicContactItem[];
-  image: {
+  imagenes?: PublicImageItem[];
+
+  personal?: PublicPersonItem[];
+  contactos?: PublicContactItem[];
+
+  image?: {
     previewUrl: string;
     imageId: number | null;
     alt: string;
-  } | null;
+  };
 
-  galleryImages: PublicGalleryImageItem[];
+  galleryImages?: {
+    id: number;
+    previewUrl: string;
+    alt: string;
+    order: number | null;
+  }[];
 };
 
 export type PublicListItem = {
-  id: number;
+  id?: number;
+  idlista_seccion?: number;
+  seccion_idseccion?: number;
   texto_item: string;
+  created_at?: string;
+  updated_at?: string;
 };
 
 export type PublicElementItem = {
   idelemento: number;
-  seccion_idseccion: number;
-  clave: string | null;
+  seccion_idseccion?: number;
+  clave?: string | null;
   titulo: string;
   descripcion: string | null;
   icono: string | null;
@@ -57,11 +68,15 @@ export type PublicElementItem = {
   updated_at?: string;
 };
 
-export type PublicGalleryImageItem = {
-  id: number;
-  previewUrl: string;
-  alt: string;
-  order: number;
+export type PublicImageItem = {
+  idimagen_seccion: number;
+  seccion_idseccion?: number;
+  imagen_url: string;
+  imagen_alt: string;
+  tipo_imagen?: string | null;
+  orden?: number | null;
+  created_at?: string;
+  updated_at?: string;
 };
 
 export type PublicPersonItem = {

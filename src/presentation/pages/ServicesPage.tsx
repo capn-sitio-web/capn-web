@@ -44,7 +44,7 @@ const ServicesPage = () => {
           items={data.microbiologico.items}
           buttonText="Solicitar Información"
           buttonColor="primary"
-          buttonOnClick={() => navigate(ROUTES.CONTACT)}
+          buttonOnClick={() => navigate(`/servicios/${data.microbiologico?.slug}`)}
         />
       )}
       {/* Sección: Análisis Fisicoquímico */}
@@ -56,7 +56,7 @@ const ServicesPage = () => {
           items={data.fisicoquimico.items}
           buttonText="Solicitar Información"
           buttonColor="success"
-          buttonOnClick={() => navigate(ROUTES.CONTACT)}
+          buttonOnClick={() => navigate(`/servicios/${data.fisicoquimico?.slug}`)}
           reverse
           backgroundColor="#F9FAFB"
         />
@@ -70,7 +70,7 @@ const ServicesPage = () => {
           items={data.sensorial.items}
           buttonText="Solicitar Información"
           buttonColor="primary"
-          buttonOnClick={() => navigate(ROUTES.CONTACT)}
+          buttonOnClick={() => navigate(`/servicios/${data.sensorial?.slug}`)}
         />
       )}
       {/* Sección: Análisis Especializado */}
@@ -82,7 +82,7 @@ const ServicesPage = () => {
           items={data.especializado.items}
           buttonText="Solicitar Información"
           buttonColor="success"
-          buttonOnClick={() => navigate(ROUTES.CONTACT)}
+          buttonOnClick={() => navigate(`/servicios/${data.especializado?.slug}`)}
           reverse
           backgroundColor="#F9FAFB"
         />
