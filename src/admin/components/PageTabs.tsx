@@ -20,15 +20,37 @@ export default function PageTabs<T extends string>({
     <Tabs
       value={value}
       onChange={(_, nextValue) => onChange(nextValue as T)}
-      sx={{ px: 2, borderBottom: 1, borderColor: "divider" }}
+      variant="scrollable"
+      scrollButtons="auto"
+      allowScrollButtonsMobile
+      sx={{
+        px: { xs: 0.5, sm: 1.5 },
+        borderBottom: 1,
+        borderColor: "divider",
+        maxWidth: "100%",
+
+        "& .MuiTabs-scroller": {
+          overflowX: "auto",
+        },
+
+        "& .MuiTab-root": {
+          textTransform: "none",
+          minWidth: "max-content",
+          whiteSpace: "nowrap",
+        },
+
+        "& .MuiTabs-scrollButtons": {
+          width: 20,
+          minWidth: 20,
+        },
+
+        "& .MuiTabs-scrollButtons.Mui-disabled": {
+          opacity: 0.25,
+        },
+      }}
     >
       {tabs.map((tab) => (
-        <Tab
-          key={tab.value}
-          value={tab.value}
-          label={tab.label}
-          sx={{ textTransform: "none" }}
-        />
+        <Tab key={tab.value} value={tab.value} label={tab.label} />
       ))}
     </Tabs>
   );
