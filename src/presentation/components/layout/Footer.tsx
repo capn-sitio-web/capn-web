@@ -8,7 +8,7 @@ import {
   IconButton,
   Divider,
 } from "@mui/material";
-import { Facebook, LinkedIn, Email, Room, Phone } from "@mui/icons-material";
+import { Facebook, LinkedIn, Email, Room, Phone, Instagram, YouTube, MusicNote } from "@mui/icons-material";
 import { ROUTES } from "../../../app/routes";
 import { Link } from "react-router-dom";
 import capnLogo from "/logo.png";
@@ -52,21 +52,45 @@ const FooterLinks: React.FC<FooterLinksProps> = ({ title, links }) => (
 
 // Subcomponente: redes sociales
 interface SocialLinksProps {
-  socials: { icon: React.ReactNode; href: string }[];
+  socials: { id: number; type: string; url: string; }[];
+}
+
+function getSocialIcon(type: string) {
+  switch (type.toLowerCase()) {
+    case "facebook":
+      return <Facebook />;
+    case "instagram":
+      return <Instagram />;
+    case "linkedin":
+      return <LinkedIn />;
+    case "youtube":
+      return <YouTube />;
+    case "tiktok":
+      return <MusicNote />;
+    default:
+      return null;
+  }
 }
 
 const SocialLinks: React.FC<SocialLinksProps> = ({ socials }) => (
   <>
-    {socials.map((social) => (
-      <IconButton
-        color="inherit"
-        size="small"
-        href={social.href}
-        target="_blank"
-      >
-        {social.icon}
-      </IconButton>
-    ))}
+    {socials.map((social) => {
+      const icon = getSocialIcon(social.type);
+      if (!icon || !social.url) return null;
+      return (
+        <IconButton
+          key={social.id}
+          color="inherit"
+          size="small"
+          href={social.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={social.type}
+        >
+          {icon}
+        </IconButton>
+      );
+    })}
   </>
 );
 
@@ -75,11 +99,17 @@ const Footer: React.FC = () => {
   const { data } = useContactPage();
   const contact = data?.location;
 
-  const socialLinks = [
-    { icon: <Facebook />, href: contact?.facebookUrl ?? "" },
-    { icon: <LinkedIn />, href: "https://www.linkedin.com" },
-    { icon: <Email />, href: contact?.email ? `mailto:${contact.email}` : "" },
-  ];
+  const mainPhone =
+    contact?.phones.find((phone) => phone.isPrimary)?.value ??
+    contact?.phones[0]?.value ??
+    "";
+
+  const mainEmail =
+    contact?.emails.find((email) => email.isPrimary)?.value ??
+    contact?.emails[0]?.value ??
+    "";
+
+  const socialLinks = contact?.socialLinks ?? [];
   const infoLinks = [
     { label: "Nosotros", path: ROUTES.ABOUT },
     { label: "Acreditación", path: ROUTES.ACCREDITATION },
@@ -128,9 +158,11 @@ const Footer: React.FC = () => {
               Centro especializado en alimentos y productos naturales,
               certificado ISO/IEC 17025.
             </Typography>
-            <Box mt={2} textAlign={{ xs: 'center', sm: 'left' }}>
-              <SocialLinks socials={socialLinks} />
-            </Box>
+            {socialLinks.length > 0 && (
+              <Box mt={2} textAlign={{ xs: "center", sm: "left" }}>
+                <SocialLinks socials={socialLinks} />
+              </Box>
+            )}
           </Grid>
 
           {/* Columna 2: Servicios */}
@@ -154,39 +186,38 @@ const Footer: React.FC = () => {
               <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
                 Contacto
               </Typography>
-              <Box display="flex" alignItems="flex-start" mb={1}>
-                <Room fontSize="small" sx={{ mr: 1, mt: 0.5 }} />
-                <Typography variant="body2" sx={{ opacity: 0.8, maxWidth: 200 }}>
-                  {contact?.locationName ?? ""}
-                  <br />
-                  Cochabamba, Bolivia
-                </Typography>
-              </Box>
-              <Box display="flex" alignItems="center" mb={1}>
-                <Phone fontSize="small" sx={{ mr: 1 }} />
-                <Typography variant="body2" sx={{ opacity: 0.8, maxWidth: 200 }}>
-                  {contact?.phone ?? ""}
-                </Typography>
-              </Box>
-              <Box display="flex" alignItems="center">
-                <Email fontSize="small" sx={{ mr: 1 }} />
-                <Typography variant="body2" sx={{ opacity: 0.8, maxWidth: 200 }}>
-                  {contact?.email ?? ""}
-                </Typography>
-              </Box>
+              {contact?.locationName && (
+                <Box display="flex" alignItems="flex-start" mb={1}>
+                  <Room fontSize="small" sx={{ mr: 1, mt: 0.5 }} />
+                  <Typography variant="body2" sx={{ opacity: 0.8, maxWidth: 220 }}>
+                    {contact.locationName}
+                  </Typography>
+                </Box>
+              )}
+              {mainPhone && (
+                <Box display="flex" alignItems="center" mb={1}>
+                  <Phone fontSize="small" sx={{ mr: 1 }} />
+                  <Typography variant="body2" sx={{ opacity: 0.8, maxWidth: 220 }}>
+                    {mainPhone}
+                  </Typography>
+                </Box>
+              )}
+              {mainEmail && (
+                <Box display="flex" alignItems="center">
+                  <Email fontSize="small" sx={{ mr: 1 }} />
+                  <Typography variant="body2" sx={{ opacity: 0.8, maxWidth: 220 }}>
+                    {mainEmail}
+                  </Typography>
+                </Box>
+              )}
             </Box>
-
           </Grid>
         </Grid>
 
         <Divider sx={{ my: 3, borderColor: "rgba(255,255,255,0.1)" }} />
 
         {/* Derechos reservados */}
-        <Typography
-          variant="body2"
-          align="center"
-          sx={{ opacity: 0.7 }}
-        >
+        <Typography variant="body2" align="center" sx={{ opacity: 0.7 }}>
           © {currentYear} CAPN - Centro de Alimentos y Productos Naturales. Todos los derechos reservados.
         </Typography>
       </Container>

@@ -90,14 +90,35 @@ export type PublicPersonItem = {
   updated_at?: string;
 };
 
+/* CONTACTO */
+export type PublicContactPhoneItem = {
+  idtelefono_contacto: number;
+  telefono: string;
+  es_principal: boolean;
+  orden: number;
+};
+
+export type PublicContactEmailItem = {
+  idcorreo_contacto: number;
+  correo: string;
+  es_principal: boolean;
+  orden: number;
+};
+
+export type PublicContactSocialItem = {
+  idred_social_contacto: number;
+  tipo: string;
+  url: string;
+  orden: number;
+};
+
 export type PublicContactItem = {
   idcontacto: number;
   seccion_idseccion: number;
   ubicacion_nombre: string;
   ubicacion_url: string;
-  telefono: string;
-  correo: string;
-  facebook_url: string | null;
-  created_at?: string;
-  updated_at?: string;
+  horario_atencion: string | null;
+  telefonos: PublicContactPhoneItem[];
+  correos: PublicContactEmailItem[];
+  redes_sociales: PublicContactSocialItem[];
 };
