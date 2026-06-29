@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import { Box, useMediaQuery, useTheme } from "@mui/material";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import FloatingWhatsAppButton from "./FloatingWhatsAppButton";
 import { usePageTracking } from "../../services/analytics/usePageTracking";
 
 export default function PublicLayout() {
@@ -24,6 +25,7 @@ export default function PublicLayout() {
         <Outlet />
       </Box>
       <Footer />
+      <FloatingWhatsAppButton />
     </Box>
   );
 }

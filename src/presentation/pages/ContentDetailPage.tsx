@@ -80,24 +80,28 @@ const ContentDetailPage = ({ type }: ContentDetailPageProps) => {
           to={backTo}
           startIcon={<ArrowBackIcon />}
           sx={{
-            position: "absolute",
-            top: 24,
-            left: 24,
+            position: "fixed",
+            top: { xs: 70, md: 90 },
+            left: { xs: 15, md: 24 },
             zIndex: 2,
-            color: "white",
+            color: "primary.main",
             bgcolor: "rgba(255,255,255,0.18)",
             backdropFilter: "blur(6px)",
-            textTransform: "none",
-            fontWeight: 600,
-            borderRadius: 1,
-            px: 2,
-            py: 0.8,
+            borderRadius: { xs: "50%", md: 1 },
+            minWidth: { xs: 44, md: "auto" },
+            width: { xs: 44, md: "auto" },
+            height: { xs: 44, md: "auto" },
+            "& .MuiButton-startIcon": {
+              margin: { xs: 0, md: "0 8px 0 -4px" },
+            },
             "&:hover": {
               bgcolor: "rgba(255,255,255,0.28)",
             },
           }}
         >
-          {backLabel}
+          <Box component="span" sx={{ display: { xs: "none", md: "inline" } }}>
+            {backLabel}
+          </Box>
         </Button>
 
         <Container
