@@ -1,5 +1,4 @@
 import {
-  getFullImageUrl,
   mapIconNameToMui,
 } from "../public.mapper";
 
@@ -36,7 +35,7 @@ export function mapHistoriaToAboutHistory(
   return {
     title: data.titulo,
     description: data.descripcion ?? "",
-    image: getFullImageUrl(data.imagenes?.[0]?.imagen_url),
+    image: data.image?.previewUrl ?? "",
   };
 }
 
@@ -49,7 +48,7 @@ export function mapMisionVisionToAboutCards(
     items: data.elementos.map((item) => ({
       icon: mapIconNameToMui(item.icono),
       title: item.titulo,
-      description: item.descripcion,
+      description: item.descripcion ?? "",
       txtAlign: "left",
     })),
   };
@@ -64,7 +63,7 @@ export function mapValoresToAboutCards(
     items: data.elementos.map((item) => ({
       icon: mapIconNameToMui(item.icono),
       title: item.titulo,
-      description: item.descripcion,
+      description: item.descripcion ?? "",
       txtAlign: "center",
     })),
   };
@@ -76,12 +75,12 @@ export function mapEquipoToAboutTeam(
   return {
     title: data.titulo,
     subtitle: data.descripcion ?? undefined,
-    items: data.personal?.map((person) => ({
-      image: getFullImageUrl(person.foto_url),
+    items: data.personal.map((person) => ({
+      image: person.foto_url ?? "",
       title: person.nombre,
       subtitle: person.cargo,
-      description: person.descripcion,
-    })) ?? [],
+      description: person.descripcion ?? "",
+    })),
   };
 }
 

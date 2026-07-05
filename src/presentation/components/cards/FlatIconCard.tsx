@@ -4,7 +4,7 @@ import { blue } from "@mui/material/colors";
 interface FlatIconCardProps {
   icon: React.ReactNode;
   title: string;
-  description: string;
+  description: React.ReactNode;
 }
 
 const FlatIconCard: React.FC<FlatIconCardProps> = ({ icon, title, description }) => {
@@ -23,7 +23,7 @@ const FlatIconCard: React.FC<FlatIconCardProps> = ({ icon, title, description })
       <Typography variant="h6" color="text.primary" fontWeight="bold" gutterBottom>
         {title}
       </Typography>
-      <Typography variant="body2" color="text.secondary">
+      <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: "pre-line", lineHeight: 1.6 }}>
         {description}
       </Typography>
     </Box>

@@ -42,9 +42,9 @@ const ServicesPage = () => {
           description={data.microbiologico.description}
           image={data.microbiologico.image}
           items={data.microbiologico.items}
-          buttonText="Solicitar Información"
+          buttonText="Más Información"
           buttonColor="primary"
-          buttonOnClick={() => navigate(ROUTES.CONTACT)}
+          buttonOnClick={() => navigate(`/servicios/${data.microbiologico?.slug}`)}
         />
       )}
       {/* Sección: Análisis Fisicoquímico */}
@@ -54,9 +54,9 @@ const ServicesPage = () => {
           description={data.fisicoquimico.description}
           image={data.fisicoquimico.image}
           items={data.fisicoquimico.items}
-          buttonText="Solicitar Información"
+          buttonText="Más Información"
           buttonColor="success"
-          buttonOnClick={() => navigate(ROUTES.CONTACT)}
+          buttonOnClick={() => navigate(`/servicios/${data.fisicoquimico?.slug}`)}
           reverse
           backgroundColor="#F9FAFB"
         />
@@ -68,9 +68,9 @@ const ServicesPage = () => {
           description={data.sensorial.description}
           image={data.sensorial.image}
           items={data.sensorial.items}
-          buttonText="Solicitar Información"
+          buttonText="Más Información"
           buttonColor="primary"
-          buttonOnClick={() => navigate(ROUTES.CONTACT)}
+          buttonOnClick={() => navigate(`/servicios/${data.sensorial?.slug}`)}
         />
       )}
       {/* Sección: Análisis Especializado */}
@@ -80,9 +80,9 @@ const ServicesPage = () => {
           description={data.especializado.description}
           image={data.especializado.image}
           items={data.especializado.items}
-          buttonText="Solicitar Información"
+          buttonText="Más Información"
           buttonColor="success"
-          buttonOnClick={() => navigate(ROUTES.CONTACT)}
+          buttonOnClick={() => navigate(`/servicios/${data.especializado?.slug}`)}
           reverse
           backgroundColor="#F9FAFB"
         />

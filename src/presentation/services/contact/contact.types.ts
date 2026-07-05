@@ -14,14 +14,36 @@ export type ContactBanner = {
   image: string;
 };
 
+export type ContactPhone = {
+  id: number;
+  value: string;
+  isPrimary: boolean;
+  order: number;
+};
+
+export type ContactEmail = {
+  id: number;
+  value: string;
+  isPrimary: boolean;
+  order: number;
+};
+
+export type ContactSocialLink = {
+  id: number;
+  type: string;
+  url: string;
+  order: number;
+};
+
 export type ContactLocation = {
   title: string;
   subtitle: string;
   mapSrc: string;
   locationName: string;
-  phone: string;
-  email: string;
-  facebookUrl: string;
+  businessHours: string;
+  phones: ContactPhone[];
+  emails: ContactEmail[];
+  socialLinks: ContactSocialLink[];
 };
 
 export type ContactPageData = {

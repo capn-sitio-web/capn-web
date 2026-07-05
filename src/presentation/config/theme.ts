@@ -90,6 +90,17 @@ export const theme = createTheme({
       },
     },
 
+    // quitar el borde negro de los botones, pasa con algunos navegadores
+    MuiButtonBase: {
+      styleOverrides: {
+        root: {
+          "&:focus": {
+            outline: "none",
+          },
+        },
+      },
+    },
+
     MuiContainer: {
       defaultProps: {
         maxWidth: "lg",

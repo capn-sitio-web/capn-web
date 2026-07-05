@@ -1,73 +1,24 @@
 import { axiosClient } from "../../../config/axiosClient";
 import type { ServiceMicrobiological } from "../domain/services.types";
-
-type ServiceMicrobiologicalApiPayload = {
-  seccionId: number | null;
-  sectionTitle: string;
-  sectionDescription: string;
-  items: {
-    id: string;
-    text: string;
-  }[];
-  image: {
-    previewUrl: string;
-    imageId: number | null;
-    alt: string;
-  };
-};
-
-type ServiceMicrobiologicalApiResponse = {
-  message: string;
-  data: ServiceMicrobiologicalApiPayload;
-};
-
-function mapServiceMicrobiologicalFromApi(
-  data: ServiceMicrobiologicalApiPayload
-): ServiceMicrobiological {
-  return {
-    seccionId: data.seccionId,
-    sectionTitle: data.sectionTitle,
-    sectionDescription: data.sectionDescription ?? "",
-    items: data.items.map((item) => ({
-      id: item.id,
-      text: item.text,
-    })),
-    image: {
-      file: null,
-      previewUrl: data.image?.previewUrl ?? "",
-      imageId: data.image?.imageId ?? null,
-      alt: data.image?.alt ?? "",
-    },
-  };
-}
+import {
+  buildServiceAnalysisFormData,
+  mapServiceAnalysisFromApi,
+  type ServiceAnalysisApiResponse,
+} from "./servicesAnalysis.helpers";
 
 export const servicesMicrobiologicalService = {
   async obtenerMicrobiologico(): Promise<ServiceMicrobiological> {
-    const response = await axiosClient.get<ServiceMicrobiologicalApiResponse>(
+    const response = await axiosClient.get<ServiceAnalysisApiResponse>(
       "/admin/services/microbiological"
     );
-    return mapServiceMicrobiologicalFromApi(response.data.data);
+    return mapServiceAnalysisFromApi<ServiceMicrobiological>(response.data.data);
   },
 
   async actualizarMicrobiologico(
     data: ServiceMicrobiological
   ): Promise<ServiceMicrobiological> {
-    const formData = new FormData();
-
-    formData.append("sectionTitle", data.sectionTitle);
-    formData.append("sectionDescription", data.sectionDescription ?? "");
-    formData.append("image_alt", data.image.alt ?? "");
-
-    data.items.forEach((item, index) => {
-      formData.append(`items[${index}][id]`, item.id);
-      formData.append(`items[${index}][text]`, item.text);
-    });
-
-    if (data.image.file) {
-      formData.append("image", data.image.file);
-    }
-
-    const response = await axiosClient.post<ServiceMicrobiologicalApiResponse>(
+    const formData = buildServiceAnalysisFormData(data);
+    const response = await axiosClient.post<ServiceAnalysisApiResponse>(
       "/admin/services/microbiological",
       formData,
       {
@@ -76,7 +27,6 @@ export const servicesMicrobiologicalService = {
         },
       }
     );
-
-    return mapServiceMicrobiologicalFromApi(response.data.data);
+    return mapServiceAnalysisFromApi<ServiceMicrobiological>(response.data.data);
   },
 };

@@ -5,11 +5,41 @@ export interface ContactBanner extends SectionBannerData {
   seccionId: number | null;
 }
 
+// -------- Informacion de Contacto --------
+export type ContactPhone = {
+  id: number | null;
+  value: string;
+  isPrimary: boolean;
+  order: number;
+};
+
+export type ContactEmail = {
+  id: number | null;
+  value: string;
+  isPrimary: boolean;
+  order: number;
+};
+
+export type ContactSocialType =
+  | "facebook"
+  | "instagram"
+  | "youtube"
+  | "tiktok"
+  | "linkedin";
+
+export type ContactSocialLink = {
+  id: number | null;
+  type: ContactSocialType;
+  url: string;
+  order: number;
+};
+
 export interface ContactInfo {
   seccionId: number | null;
   address: string;
-  phone: string;
-  email: string;
-  facebookUrl: string;
+  businessHours: string;
   mapEmbedUrl: string;
+  phones: ContactPhone[];
+  emails: ContactEmail[];
+  socialLinks: ContactSocialLink[];
 }

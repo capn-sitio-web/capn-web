@@ -46,10 +46,11 @@ export default function ContactManagementPage() {
   const [savedContactInfo, setSavedContactInfo] = useState<ContactInfo>({
     seccionId: null,
     address: "",
-    phone: "",
-    email: "",
-    facebookUrl: "",
+    businessHours: "",
     mapEmbedUrl: "",
+    phones: [{ id: null, value: "", isPrimary: true, order: 1 }],
+    emails: [{ id: null, value: "", isPrimary: true, order: 1 }],
+    socialLinks: [],
   });
 
   // Estados de carga por sección

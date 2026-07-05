@@ -29,7 +29,7 @@ import {
   VerifiedUser,
 } from "@mui/icons-material";
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL?.replace("/api", "");
+const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL || "").replace("/api", "");
 
 export function getFullImageUrl(imageUrl?: string | null): string {
   if (!imageUrl) return "";
@@ -38,7 +38,7 @@ export function getFullImageUrl(imageUrl?: string | null): string {
     return imageUrl;
   }
 
-  return `${apiBaseUrl}/${imageUrl}`;
+  return apiBaseUrl ? `${apiBaseUrl}/${imageUrl}` : imageUrl;
 }
 
 export function mapIconNameToMui(iconName: string | null) {

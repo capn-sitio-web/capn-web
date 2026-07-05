@@ -7,7 +7,7 @@ import App from "./App.tsx";
 import { queryClient } from "./presentation/config/queryClient";
 
 
-import { ThemeProvider, CssBaseline } from "@mui/material";
+import { ThemeProvider } from "@mui/material";
 import { theme } from "./presentation/config/theme";
 
 createRoot(document.getElementById("root")!).render(

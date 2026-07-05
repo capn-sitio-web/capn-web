@@ -21,10 +21,7 @@ function extractMapSrc(value: string): string {
   const trimmed = value.trim();
   if (!trimmed) return "";
   const srcMatch = trimmed.match(/src=["']([^"']+)["']/i);
-  if (srcMatch?.[1]) {
-    return srcMatch[1];
-  }
-  return trimmed;
+  return srcMatch?.[1] ?? trimmed;
 }
 
 export function mapInformacionToContactLocation(
@@ -36,9 +33,34 @@ export function mapInformacionToContactLocation(
     subtitle: data.descripcion ?? "",
     mapSrc: extractMapSrc(contact?.ubicacion_url ?? ""),
     locationName: contact?.ubicacion_nombre ?? "",
-    phone: contact?.telefono ?? "",
-    email: contact?.correo ?? "",
-    facebookUrl: contact?.facebook_url ?? "",
+    businessHours: contact?.horario_atencion ?? "",
+    phones:
+      contact?.telefonos
+        ?.map((phone) => ({
+          id: phone.idtelefono_contacto,
+          value: phone.telefono,
+          isPrimary: phone.es_principal,
+          order: phone.orden,
+        }))
+        .sort((a, b) => a.order - b.order) ?? [],
+    emails:
+      contact?.correos
+        ?.map((email) => ({
+          id: email.idcorreo_contacto,
+          value: email.correo,
+          isPrimary: email.es_principal,
+          order: email.orden,
+        }))
+        .sort((a, b) => a.order - b.order) ?? [],
+    socialLinks:
+      contact?.redes_sociales
+        ?.map((social) => ({
+          id: social.idred_social_contacto,
+          type: social.tipo,
+          url: social.url,
+          order: social.orden,
+        }))
+        .sort((a, b) => a.order - b.order) ?? [],
   };
 }
 

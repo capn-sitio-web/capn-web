@@ -3,6 +3,7 @@ import CardPageSkeleton from "../components/skeletons/CardPageSkeleton";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../app/routes";
 import hero from "../../assets/hero-lab.jpeg";
+import reloaaLogo from "../../assets/clients-logo/reloaa.jpg";
 import cofadenaLogo from "../../assets/clients-logo/cofadena.png";
 import inlasaLogo from "../../assets/clients-logo/inlasa.png";
 import pilLogo from "../../assets/clients-logo/pil.svg";
@@ -28,6 +29,7 @@ const statsData = [
 ];
 
 const clientsData = [
+  { name: "RELOAA", logo: reloaaLogo },
   { name: "COFADENA", logo: cofadenaLogo },
   { name: "INLASA", logo: inlasaLogo },
   { name: "PIL", logo: pilLogo },
@@ -97,7 +99,7 @@ const HomePage = () => {
       />
       {/* Sección: Nuestros Clientes */}
       <ClientsSection
-        title="Nuestros Clientes"
+        title="Nuestros Socios"
         subtitle="Empresas e instituciones que confían en nosotros"
         clients={clientsData}
       />

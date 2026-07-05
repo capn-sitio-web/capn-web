@@ -1,17 +1,17 @@
-import {
-  getFullImageUrl,
-  mapIconNameToMui,
-} from "../public.mapper";
+import { mapIconNameToMui } from "../public.mapper";
 
 import type {
   HomeBanner,
   HomeServices,
   HomeQuality,
   HomePageData,
-  PublicBannerData,
-  PublicSectionData,
   PublicHomePageResponse,
 } from "./home.types";
+
+import type {
+  PublicBannerData,
+  PublicSectionData,
+} from "../public.types";
 
 export function mapBannerToHomeBanner(data: PublicBannerData): HomeBanner {
   return {
@@ -30,7 +30,7 @@ export function mapServiciosToHomeServices(
     items: data.elementos.map((item) => ({
       icon: mapIconNameToMui(item.icono),
       title: item.titulo,
-      description: item.descripcion,
+      description: item.descripcion ?? "",
     })),
   };
 }
@@ -41,7 +41,7 @@ export function mapCalidadToHomeQuality(
   return {
     title: data.titulo,
     description: data.descripcion ?? "",
-    image: getFullImageUrl(data.imagenes?.[0]?.imagen_url),
+    image: data.image?.previewUrl ?? "",
     items: data.listas.map((item) => item.texto_item),
   };
 }
@@ -51,11 +51,9 @@ export function mapHomePageToHomePageData(
 ): HomePageData {
   return {
     banner: data.banner ? mapBannerToHomeBanner(data.banner) : null,
-
     services: data.nuestrosServicios
       ? mapServiciosToHomeServices(data.nuestrosServicios)
       : null,
-
     quality: data.calidadCertificada
       ? mapCalidadToHomeQuality(data.calidadCertificada)
       : null,

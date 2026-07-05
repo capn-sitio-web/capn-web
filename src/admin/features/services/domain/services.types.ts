@@ -13,23 +13,39 @@ export interface ServicesBanner extends SectionBannerData {
   seccionId: number | null;
 }
 
+// -------- Detalle extendido de análisis --------
+export type ServiceDetailImage = {
+  id: string;
+  imageId: number | null;
+  file: File | null;
+  previewUrl: string;
+  alt: string;
+  order: number;
+};
+
+export type ServiceAnalysisDetail = {
+  extendedContent: string;
+  galleryImages: ServiceDetailImage[];
+  galleryImagesToDelete?: number[];
+};
+
 // -------- Análisis Microbiológicos --------
-export interface ServiceMicrobiological extends SectionListImageData {
+export interface ServiceMicrobiological extends SectionListImageData, ServiceAnalysisDetail {
   seccionId: number | null;
 }
 
 // -------- Análisis Fisicoquímicos --------
-export interface ServicePhysicochemical extends SectionListImageData {
+export interface ServicePhysicochemical extends SectionListImageData, ServiceAnalysisDetail {
   seccionId: number | null;
 }
 
 // -------- Análisis Sensoriales --------
-export interface ServiceSensory extends SectionListImageData {
+export interface ServiceSensory extends SectionListImageData, ServiceAnalysisDetail {
   seccionId: number | null;
 }
 
 // -------- Análisis Especializados --------
-export interface ServiceSpecialized extends SectionListImageData {
+export interface ServiceSpecialized extends SectionListImageData, ServiceAnalysisDetail {
   seccionId: number | null;
 }
 
