@@ -36,7 +36,7 @@ function mapHomeServicesFromApi(data: HomeServicesApiPayload): HomeServices {
 
 export const homeServicesService = {
   async obtenerServicios(): Promise<HomeServices> {
-    const response = await axiosClient.get<HomeServicesApiResponse>("/admin/home/services");
+    const response = await axiosClient.get<HomeServicesApiResponse>("/home/services");
     return mapHomeServicesFromApi(response.data.data);
   },
 
@@ -54,7 +54,7 @@ export const homeServicesService = {
     };
 
     const response = await axiosClient.post<HomeServicesApiResponse>(
-      "/admin/home/services",
+      "/home/services",
       payload
     );
 

@@ -4,7 +4,7 @@ import type { DashboardRange, DashboardSummaryResponse } from "./dashboard.types
 export const dashboardService = {
   async obtenerResumen(range: DashboardRange): Promise<DashboardSummaryResponse> {
     const response = await axiosClient.get<DashboardSummaryResponse>(
-      `/admin/dashboard/summary?range=${range}`
+      `/dashboard/summary?range=${range}`
     );
 
     return response.data;
@@ -12,7 +12,7 @@ export const dashboardService = {
 
   async eliminarVisitasAntiguas(): Promise<{ message: string; deleted: number }> {
     const response = await axiosClient.delete<{ message: string; deleted: number }>(
-      "/admin/dashboard/site-visits/old"
+      "/dashboard/site-visits/old"
     );
 
     return response.data;

@@ -3,6 +3,6 @@ import type { PageViewPayload } from "./analytics.types";
 
 export const analyticsService = {
   async registrarVisita(payload: PageViewPayload): Promise<void> {
-    await publicAxiosClient.post("/public/analytics/page-view", payload);
+    await publicAxiosClient.post("/analytics/page-view", payload);
   },
 };

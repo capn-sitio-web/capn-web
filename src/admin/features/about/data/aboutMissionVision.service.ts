@@ -73,7 +73,7 @@ function mapMissionVisionToPayload(data: MissionVision): MissionVisionPayload {
 export const aboutMissionVisionService = {
   obtenerMisionVision: async (): Promise<MissionVision> => {
     const response = await axiosClient.get<MissionVisionResponse>(
-      "/admin/about/mission-vision"
+      "/about/mission-vision"
     );
 
     return mapResponseToMissionVision(response.data.data);
@@ -85,7 +85,7 @@ export const aboutMissionVisionService = {
     const payload = mapMissionVisionToPayload(data);
 
     const response = await axiosClient.post<MissionVisionResponse>(
-      "/admin/about/mission-vision",
+      "/about/mission-vision",
       payload
     );
 

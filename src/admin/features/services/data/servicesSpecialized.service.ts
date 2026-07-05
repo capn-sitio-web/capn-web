@@ -9,7 +9,7 @@ import {
 export const servicesSpecializedService = {
   async obtenerEspecializado(): Promise<ServiceSpecialized> {
     const response = await axiosClient.get<ServiceAnalysisApiResponse>(
-      "/admin/services/specialized"
+      "/services/specialized"
     );
     return mapServiceAnalysisFromApi<ServiceSpecialized>(response.data.data);
   },
@@ -19,7 +19,7 @@ export const servicesSpecializedService = {
   ): Promise<ServiceSpecialized> {
     const formData = buildServiceAnalysisFormData(data);
     const response = await axiosClient.post<ServiceAnalysisApiResponse>(
-      "/admin/services/specialized",
+      "/services/specialized",
       formData,
       {
         headers: {

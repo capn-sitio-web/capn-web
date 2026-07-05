@@ -19,7 +19,7 @@ type SaveHistoryResponse = GetHistoryResponse;
 
 export const aboutHistoryService = {
   async obtenerHistoria(): Promise<History> {
-    const response = await axiosClient.get<GetHistoryResponse>("/admin/about/history");
+    const response = await axiosClient.get<GetHistoryResponse>("/about/history");
     const data = response.data.data;
 
     return {
@@ -47,7 +47,7 @@ export const aboutHistoryService = {
     }
 
     const response = await axiosClient.post<SaveHistoryResponse>(
-      "/admin/about/history",
+      "/about/history",
       formData,
       {
         headers: {

@@ -13,7 +13,7 @@ type GetNewsPageParams = {
 export const NewsService = {
   getNewsPage: async ({ page = 1, category = null }: GetNewsPageParams) => {
     const response = await publicAxiosClient.get<PublicNewsPageResponse>(
-      "/public/noticias",
+      "/noticias",
       {
         params: {
           page,
@@ -27,7 +27,7 @@ export const NewsService = {
 
   getNewsDetail: async (idnoticia: number) => {
     const response = await publicAxiosClient.get<PublicNewsDetailResponse>(
-      `/public/noticias/${idnoticia}`
+      `/noticias/${idnoticia}`
     );
 
     return response.data.data;

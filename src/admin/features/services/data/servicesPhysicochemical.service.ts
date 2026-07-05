@@ -9,7 +9,7 @@ import {
 export const servicesPhysicochemicalService = {
   async obtenerFisicoquimico(): Promise<ServicePhysicochemical> {
     const response = await axiosClient.get<ServiceAnalysisApiResponse>(
-      "/admin/services/physicochemical"
+      "/services/physicochemical"
     );
     return mapServiceAnalysisFromApi<ServicePhysicochemical>(response.data.data);
   },
@@ -19,7 +19,7 @@ export const servicesPhysicochemicalService = {
   ): Promise<ServicePhysicochemical> {
     const formData = buildServiceAnalysisFormData(data);
     const response = await axiosClient.post<ServiceAnalysisApiResponse>(
-      "/admin/services/physicochemical",
+      "/services/physicochemical",
       formData,
       {
         headers: {

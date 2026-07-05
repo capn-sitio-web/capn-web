@@ -39,7 +39,7 @@ function mapQualitySystemFromApi(
 export const accreditationQualitySystemService = {
   async obtenerSistemaCalidad(): Promise<AccreditationQualitySystem> {
     const response = await axiosClient.get<AccreditationQualitySystemApiResponse>(
-      "/admin/accreditation/quality-system"
+      "/accreditation/quality-system"
     );
 
     return mapQualitySystemFromApi(response.data.data);
@@ -61,7 +61,7 @@ export const accreditationQualitySystemService = {
     };
 
     const response = await axiosClient.post<AccreditationQualitySystemApiResponse>(
-      "/admin/accreditation/quality-system",
+      "/accreditation/quality-system",
       payload
     );
 
