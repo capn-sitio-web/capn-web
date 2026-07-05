@@ -4,7 +4,7 @@ import type { PublicAccreditationPageResponse } from "./accreditation.types";
 export const AccreditationService = {
   getAccreditationPage: async () => {
     const response = await publicAxiosClient.get<PublicAccreditationPageResponse>(
-      "/public/acreditacion"
+      "/acreditacion"
     );
 
     return response.data.data;

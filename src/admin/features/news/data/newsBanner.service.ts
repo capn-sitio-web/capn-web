@@ -1,3 +1,3 @@
 import { createBannerService } from "../../../components/sectionBanner/bannerServiceFactory";
 
-export const newsBannerService = createBannerService("/admin/banners/noticias");
+export const newsBannerService = createBannerService("/banners/noticias");

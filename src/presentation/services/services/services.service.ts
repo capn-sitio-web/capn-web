@@ -4,14 +4,14 @@ import type { PublicServicesPageResponse, PublicServiceDetailResponse } from "./
 export const ServicesService = {
   getServicesPage: async () => {
     const response = await publicAxiosClient.get<PublicServicesPageResponse>(
-      "/public/servicios"
+      "/servicios"
     );
     return response.data.data;
   },
 
   getServiceDetail: async (slug: string) => {
     const response = await publicAxiosClient.get<PublicServiceDetailResponse>(
-      `/public/servicios/detalle/${slug}`
+      `/servicios/detalle/${slug}`
     );
     return response.data.data;
   },

@@ -36,7 +36,7 @@ function mapValuesFromApi(data: ValuesApiPayload): Values {
 
 export const aboutValuesService = {
   async obtenerValores(): Promise<Values> {
-    const response = await axiosClient.get<ValuesApiResponse>("/admin/about/values");
+    const response = await axiosClient.get<ValuesApiResponse>("/about/values");
     return mapValuesFromApi(response.data.data);
   },
 
@@ -54,7 +54,7 @@ export const aboutValuesService = {
     };
 
     const response = await axiosClient.post<ValuesApiResponse>(
-      "/admin/about/values",
+      "/about/values",
       payload
     );
 

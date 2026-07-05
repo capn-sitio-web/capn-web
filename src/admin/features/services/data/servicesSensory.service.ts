@@ -9,7 +9,7 @@ import {
 export const servicesSensoryService = {
   async obtenerSensorial(): Promise<ServiceSensory> {
     const response = await axiosClient.get<ServiceAnalysisApiResponse>(
-      "/admin/services/sensory"
+      "/services/sensory"
     );
     return mapServiceAnalysisFromApi<ServiceSensory>(response.data.data);
   },
@@ -17,7 +17,7 @@ export const servicesSensoryService = {
   async actualizarSensorial(data: ServiceSensory): Promise<ServiceSensory> {
     const formData = buildServiceAnalysisFormData(data);
     const response = await axiosClient.post<ServiceAnalysisApiResponse>(
-      "/admin/services/sensory",
+      "/services/sensory",
       formData,
       {
         headers: {

@@ -2,7 +2,7 @@ import { axiosClient } from "../../../config/axiosClient";
 import { authStorage } from "./auth.storage";
 import type { LoginRequest, LoginResponse } from "../domain/auth.types";
 
-const AUTH_BASE = "/admin/auth";
+const AUTH_BASE = "/auth";
 
 export const authService = {
   async iniciarSesion(payload: LoginRequest) {

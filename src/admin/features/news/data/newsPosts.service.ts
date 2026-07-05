@@ -139,7 +139,7 @@ async function uploadGalleryImages(
       formData.append("orden", String(image.order));
 
       await axiosClient.post(
-        `/admin/news/posts/${noticiaId}/images`,
+        `/news/posts/${noticiaId}/images`,
         formData,
         {
           headers: {
@@ -157,7 +157,7 @@ async function deleteGalleryImages(
 ): Promise<void> {
   await Promise.all(
     imageIds.map((imageId) =>
-      axiosClient.delete(`/admin/news/posts/${noticiaId}/images/${imageId}`)
+      axiosClient.delete(`/news/posts/${noticiaId}/images/${imageId}`)
     )
   );
 }
@@ -165,7 +165,7 @@ async function deleteGalleryImages(
 export const newsPostsService = {
   async listarCategorias(): Promise<NewsCategory[]> {
     const response = await axiosClient.get<ApiListResponse<CategoriaApi>>(
-      "/admin/news/categories"
+      "/news/categories"
     );
 
     return response.data.data.map(mapCategoria);
@@ -173,7 +173,7 @@ export const newsPostsService = {
 
   async listarNoticias(): Promise<NewsPost[]> {
     const response = await axiosClient.get<ApiListResponse<NoticiaApi>>(
-      "/admin/news/posts"
+      "/news/posts"
     );
 
     return response.data.data.map(mapNoticia);
@@ -181,7 +181,7 @@ export const newsPostsService = {
 
   async obtenerNoticia(idnoticia: number): Promise<NewsPost> {
     const response = await axiosClient.get<ApiItemResponse<NoticiaApi>>(
-      `/admin/news/posts/${idnoticia}`
+      `/news/posts/${idnoticia}`
     );
 
     return mapNoticia(response.data.data);
@@ -191,7 +191,7 @@ export const newsPostsService = {
     const formData = buildNewsFormData(form);
 
     const createResponse = await axiosClient.post<ApiItemResponse<NoticiaApi>>(
-      "/admin/news/posts",
+      "/news/posts",
       formData,
       {
         headers: {
@@ -231,7 +231,7 @@ export const newsPostsService = {
     const formData = buildNewsFormData(form);
 
     await axiosClient.post(
-      `/admin/news/posts/${form.noticiaId}`,
+      `/news/posts/${form.noticiaId}`,
       formData,
       {
         headers: {
@@ -256,6 +256,6 @@ export const newsPostsService = {
   },
 
   async eliminarNoticia(id: string | number): Promise<void> {
-    await axiosClient.delete(`/admin/news/posts/${id}`);
+    await axiosClient.delete(`/news/posts/${id}`);
   },
 };

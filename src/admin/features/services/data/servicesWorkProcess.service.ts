@@ -39,7 +39,7 @@ function mapServiceWorkProcessFromApi(
 export const servicesWorkProcessService = {
   async obtenerProcesoTrabajo(): Promise<ServiceWorkProcess> {
     const response = await axiosClient.get<ServiceWorkProcessApiResponse>(
-      "/admin/services/work-process"
+      "/services/work-process"
     );
     return mapServiceWorkProcessFromApi(response.data.data);
   },
@@ -60,7 +60,7 @@ export const servicesWorkProcessService = {
     };
 
     const response = await axiosClient.post<ServiceWorkProcessApiResponse>(
-      "/admin/services/work-process",
+      "/services/work-process",
       payload
     );
 

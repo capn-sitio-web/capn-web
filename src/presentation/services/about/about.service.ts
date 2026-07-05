@@ -4,7 +4,7 @@ import type { PublicAboutPageResponse } from "./about.types";
 export const AboutService = {
   getAboutPage: async () => {
     const response = await publicAxiosClient.get<PublicAboutPageResponse>(
-      "/public/nosotros"
+      "/nosotros"
     );
 
     return response.data.data;

@@ -41,7 +41,7 @@ function mapHomeQualityFromApi(data: HomeQualityApiPayload): HomeQuality {
 
 export const homeQualityService = {
   async obtenerCalidad(): Promise<HomeQuality> {
-    const response = await axiosClient.get<HomeQualityApiResponse>("/admin/home/quality");
+    const response = await axiosClient.get<HomeQualityApiResponse>("/home/quality");
     return mapHomeQualityFromApi(response.data.data);
   },
 
@@ -62,7 +62,7 @@ export const homeQualityService = {
     }
 
     const response = await axiosClient.post<HomeQualityApiResponse>(
-      "/admin/home/quality",
+      "/home/quality",
       formData,
       {
         headers: {

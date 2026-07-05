@@ -39,7 +39,7 @@ function mapServiceEquipmentTechnologyFromApi(
 export const servicesEquipmentTechnologyService = {
   async obtenerEquiposTecnologia(): Promise<ServiceEquipmentTechnology> {
     const response = await axiosClient.get<ServiceEquipmentTechnologyApiResponse>(
-      "/admin/services/equipment-technology"
+      "/services/equipment-technology"
     );
 
     return mapServiceEquipmentTechnologyFromApi(response.data.data);
@@ -61,7 +61,7 @@ export const servicesEquipmentTechnologyService = {
     };
 
     const response = await axiosClient.post<ServiceEquipmentTechnologyApiResponse>(
-      "/admin/services/equipment-technology",
+      "/services/equipment-technology",
       payload
     );
 

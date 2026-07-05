@@ -9,7 +9,7 @@ import {
 export const servicesMicrobiologicalService = {
   async obtenerMicrobiologico(): Promise<ServiceMicrobiological> {
     const response = await axiosClient.get<ServiceAnalysisApiResponse>(
-      "/admin/services/microbiological"
+      "/services/microbiological"
     );
     return mapServiceAnalysisFromApi<ServiceMicrobiological>(response.data.data);
   },
@@ -19,7 +19,7 @@ export const servicesMicrobiologicalService = {
   ): Promise<ServiceMicrobiological> {
     const formData = buildServiceAnalysisFormData(data);
     const response = await axiosClient.post<ServiceAnalysisApiResponse>(
-      "/admin/services/microbiological",
+      "/services/microbiological",
       formData,
       {
         headers: {

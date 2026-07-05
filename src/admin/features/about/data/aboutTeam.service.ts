@@ -46,7 +46,7 @@ function mapTeamFromApi(data: TeamApiPayload): Team {
 
 export const aboutTeamService = {
   async obtenerEquipo(): Promise<Team> {
-    const response = await axiosClient.get<TeamApiResponse>("/admin/about/team");
+    const response = await axiosClient.get<TeamApiResponse>("/about/team");
     return mapTeamFromApi(response.data.data);
   },
 
@@ -70,7 +70,7 @@ export const aboutTeamService = {
     });
 
     const response = await axiosClient.post<TeamApiResponse>(
-      "/admin/about/team",
+      "/about/team",
       formData,
       {
         headers: {
