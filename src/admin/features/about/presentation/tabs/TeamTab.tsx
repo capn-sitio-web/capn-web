@@ -44,7 +44,7 @@ type TeamFormErrors = {
 
 function createEmptyMember(): TeamMember {
   return {
-    id: crypto.randomUUID(),
+    id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
     personalId: null,
     image: {
       file: null,

@@ -96,7 +96,7 @@ export default function AnalysisDetailDialog({
     const currentLength = data.galleryImages.length;
 
     const newImages: ServiceDetailImage[] = files.map((file, index) => ({
-      id: crypto.randomUUID(),
+      id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
       imageId: null,
       file,
       previewUrl: "",

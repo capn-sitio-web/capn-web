@@ -23,7 +23,7 @@ type Props = {
 
 function createEmptyItem(): SectionListItem {
   return {
-    id: crypto.randomUUID(),
+    id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
     text: "",
   };
 }

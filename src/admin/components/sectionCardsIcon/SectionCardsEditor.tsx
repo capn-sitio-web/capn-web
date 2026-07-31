@@ -39,7 +39,7 @@ interface SectionCardsEditorProps {
 
 function createEmptyCard(): SectionCardItem {
   return {
-    id: crypto.randomUUID(),
+    id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
     icon: "shield",
     title: "",
     description: "",

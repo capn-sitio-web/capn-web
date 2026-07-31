@@ -135,7 +135,7 @@ const NewsPostFormDialog = ({
     const currentLength = form.galleryImages.length;
 
     const nextImages: NewsGalleryImage[] = files.map((file, index) => ({
-      id: crypto.randomUUID(),
+      id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
       imageId: null,
       file,
       previewUrl: "",

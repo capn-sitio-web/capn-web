@@ -32,7 +32,7 @@ export function mapSistemaCalidadToCards(
     items: data.elementos.map((item) => ({
       icon: mapIconNameToMui(item.icono),
       title: item.titulo,
-      description: item.descripcion,
+      description: item.descripcion ?? "",
     })),
   };
 }

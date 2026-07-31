@@ -18,7 +18,7 @@ function getOrCreateStorageValue(key: string): string {
     return existingValue;
   }
 
-  const newValue = crypto.randomUUID();
+  const newValue = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
   localStorage.setItem(key, newValue);
 
   return newValue;

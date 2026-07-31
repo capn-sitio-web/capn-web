@@ -75,7 +75,7 @@ export function mapEquipoToAboutTeam(
   return {
     title: data.titulo,
     subtitle: data.descripcion ?? undefined,
-    items: data.personal.map((person) => ({
+    items: (data.personal ?? []).map((person) => ({
       image: person.foto_url ?? "",
       title: person.nombre,
       subtitle: person.cargo,

@@ -46,7 +46,7 @@ function createEmptyPost(categories: NewsCategory[]): NewsPostForm {
   const firstCategory = categories[0];
 
   return {
-    id: crypto.randomUUID(),
+    id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
     noticiaId: null,
     categoryId: firstCategory?.id ?? null,
     categoryName: firstCategory?.name ?? "",
