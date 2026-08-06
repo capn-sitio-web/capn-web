@@ -11,15 +11,30 @@ type ContentDetailPageProps = {
   type: "news" | "service";
 };
 
-function hasHtmlTags(value: string): boolean {
-  return /<\/?[a-z][\s\S]*>/i.test(value);
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
-function normalizeContent(content: string): string {
-  if (hasHtmlTags(content)) {
-    return content;
+function sanitizeHtml(html: string): string {
+  return html
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+    .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, "")
+    .replace(/\s+on\w+\s*=\s*(['"])(.*?)\1/gi, "")
+    .replace(/\s+style\s*=\s*(['"])(.*?)\1/gi, "")
+    .replace(/\s+class\s*=\s*(['"])(.*?)\1/gi, "");
+}
+
+function normalizeContent(content: string, type: "news" | "service"): string {
+  if (type === "news") {
+    return escapeHtml(content).replace(/\n/g, "<br />");
   }
-  return content.replace(/\n/g, "<br />");
+  const sanitized = sanitizeHtml(content);
+  return sanitized.replace(/\n/g, "<br />");
 }
 
 const ContentDetailPage = ({ type }: ContentDetailPageProps) => {
@@ -190,7 +205,7 @@ const ContentDetailPage = ({ type }: ContentDetailPageProps) => {
               },
             }}
             dangerouslySetInnerHTML={{
-              __html: normalizeContent(data.content),
+              __html: normalizeContent(data.content, type),
             }}
           />
         </Box>

@@ -233,6 +233,24 @@ export default function AnalysisDetailDialog({
                     contentEditable
                     suppressContentEditableWarning
                     onInput={syncEditorContent}
+                    onPaste={(event) => {
+                      event.preventDefault();
+                      const text = event.clipboardData.getData("text/plain");
+                      const html = event.clipboardData.getData("text/html");
+                      if (html) {
+                        // Limpiamos estilos, clases, scripts e iframes del HTML copiado
+                        const cleanHtml = html
+                          .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+                          .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, "")
+                          .replace(/\s+on\w+\s*=\s*(['"])(.*?)\1/gi, "")
+                          .replace(/\s+style\s*=\s*(['"])(.*?)\1/gi, "")
+                          .replace(/\s+class\s*=\s*(['"])(.*?)\1/gi, "");
+                        document.execCommand("insertHTML", false, cleanHtml);
+                      } else {
+                        document.execCommand("insertText", false, text);
+                      }
+                      syncEditorContent();
+                    }}
                     sx={{
                       minHeight: 430,
                       maxHeight: 430,
@@ -278,10 +296,6 @@ export default function AnalysisDetailDialog({
                     }}
                   />
                 </Box>
-
-                <Typography variant="caption" color="text.secondary">
-                  Usa los botones para aplicar negrilla o listas.
-                </Typography>
               </Stack>
             </Grid>
 
