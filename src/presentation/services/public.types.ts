@@ -116,7 +116,8 @@ export type PublicContactItem = {
   idcontacto: number;
   seccion_idseccion: number;
   ubicacion_nombre: string;
-  ubicacion_url: string;
+  latitud: number;
+  longitud: number;
   horario_atencion: string | null;
   telefonos: PublicContactPhoneItem[];
   correos: PublicContactEmailItem[];

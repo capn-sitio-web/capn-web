@@ -38,7 +38,8 @@ export interface ContactInfo {
   seccionId: number | null;
   address: string;
   businessHours: string;
-  mapEmbedUrl: string;
+  latitud: number;
+  longitud: number;
   phones: ContactPhone[];
   emails: ContactEmail[];
   socialLinks: ContactSocialLink[];

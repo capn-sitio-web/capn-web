@@ -26,6 +26,34 @@ import type { ContactInfo, ContactSocialLink, ContactSocialType } from "../../do
 import { contactInfoValidation } from "../../domain/contactInfo.validation";
 import { hasContactInfoChanges } from "../../domain/contactChangeDetection";
 
+// imports Leaflet
+import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from "react-leaflet";
+import L from "leaflet";
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
+
+delete (
+  L.Icon.Default.prototype as L.Icon.Default & {
+    _getIconUrl?: () => string;
+  }
+)._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconUrl: markerIcon,
+  iconRetinaUrl: markerIcon2x,
+  shadowUrl: markerShadow,
+});
+
+const numberInputSx = {
+  "& input[type=number]": {
+    MozAppearance: "textfield",
+  },
+  "& input[type=number]::-webkit-outer-spin-button, & input[type=number]::-webkit-inner-spin-button": {
+    WebkitAppearance: "none",
+    margin: 0,
+  },
+};
+
 export type ContactInfoTabHandle = {
   submit: () => Promise<boolean>;
 };
@@ -39,7 +67,8 @@ type Props = {
 type ContactInfoErrors = {
   address?: string;
   businessHours?: string;
-  mapEmbedUrl?: string;
+  latitud?: string;
+  longitud?: string;
   phones?: { value?: string }[];
   emails?: { value?: string }[];
   socialLinks?: { url?: string }[];
@@ -51,7 +80,8 @@ function mapZodIssuesToErrors(issues: ZodIssue[]): ContactInfoErrors {
     const path = issue.path;
     if (path[0] === "address") errors.address = issue.message;
     if (path[0] === "businessHours") errors.businessHours = issue.message;
-    if (path[0] === "mapEmbedUrl") errors.mapEmbedUrl = issue.message;
+    if (path[0] === "latitud") errors.latitud = issue.message;
+    if (path[0] === "longitud") errors.longitud = issue.message;
     if (path[0] === "phones" && typeof path[1] === "number") {
       const index = path[1];
       errors.phones ??= [];
@@ -71,10 +101,40 @@ function mapZodIssuesToErrors(issues: ZodIssue[]): ContactInfoErrors {
   return errors;
 }
 
-function extractMapSrc(value: string): string {
-  const trimmed = value.trim();
-  const srcMatch = trimmed.match(/src=["']([^"']+)["']/i);
-  return srcMatch?.[1] ?? trimmed;
+// Leaflet -> para manejar clics y eventos de arrastre en el marcador del mapa
+function LocationMarker({ position, setPosition }: {
+  position: [number, number];
+  setPosition: (pos: [number, number]) => void;
+}) {
+  const map = useMap();
+  useMapEvents({
+    click(e) {
+      setPosition([e.latlng.lat, e.latlng.lng]);
+      map.flyTo(e.latlng, map.getZoom());
+    },
+  });
+  return (
+    <Marker
+      position={position}
+      draggable={true}
+      eventHandlers={{
+        dragend(e) {
+          const marker = e.target;
+          const pos = marker.getLatLng();
+          setPosition([pos.lat, pos.lng]);
+        },
+      }}
+    />
+  );
+}
+
+// Leaflet -> para centrar el mapa cuando cambian las coordenadas
+function ChangeMapCenter({ center }: { center: [number, number] }) {
+  const map = useMap();
+  useEffect(() => {
+    map.setView(center, map.getZoom());
+  }, [center, map]);
+  return null;
 }
 
 const ContactInfoTab = forwardRef<ContactInfoTabHandle, Props>(
@@ -103,7 +163,7 @@ const ContactInfoTab = forwardRef<ContactInfoTabHandle, Props>(
       setSaveError("");
     };
 
-    const handleChange = (field: keyof ContactInfo, value: string) => {
+    const handleChange = <K extends keyof ContactInfo>(field: K, value: ContactInfo[K]) => {
       setData((prev) => ({
         ...prev,
         [field]: value,
@@ -317,7 +377,8 @@ const ContactInfoTab = forwardRef<ContactInfoTabHandle, Props>(
           seccionId: result.data.seccionId ?? null,
           address: result.data.address,
           businessHours: result.data.businessHours ?? "",
-          mapEmbedUrl: result.data.mapEmbedUrl,
+          latitud: result.data.latitud,
+          longitud: result.data.longitud,
           phones: result.data.phones.map((phone, index) => ({
             id: phone.id ?? null,
             value: phone.value,
@@ -352,8 +413,6 @@ const ContactInfoTab = forwardRef<ContactInfoTabHandle, Props>(
     useImperativeHandle(ref, () => ({
       submit: validateAndCommit,
     }));
-
-    const mapSrc = extractMapSrc(data.mapEmbedUrl);
 
     return (
       <Stack spacing={3}>
@@ -428,44 +487,71 @@ const ContactInfoTab = forwardRef<ContactInfoTabHandle, Props>(
           />
         </Stack>
 
-        <Typography fontWeight={700} mb={2}>Configuración del Mapa</Typography>
-        <TextField
-          label="URL o iframe del Mapa de Google Maps"
-          fullWidth
-          multiline
-          minRows={2}
-          value={data.mapEmbedUrl}
-          onChange={(event) => handleChange("mapEmbedUrl", event.target.value)}
-          error={Boolean(errors.mapEmbedUrl)}
-          helperText={errors.mapEmbedUrl}
-        />
+        <Stack spacing={0.5}>
+          <Typography fontWeight={700}>Configuración del Mapa</Typography>
+          <Typography variant="body2" color="text.secondary">
+            Haz clic en cualquier parte del mapa o arrastra el marcador para establecer la ubicación exacta.
+          </Typography>
+        </Stack>
+        <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" }, gap: 2 }}>
+          <TextField
+            label="Latitud"
+            type="number"
+            sx={numberInputSx}
+            inputProps={{ step: "any" }}
+            value={data.latitud ?? ""}
+            onChange={(event) => {
+              const value = event.target.value;
+              handleChange("latitud", Number(value));
+            }}
+            error={Boolean(errors.latitud)}
+            helperText={errors.latitud}
+          />
+          <TextField
+            label="Longitud"
+            type="number"
+            sx={numberInputSx}
+            inputProps={{ step: "any" }}
+            value={data.longitud ?? ""}
+            onChange={(event) => {
+              const value = event.target.value;
+              handleChange("longitud", Number(value));
+            }}
+            error={Boolean(errors.longitud)}
+            helperText={errors.longitud}
+          />
+        </Box>
 
-        <Box sx={{ mt: 3 }}>
-          <Typography variant="body2" fontWeight={700} mb={1}>Vista previa del mapa</Typography>
-          {mapSrc ? (
-            <Box
-              component="iframe"
-              src={mapSrc}
-              sx={{
-                width: "100%",
-                height: 300,
-                border: 0,
-                borderRadius: 2,
-                mb: 4,
-              }}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
+        <Box sx={{ mt: 2, height: 350, width: "100%", borderRadius: 2, overflow: "hidden", border: "1px solid", borderColor: "divider", mb: 3 }}>
+          {data.latitud !== undefined && data.longitud !== undefined ? (
+            <MapContainer
+              center={[data.latitud || -17.3934375, data.longitud || -66.1485625]}
+              zoom={17}
+              style={{ height: "100%", width: "100%" }}
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <LocationMarker
+                position={[data.latitud || -17.3934375, data.longitud || -66.1485625]}
+                setPosition={([lat, lng]) => {
+                  setData((prev) => ({ ...prev, latitud: lat, longitud: lng }));
+                  cleanErrors();
+                }}
+              />
+              <ChangeMapCenter center={[data.latitud || -17.3934375, data.longitud || -66.1485625]} />
+            </MapContainer>
           ) : (
             <Box
               sx={{
-                minHeight: 280,
+                height: "100%",
                 display: "grid",
                 placeItems: "center",
                 color: "text.secondary",
               }}
             >
-              Aún no se configuró el mapa.
+              Cargando mapa...
             </Box>
           )}
         </Box>

@@ -24,7 +24,8 @@ export function hasContactBannerChanges(
 type NormalizedContactInfo = {
   address: string;
   businessHours: string;
-  mapEmbedUrl: string;
+  latitud: number;
+  longitud: number;
   phones: {
     value: string;
     isPrimary: boolean;
@@ -43,7 +44,8 @@ export function normalizeContactInfo(data: ContactInfo): NormalizedContactInfo {
   return {
     address: normalizeText(data.address),
     businessHours: normalizeText(data.businessHours),
-    mapEmbedUrl: normalizeText(data.mapEmbedUrl),
+    latitud: Number(data.latitud),
+    longitud: Number(data.longitud),
     phones: data.phones.map((phone) => ({
       value: normalizeText(phone.value),
       isPrimary: Boolean(phone.isPrimary),

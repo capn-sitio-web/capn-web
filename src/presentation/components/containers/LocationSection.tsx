@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Container, Grid, Typography } from "@mui/material";
 import FlatIconCard from "../cards/FlatIconCard";
+import { MapContainer, TileLayer, Marker } from "react-leaflet";
 
 interface InfoItem {
   icon: React.ReactNode;
@@ -11,14 +12,16 @@ interface InfoItem {
 interface LocationSectionProps {
   title: string;
   subtitle?: string;
-  mapSrc: string;
+  latitud: number;
+  longitud: number;
   infoItems?: InfoItem[];
 }
 
 const LocationSection: React.FC<LocationSectionProps> = ({
   title,
   subtitle,
-  mapSrc,
+  latitud,
+  longitud,
   infoItems,
 }) => {
   return (
@@ -38,18 +41,29 @@ const LocationSection: React.FC<LocationSectionProps> = ({
 
         {/* Mapa */}
         <Box
-          component="iframe"
-          src={mapSrc}
           sx={{
             width: "100%",
             height: 400,
-            border: 0,
             borderRadius: 2,
             mb: 4,
+            overflow: "hidden",
+            border: "1px solid",
+            borderColor: "divider",
           }}
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-        />
+        >
+          <MapContainer
+            center={[latitud, longitud]}
+            zoom={17}
+            style={{ height: "100%", width: "100%" }}
+            scrollWheelZoom={false}
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <Marker position={[latitud, longitud]} />
+          </MapContainer>
+        </Box>
 
         {/* Info cards */}
         {infoItems && (
