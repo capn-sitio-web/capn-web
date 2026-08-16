@@ -23,7 +23,7 @@ const HOME_TABS: PageTabItem<HomeTabKey>[] = [
   { value: "banner", label: "Portada" },
   { value: "servicios", label: "Servicios" },
   { value: "calidad", label: "Calidad Certificada" },
-  { value: "clientes", label: "Clientes" },
+  /*{ value: "clientes", label: "Clientes" },*/
 ];
 
 export default function HomeManagementPage() {
