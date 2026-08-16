@@ -45,7 +45,7 @@ type ApiItemResponse<T> = {
 };
 
 function getBackendBaseUrl(): string {
-  const apiBaseUrl = String(axiosClient.defaults.baseURL ?? "");
+  const apiBaseUrl = String(import.meta.env.VITE_API_BASE_URL ?? "");
   return apiBaseUrl.replace(/\/api\/?$/, "");
 }
 

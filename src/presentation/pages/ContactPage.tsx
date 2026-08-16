@@ -95,7 +95,8 @@ const ContactPage = () => {
         <LocationSection
           title={data.location.title}
           subtitle={data.location.subtitle}
-          mapSrc={data.location.mapSrc}
+          latitud={data.location.latitud}
+          longitud={data.location.longitud}
           //infoItems={infoItems}
         />
       )}

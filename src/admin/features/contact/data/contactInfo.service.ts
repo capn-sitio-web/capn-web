@@ -5,7 +5,8 @@ type ContactInfoApiPayload = {
   seccionId: number | null;
   address: string;
   businessHours: string;
-  mapEmbedUrl: string;
+  latitud: number;
+  longitud: number;
   phones: {
     id: number | null;
     value: string;
@@ -36,7 +37,8 @@ function mapContactInfoFromApi(data: ContactInfoApiPayload): ContactInfo {
     seccionId: data.seccionId,
     address: data.address ?? "",
     businessHours: data.businessHours ?? "",
-    mapEmbedUrl: data.mapEmbedUrl ?? "",
+    latitud: Number(data.latitud ?? -17.39343750),
+    longitud: Number(data.longitud ?? -66.14856250),
     phones:
       data.phones?.length > 0
         ? data.phones.map((phone, index) => ({
@@ -78,7 +80,8 @@ export const contactInfoService = {
     const payload = {
       address: data.address,
       businessHours: data.businessHours,
-      mapEmbedUrl: data.mapEmbedUrl,
+      latitud: data.latitud,
+      longitud: data.longitud,
       phones: data.phones.map((phone, index) => ({
         id: phone.id,
         value: phone.value,

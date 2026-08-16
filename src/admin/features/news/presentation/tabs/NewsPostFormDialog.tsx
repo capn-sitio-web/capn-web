@@ -247,10 +247,6 @@ const NewsPostFormDialog = ({
                   value={form.content}
                   onChange={(event) => updateForm("content", event.target.value)}
                   error={Boolean(formErrors.content)}
-                  helperText={
-                    formErrors.content ||
-                    "Puedes escribir texto plano o contenido con formato HTML básico."
-                  }
                   sx={{
                     "& .MuiInputBase-root": {
                       alignItems: "flex-start",

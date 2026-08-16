@@ -38,7 +38,8 @@ export type ContactSocialLink = {
 export type ContactLocation = {
   title: string;
   subtitle: string;
-  mapSrc: string;
+  latitud: number;
+  longitud: number;
   locationName: string;
   businessHours: string;
   phones: ContactPhone[];

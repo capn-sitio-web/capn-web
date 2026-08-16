@@ -49,10 +49,14 @@ export const contactInfoValidation = z
       .max(255, "El horario no debe exceder 255 caracteres.")
       .optional()
       .default(""),
-    mapEmbedUrl: z
-      .string()
-      .trim()
-      .min(1, "El iframe o URL del mapa es obligatorio."),
+    latitud: z
+      .number({ message: "La latitud es obligatoria y debe ser un número." })
+      .min(-90, "La latitud debe estar entre -90 y 90.")
+      .max(90, "La latitud debe estar entre -90 y 90."),
+    longitud: z
+      .number({ message: "La longitud es obligatoria y debe ser un número." })
+      .min(-180, "La longitud debe estar entre -180 y 180.")
+      .max(180, "La longitud debe estar entre -180 y 180."),
     phones: z.array(phoneSchema).min(1, "Debe existir al menos un teléfono."),
     emails: z.array(emailSchema).min(1, "Debe existir al menos un email."),
     socialLinks: z.array(socialLinkSchema).optional().default([]),

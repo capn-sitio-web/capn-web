@@ -28,7 +28,15 @@ export function usePageTracking() {
   const location = useLocation();
 
   useEffect(() => {
-    const pagePath = location.pathname;
+    let pagePath = location.pathname;
+
+    // Normalizar rutas dinámicas para reportes agrupados
+    if (pagePath.startsWith("/noticias/")) {
+      pagePath = "/noticias";
+    } else if (pagePath.startsWith("/servicios/")) {
+      pagePath = "/servicios";
+    }
+
     const pageName = PAGE_NAMES[pagePath] ?? pagePath;
 
     const visitorId = getOrCreateStorageValue("capn_visitor_id");

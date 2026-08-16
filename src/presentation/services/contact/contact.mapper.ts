@@ -17,13 +17,6 @@ export function mapBannerToContactBanner(
   };
 }
 
-function extractMapSrc(value: string): string {
-  const trimmed = value.trim();
-  if (!trimmed) return "";
-  const srcMatch = trimmed.match(/src=["']([^"']+)["']/i);
-  return srcMatch?.[1] ?? trimmed;
-}
-
 export function mapInformacionToContactLocation(
   data: PublicSectionData
 ): ContactLocation {
@@ -31,7 +24,8 @@ export function mapInformacionToContactLocation(
   return {
     title: data.titulo,
     subtitle: data.descripcion ?? "",
-    mapSrc: extractMapSrc(contact?.ubicacion_url ?? ""),
+    latitud: Number(contact?.latitud ?? -17.39343750),
+    longitud: Number(contact?.longitud ?? -66.14856250),
     locationName: contact?.ubicacion_nombre ?? "",
     businessHours: contact?.horario_atencion ?? "",
     phones:
