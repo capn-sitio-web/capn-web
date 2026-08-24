@@ -70,7 +70,7 @@ function mapContactInfoFromApi(data: ContactInfoApiPayload): ContactInfo {
 export const contactInfoService = {
   async obtenerInformacionContacto(): Promise<ContactInfo> {
     const response = await axiosClient.get<ContactInfoApiResponse>(
-      "/contactos/"
+      "/contactos"
     );
 
     return mapContactInfoFromApi(response.data.data);
@@ -103,7 +103,7 @@ export const contactInfoService = {
     };
 
     const response = await axiosClient.post<ContactInfoApiResponse>(
-      "/contactos/",
+      "/contactos",
       payload
     );
 

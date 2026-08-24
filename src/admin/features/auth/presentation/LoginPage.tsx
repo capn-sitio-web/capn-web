@@ -77,9 +77,26 @@ const LoginPage: React.FC = () => {
       await authService.iniciarSesion(form);
       navigate(ROUTES.ADMIN);
     } catch (err: unknown) {
-      let message = "No se pudo iniciar sesión.";
+      let message = "No se pudo iniciar sesión. Por favor, verifica tu conexión o intenta más tarde.";
       if (axios.isAxiosError(err)) {
-        message = err.response?.data?.message || message;
+        if (!err.response) {
+          message = "No se pudo establecer conexión con el servidor. Asegúrate de que el backend y la base de datos estén activos.";
+        } else {
+          const backendMessage = err.response.data?.message;
+          const status = err.response.status;
+
+          if (
+            status >= 500 ||
+            (backendMessage &&
+              (backendMessage.includes("SQLSTATE") ||
+                backendMessage.includes("database") ||
+                backendMessage.includes("Connection")))
+          ) {
+            message = "Error interno en el servidor o la base de datos. Por favor, verifica que los servicios estén activos.";
+          } else if (backendMessage) {
+            message = backendMessage;
+          }
+        }
       }
       setBackendError(message);
     } finally {
